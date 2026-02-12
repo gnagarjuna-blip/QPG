@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BIET Question Paper Generator</title>
+    <title>Professional Paper Generator</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-        .setup-container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
+        .config-ui { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .row { display: flex; gap: 15px; margin-bottom: 15px; }
         .row div { flex: 1; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        textarea { height: 180px; font-family: 'Courier New', monospace; font-size: 13px; }
-        button { width: 100%; padding: 15px; background: #0066cc; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        textarea { height: 250px; font-family: 'Courier New', monospace; font-size: 13px; }
+        button { width: 100%; padding: 18px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
         
-        /* Print Styles - Exact Sample Match */
-        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; position: relative; }
-        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .header-table td { border: 1px solid black; padding: 6px; vertical-align: top; }
+        /* Professional Paper Layout */
+        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; position: relative; border: 1px solid #ddd; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .header-table td { border: 1px solid black; padding: 8px; vertical-align: top; }
         .center { text-align: center; }
         .bold { font-weight: bold; }
-        .ht-box { border: 1px solid black; width: 18px; height: 18px; display: inline-block; text-align: center; line-height: 18px; font-size: 9pt; margin-left: -1px; }
+        .ht-box { border: 1px solid black; width: 20px; height: 20px; display: inline-block; text-align: center; line-height: 20px; font-size: 10pt; margin-left: -1px; }
         
-        .section-header { font-weight: bold; border-bottom: 1px solid black; margin: 20px 0 10px 0; display: block; text-transform: uppercase; }
-        .question-block { margin-bottom: 15px; display: block; page-break-inside: avoid; }
+        .section-header { font-weight: bold; border-bottom: 1px solid black; margin: 25px 0 10px 0; display: block; text-transform: uppercase; font-size: 12pt; }
+        .question-block { margin-bottom: 18px; display: block; page-break-inside: avoid; }
         .q-main { display: flex; width: 100%; }
-        .q-num { width: 35px; font-weight: bold; }
-        .q-text { flex: 1; position: relative; }
+        .q-num { width: 40px; font-weight: bold; font-size: 11pt; }
+        .q-text { flex: 1; font-size: 11pt; line-height: 1.4; }
         .bracket { float: right; font-weight: normal; }
-        .options-container { display: grid; grid-template-columns: 1fr 1fr; margin-left: 35px; margin-top: 5px; }
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; margin-left: 40px; margin-top: 8px; font-size: 11pt; }
 
         @media print {
-            .setup-container { display: none; }
+            .config-ui { display: none; }
             .paper-page { display: block; margin: 0; border: none; }
             body { background: white; padding: 0; }
         }
@@ -38,130 +38,131 @@
 </head>
 <body>
 
-<div class="setup-container">
-    <h2 style="text-align: center; color: #0066cc;">Professional Paper Engine</h2>
-    
+<div class="config-ui">
+    <h2 style="text-align: center; color: #007bff;">Exam Paper Generator (Full List)</h2>
     <div class="row">
-        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Mathematics"></div>
-        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. MA101"></div>
+        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Basic Electrical Engineering"></div>
+        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. EE101BS"></div>
     </div>
     <div class="row">
         <div><label>Month & Year</label><input type="text" id="examDate" placeholder="Oct - 2025"></div>
         <div><label>Exam Type</label><input type="text" id="examType" placeholder="I Mid-Term Examinations"></div>
     </div>
     <div class="row">
-        <div><label>Time</label><input type="text" id="time" value="30 Min"></div>
         <div><label>Marks</label><input type="text" id="marks" value="10"></div>
+        <div><label>Time</label><input type="text" id="time" value="30 Min"></div>
+        <div><label>Units</label><input type="text" id="units" value="1 & 2"></div>
     </div>
 
-    <label>1. Paste Multiple Choice Questions (Directly from Word)</label>
-    <textarea id="mcqInput" placeholder="Paste questions like: 1. What is 2+2? A) 3 B) 4 C) 5 D) 6"></textarea>
+    <label>Paste ALL Questions (Subjective + Objective + Fill-ups)</label>
+    <p style="font-size: 12px; color: #666;">Paste everything. If a line has A) B) C) D) it will be jumbled. Others will be listed as normal questions.</p>
+    <textarea id="fullInput" placeholder="Paste all questions from your Word file here..."></textarea>
 
-    <label style="margin-top:10px;">2. Paste Fill in the Blanks / Match the Following</label>
-    <textarea id="otherInput" placeholder="Paste Fill-ups or Matching terms directly here..."></textarea>
-
-    <button onclick="generate()">Generate All Sets (1A-D & 2A-D)</button>
+    <button onclick="generateAll()">Generate All 8 Sets (1A-D & 2A-D)</button>
 </div>
 
-<div id="outputArea"></div>
+<div id="printOutput"></div>
 
 <script>
-    function cleanText(t) {
+    function clean(t) {
         if (!t) return "";
-        // Removes $, /, \, and extra spaces
+        // Removes $, /, \, and cleans up spaces
         return t.replace(/[\$\/\\]/g, " ").replace(/\s\s+/g, ' ').trim();
     }
 
     function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
-
-    // This function detects A) B) C) D) inside a pasted line
-    function parseMCQ(line) {
-        let parts = line.split(/([A-D][\)\.\s])/i);
-        if (parts.length < 3) return null;
-        
-        let question = cleanText(parts[0].replace(/^\d+[\.\)]\s*/, ''));
-        let options = [];
-        for (let i = 2; i < parts.length; i += 2) {
-            options.push(cleanText(parts[i]));
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-        return { q: question, o: options };
+        return arr;
     }
 
-    function generate() {
+    function parseLine(line) {
+        // Look for A) B) C) D) or a) b) c) d)
+        let parts = line.split(/([A-D][\)\.\s]|[a-d][\)\.\s])/i);
+        if (parts.length >= 3) {
+            let qText = clean(parts[0].replace(/^\d+[\.\)]\s*/, ''));
+            let options = [];
+            for (let i = 2; i < parts.length; i += 2) {
+                options.push(clean(parts[i]));
+            }
+            return { type: 'mcq', q: qText, o: options };
+        }
+        return { type: 'text', text: clean(line) };
+    }
+
+    function generateAll() {
         const config = {
             name: document.getElementById('subjName').value,
             code: document.getElementById('subjCode').value,
             date: document.getElementById('examDate').value,
             type: document.getElementById('examType').value,
             marks: document.getElementById('marks').value,
-            time: document.getElementById('time').value
+            time: document.getElementById('time').value,
+            units: document.getElementById('units').value
         };
 
-        const mcqLines = document.getElementById('mcqInput').value.split('\n').filter(l => l.trim().length > 5);
-        const otherLines = document.getElementById('otherInput').value.split('\n').filter(l => l.trim().length > 2);
+        const rawLines = document.getElementById('fullInput').value.split('\n').filter(l => l.trim().length > 2);
+        const processedQs = rawLines.map(line => parseLine(line));
 
         let finalHtml = "";
 
+        // Sets 1 and 2
         [1, 2].forEach(setNum => {
+            // Variations A, B, C, D
             ['A', 'B', 'C', 'D'].forEach(letter => {
                 let pageHtml = `
                 <div class="paper-page">
                     <table class="header-table">
-                        <tr><td colspan="2">Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
-                        <tr><td colspan="3" class="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
-                        "I B.Tech. I Sem., ${config.type}, ${config.date}"</td></tr>
-                        <tr><td colspan="3"><b>Subject name : ${config.name}</b> <span style="float:right">Objective Exam</span></td></tr>
-                        <tr><td colspan="3">Name: ______________________ Hall Ticket No: 
-                            <div style="display:inline-block; vertical-align:middle;">
+                        <tr><td>Subject Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
+                        <tr><td colspan="2" class="center">
+                            <b style="font-size: 15pt;">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
+                            <span style="font-size: 11pt;">"I B.Tech. I Sem., ${config.type}, ${config.date}"</span>
+                        </td></tr>
+                        <tr><td colspan="2"><b>Subject name : ${config.name}</b> <span style="float:right">Units Covered: ${config.units}</span></td></tr>
+                        <tr><td colspan="2">Name: ______________________ Hall Ticket No: 
+                            <div style="display:inline-block; vertical-align:middle; margin-left:10px;">
                                 ${Array(10).fill('<div class="ht-box"></div>').join('')}
                             </div>
                         </td></tr>
-                        <tr><td colspan="3" class="center" style="font-size:10pt">Time: ${config.time}. Marks: ${config.marks}.</td></tr>
+                        <tr><td colspan="2" class="center" style="font-size: 10pt;">Answer All Questions. Time: ${config.time}. Marks: ${config.marks}.</td></tr>
                     </table>
 
-                    <span class="section-header">Section I: Multiple Choice Questions</span>`;
+                    <span class="section-header">QUESTIONS</span>`;
 
-                mcqLines.forEach((line, i) => {
-                    let parsed = parseMCQ(line);
-                    if (parsed) {
-                        let displayOpts = (letter === 'A') ? parsed.o : shuffle([...parsed.o]);
+                processedQs.forEach((item, i) => {
+                    if (item.type === 'mcq') {
+                        let opts = (letter === 'A') ? item.o : shuffle(item.o);
                         pageHtml += `
                         <div class="question-block">
                             <div class="q-main">
-                                <div class="q-num">${i+1}.</div>
-                                <div class="q-text">${parsed.q} <span class="bracket">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</span></div>
+                                <div class="q-num">${i + 1}.</div>
+                                <div class="q-text">${item.q} <span class="bracket">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</span></div>
                             </div>
                             <div class="options-container">
-                                <div>A) ${displayOpts[0] || ''}</div><div>B) ${displayOpts[1] || ''}</div>
-                                <div>C) ${displayOpts[2] || ''}</div><div>D) ${displayOpts[3] || ''}</div>
+                                <div>A) ${opts[0] || ''}</div><div>B) ${opts[1] || ''}</div>
+                                <div>C) ${opts[2] || ''}</div><div>D) ${opts[3] || ''}</div>
                             </div>
                         </div>`;
                     } else {
-                        pageHtml += `<div class="question-block"><div class="q-main"><div class="q-num">${i+1}.</div><div class="q-text">${cleanText(line)}</div></div></div>`;
-                    }
-                });
-
-                if (otherLines.length > 0) {
-                    pageHtml += `<span class="section-header">Section II: Additional Questions</span>`;
-                    otherLines.forEach((line, i) => {
                         pageHtml += `
                         <div class="question-block">
                             <div class="q-main">
-                                <div class="q-num">${mcqLines.length + i + 1}.</div>
-                                <div class="q-text">${cleanText(line)}</div>
+                                <div class="q-num">${i + 1}.</div>
+                                <div class="q-text">${item.text}</div>
                             </div>
                         </div>`;
-                    });
-                }
+                    }
+                });
 
                 pageHtml += `</div>`;
                 finalHtml += pageHtml;
             });
         });
 
-        document.getElementById('outputArea').innerHTML = finalHtml;
+        document.getElementById('printOutput').innerHTML = finalHtml;
         window.print();
     }
 </script>
