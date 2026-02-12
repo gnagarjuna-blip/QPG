@@ -2,32 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BIET Question Paper Generator</title>
+    <title>Universal Exam Generator</title>
     <style>
-        body { font-family: 'Times New Roman', serif; background: #f0f2f5; padding: 20px; }
-        .setup-box { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; padding: 20px; }
+        .config-box { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .row { display: flex; gap: 15px; margin-bottom: 15px; }
         .row div { flex: 1; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-        button { width: 100%; padding: 15px; background: #0056b3; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        textarea { height: 120px; }
+        button { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
         
-        /* Print Layout */
-        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; color: black; box-sizing: border-box; page-break-after: always; border: 1px solid #eee; }
-        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .header-table td { border: 1px solid black; padding: 5px; vertical-align: top; }
+        /* Professional Paper Layout */
+        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; position: relative; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .header-table td { border: 1px solid black; padding: 8px; vertical-align: top; }
         .center { text-align: center; }
         .bold { font-weight: bold; }
-        .ht-box { border: 1px solid black; width: 18px; height: 18px; display: inline-block; text-align: center; line-height: 18px; font-size: 9pt; margin-left: -1px; }
-        .section-title { font-weight: bold; text-decoration: underline; margin: 15px 0 10px 0; display: block; }
-        .q-row { margin-bottom: 8px; display: flex; page-break-inside: avoid; }
-        .q-num { width: 30px; font-weight: bold; }
+        .ht-box { width: 18px; height: 18px; border: 1px solid black; display: inline-block; margin-left: -1px; }
+
+        .section-title { font-weight: bold; text-decoration: underline; margin: 25px 0 10px 0; display: block; text-transform: uppercase; font-size: 12pt; }
+        .q-row { margin-bottom: 15px; display: flex; page-break-inside: avoid; }
+        .q-num { width: 35px; font-weight: bold; }
         .q-body { flex: 1; }
-        .bracket { float: right; }
-        .options { display: grid; grid-template-columns: 1fr 1fr; margin-top: 5px; }
-        .match-container { display: flex; justify-content: space-between; width: 85%; margin: 10px 0 0 30px; }
+        .bracket { float: right; font-weight: normal; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 5px; margin-left: 10px; }
+        .match-table { width: 90%; margin-left: 30px; border: none; }
+        .match-table td { border: none; padding: 4px 0; }
 
         @media print {
-            .setup-box { display: none; }
+            .config-box { display: none; }
             .paper-page { display: block; margin: 0; border: none; }
             body { background: white; padding: 0; }
         }
@@ -35,105 +39,109 @@
 </head>
 <body>
 
-<div class="setup-box">
-    <h2 style="text-align: center;">BIET Exam Generator (Units 1 & 2 Combined)</h2>
+<div class="config-box">
+    <h2 style="text-align: center; color: #28a745;">Universal Topic-to-Paper Generator</h2>
+    
     <div class="row">
-        <div><label>Subject</label><input type="text" id="subjName" value="Basic Electrical Engineering"></div>
-        <div><label>Subject Code</label><input type="text" id="subjCode" value="EE101BS"></div>
+        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Applied Physics"></div>
+        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. PH101"></div>
     </div>
     <div class="row">
-        <div><label>Month & Year</label><input type="text" id="examDate" value="Oct - 2025"></div>
-        <div><label>Mid Type</label><input type="text" id="midType" value="I Mid-Term Examinations"></div>
+        <div><label>Month & Year</label><input type="text" id="examDate" placeholder="Oct - 2025"></div>
+        <div><label>Exam Type (Mid-I/II)</label><input type="text" id="examType" placeholder="I Mid-Term Examinations"></div>
     </div>
-    <div class="row">
-        <div><label>Time</label><input type="text" id="time" value="30 Min"></div>
-        <div><label>Marks</label><input type="text" id="marks" value="10"></div>
-    </div>
-    <label>Topics (Paste topics here)</label>
-    <textarea id="topicsInput" placeholder="Ohm's Law, KCL, KVL, Thevenin's, Norton's, Magnetic Circuits..."></textarea>
-    <button onclick="generate()">Generate All Sets (1A-D & 2A-D)</button>
+    
+    <label>Enter Key Topics/Terms (One per line - at least 10 topics)</label>
+    <textarea id="topicsInput" placeholder="Enter topics like:&#10;Photosynthesis&#10;Chlorophyll&#10;Solar Energy&#10;Carbon Dioxide..."></textarea>
+    
+    <button onclick="generatePaper()">Generate & Prepare Print (1A-D & 2A-D)</button>
 </div>
 
-<div id="printOutput"></div>
+<div id="output"></div>
 
 <script>
-    // Database of Real BEE Content based on your Units 1 & 2
-    const beeDatabase = [
-        { q: "Unit of Electrical Conductance is", o: ["Mho", "Ohm", "Henry", "Farad"], type: "mcq" },
-        { q: "KCL is based on conservation of", o: ["Charge", "Energy", "Mass", "Momentum"], type: "mcq" },
-        { q: "The internal resistance of an ideal voltmeter is", o: ["Infinite", "Zero", "100 Ohms", "1 Mega Ohm"], type: "mcq" },
-        { q: "Which element stores energy in magnetic field?", o: ["Inductor", "Capacitor", "Resistor", "Battery"], type: "mcq" },
-        { q: "Thevenin's voltage is equivalent to", o: ["Open Circuit Voltage", "Short Circuit Current", "Source Voltage", "Load Voltage"], type: "mcq" },
-        { q: "KVL deals with the conservation of", o: ["Energy", "Charge", "Voltage", "Current"], type: "mcq" },
-        { q: "Unit of Magnetic Flux is", o: ["Weber", "Tesla", "Ampere-turns", "Henry"], type: "mcq" },
-        { q: "Maximum power transfer occurs when Load Resistance is", o: ["Equal to Source Resistance", "Zero", "Infinite", "Double of Source"], type: "mcq" },
-        { q: "Reciprocal of Resistance is", o: ["Conductance", "Susceptance", "Reluctance", "Impedance"], type: "mcq" },
-        { q: "A passive element in circuit is", o: ["Resistor", "Voltage Source", "Current Source", "Transistor"], type: "mcq" },
-        { f: "The SI unit of Inductance is _______.", type: "fill" },
-        { f: "In a series circuit, _______ remains same through all elements.", type: "fill" },
-        { f: "The property that opposes the flow of flux is _______.", type: "fill" },
-        { f: "Norton's Theorem results in an equivalent _______ source.", type: "fill" },
-        { f: "Ohm's law is not applicable to _______ devices.", type: "fill" }
-    ];
-
-    const matchItems = [
-        { l: "Resistance", r: "Ohms" },
-        { l: "Capacitance", r: "Farads" },
-        { l: "MMF", r: "Ampere-Turns" },
-        { l: "Power", r: "Watts" },
-        { l: "Frequency", r: "Hertz" }
-    ];
-
+    function clean(text) { return text ? text.replace(/[\$\/\\]/g, "").trim() : ""; }
     function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
 
-    function generate() {
-        let html = "";
+    function generatePaper() {
         const config = {
             name: document.getElementById('subjName').value,
             code: document.getElementById('subjCode').value,
             date: document.getElementById('examDate').value,
-            mid: document.getElementById('midType').value,
-            time: document.getElementById('time').value,
-            marks: document.getElementById('marks').value
+            type: document.getElementById('examType').value
         };
+        
+        const topics = document.getElementById('topicsInput').value.split('\n').map(t => clean(t)).filter(t => t.length > 1);
+        
+        if (topics.length < 10) {
+            alert("Please enter at least 10 topics to generate a full paper.");
+            return;
+        }
 
+        let html = "";
+
+        // Set 1 and Set 2
         [1, 2].forEach(setNum => {
+            // Variations A, B, C, D
             ['A', 'B', 'C', 'D'].forEach(letter => {
-                let page = `<div class="paper-page">
+                let currentTopics = (setNum === 1) ? topics : shuffle([...topics]);
+                
+                let page = `
+                <div class="paper-page">
                     <table class="header-table">
-                        <tr><td colspan="2">Code: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
-                        <tr><td colspan="3" class="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
-                        "I B.Tech. I Sem., ${config.mid}, ${config.date}"</td></tr>
-                        <tr><td colspan="3"><b>Subject: ${config.name}</b> <span style="float:right">Objective Exam</span></td></tr>
-                        <tr><td colspan="3">Name: ______________________ Hall Ticket: ${Array(10).fill('<div class="ht-box"></div>').join('')}</td></tr>
-                        <tr><td colspan="3" class="center" style="font-size:10pt">Time: ${config.time}. Marks: ${config.marks}. (Units 1 & 2 Combined)</td></tr>
+                        <tr><td>Code No: <b>${config.code}</b></td><td colspan="2" style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
+                        <tr><td colspan="3" class="center"><b style="font-size: 14pt;">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
+                        "I B.Tech. I Sem., ${config.type}, ${config.date}"</td></tr>
+                        <tr><td colspan="3"><b>Subject: ${config.name}</b> <span style="float:right">Objective Type</span></td></tr>
+                        <tr><td colspan="3">Name: ______________________ Hall Ticket No: 
+                            <div style="display:inline-block; vertical-align:middle;">
+                                ${Array(10).fill('<div class="ht-box"></div>').join('')}
+                            </div>
+                        </td></tr>
                     </table>
 
                     <span class="section-title">I. Multiple Choice Questions (10 Marks)</span>`;
 
-                let mcqs = (setNum === 1) ? beeDatabase.slice(0, 10) : shuffle(beeDatabase.slice(0, 10));
-                mcqs.forEach((item, i) => {
-                    let opts = (letter === 'A') ? item.o : shuffle(item.o);
-                    page += `<div class="q-row"><div class="q-num">${i+1}.</div><div class="q-body">${item.q} <span class="bracket">[ &nbsp;&nbsp; ]</span><div class="options"><div>A) ${opts[0]}</div><div>B) ${opts[1]}</div><div>C) ${opts[2]}</div><div>D) ${opts[3]}</div></div></div></div>`;
-                });
+                // Generate 10 MCQs based on topics
+                for (let i = 0; i < 10; i++) {
+                    let topic = currentTopics[i % currentTopics.length];
+                    let opts = [`Primary function of ${topic}`, `Characteristics of ${topic}`, `Measurement of ${topic}`, `None of the above`];
+                    if (letter !== 'A') opts = shuffle(opts);
+                    
+                    page += `
+                    <div class="q-row">
+                        <div class="q-num">${i+1}.</div>
+                        <div class="q-body">Which of the following best describes the principle of <b>${topic}</b>? <span class="bracket">[ &nbsp;&nbsp; ]</span>
+                            <div class="options-grid">
+                                <div>A) ${opts[0]}</div><div>B) ${opts[1]}</div>
+                                <div>C) ${opts[2]}</div><div>D) ${opts[3]}</div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
 
                 page += `<span class="section-title">II. Fill in the Blanks (5 Marks)</span>`;
-                beeDatabase.slice(10, 15).forEach((item, i) => {
-                    page += `<div class="q-row"><div class="q-num">${i+11}.</div><div class="q-body">${item.f}</div></div>`;
-                });
+                for (let i = 0; i < 5; i++) {
+                    let topic = currentTopics[(i + 5) % currentTopics.length];
+                    page += `<div class="q-row"><div class="q-num">${i+11}.</div><div class="q-body">The standard unit or process associated with <b>${topic}</b> is _______________.</div></div>`;
+                }
 
                 page += `<span class="section-title">III. Match the Following (5 Marks)</span>`;
-                let left = matchItems.map(x => x.l);
-                let right = (letter === 'A') ? matchItems.map(x => x.r) : shuffle(matchItems.map(x => x.r));
-                for(let i=0; i<5; i++) {
-                    page += `<div class="match-container"><div>${i+16}. ${left[i]}</div><div>(${String.fromCharCode(97+i)}) ${right[i]}</div></div>`;
+                let left = currentTopics.slice(0, 5);
+                let right = left.map(t => "Related to " + t);
+                if (letter !== 'A') right = shuffle(right);
+
+                page += `<table class="match-table">`;
+                for (let i = 0; i < 5; i++) {
+                    page += `<tr><td width="5%">${i+16}.</td><td width="45%">${left[i]}</td><td width="10%">(${String.fromCharCode(97+i)})</td><td>${right[i]}</td></tr>`;
                 }
+                page += `</table></div>`;
                 
-                page += `</div>`;
                 html += page;
             });
         });
-        document.getElementById('printOutput').innerHTML = html;
+
+        document.getElementById('output').innerHTML = html;
         window.print();
     }
 </script>
