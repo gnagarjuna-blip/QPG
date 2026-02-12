@@ -2,33 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BIET Complete Set Generator</title>
+    <title>Word-to-Paper Converter</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .config-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        label { font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        textarea { height: 300px; font-family: 'Courier New', monospace; font-size: 13px; }
-        .btn { width: 100%; padding: 15px; background: #d9534f; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        .setup-gui { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        textarea { height: 350px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.5; }
+        .action-btn { width: 100%; padding: 20px; background: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 1.3rem; cursor: pointer; font-weight: bold; margin-top: 15px; }
         
-        /* Print Styles - BIET Standard */
-        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; border: 1px solid #eee; }
+        /* Print Layout - BIET Standard */
+        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; }
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .header-table td { border: 1px solid black; padding: 6px; vertical-align: top; font-size: 11pt; }
+        .header-table td { border: 1px solid black; padding: 8px; vertical-align: top; font-size: 11pt; }
         .center { text-align: center; }
-        .ht-box { border: 1px solid black; width: 19px; height: 19px; display: inline-block; text-align: center; line-height: 19px; font-size: 10pt; margin-left: -1px; }
+        .ht-box { border: 1px solid black; width: 20px; height: 20px; display: inline-block; text-align: center; line-height: 20px; font-size: 10pt; margin-left: -1px; }
         
-        .sec-title { font-weight: bold; text-decoration: underline; margin: 15px 0 10px 0; display: block; text-transform: uppercase; font-size: 11pt; }
-        .q-row { margin-bottom: 12px; display: flex; page-break-inside: avoid; }
+        .sec-header { font-weight: bold; text-decoration: underline; margin: 20px 0 10px 0; display: block; text-transform: uppercase; font-size: 11pt; }
+        .q-block { margin-bottom: 15px; display: block; page-break-inside: avoid; }
+        .q-row { display: flex; width: 100%; }
         .q-num { width: 35px; font-weight: bold; }
         .q-text { flex: 1; }
-        .bracket { float: right; }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; margin: 5px 0 0 35px; }
-        .match-row { display: flex; justify-content: space-between; width: 90%; margin: 5px 0 0 35px; }
+        .bracket { float: right; font-weight: normal; }
+        .opts-row { display: grid; grid-template-columns: 1fr 1fr; margin: 5px 0 0 35px; }
+        .match-grid { width: 90%; margin: 5px 0 0 35px; }
+        .match-grid td { padding: 4px 0; border: none; }
 
         @media print {
-            .container { display: none; }
+            .setup-gui { display: none; }
             .paper-page { display: block; margin: 0; border: none; }
             body { background: white; padding: 0; }
         }
@@ -36,102 +38,130 @@
 </head>
 <body>
 
-<div class="container">
-    <h2 style="text-align: center; color: #d9534f;">BIET Bulk Set Generator</h2>
-    <div class="config-grid">
+<div class="setup-gui">
+    <h2 style="text-align: center;">BIET Exam Generator (Word-Paste Mode)</h2>
+    <div class="grid-3">
         <div><label>Subject</label><input type="text" id="sName" value="Basic Electrical Engineering"></div>
-        <div><label>Sub Code</label><input type="text" id="sCode" value="EE101BS"></div>
+        <div><label>Code</label><input type="text" id="sCode" value="EE101BS"></div>
         <div><label>Units</label><input type="text" id="units" value="1 & 2"></div>
-        <div><label>Date</label><input type="text" id="date" value="Oct - 2025"></div>
+        <div><label>Exam Date</label><input type="text" id="date" value="Oct - 2025"></div>
         <div><label>Exam Type</label><input type="text" id="mid" value="I Mid-Term Examinations"></div>
-        <div><label>Marks/Time</label><input type="text" id="marks" value="10 Marks / 30 Min"></div>
+        <div><label>Time/Marks</label><input type="text" id="tm" value="30 Min / 10 Marks"></div>
     </div>
 
-    <label>Paste AI Tool Output (Paste all 20+ questions here)</label>
-    <textarea id="bulkPaste" placeholder="Paste your MCQs, Fill-ups, and Matching terms here..."></textarea>
+    <label>Paste Everything from Word Below (MCQs, Fill-ups, and Matching)</label>
+    <p style="font-size: 12px; color: #e67e22;">Note: Paste at least 10 MCQs, then 5 Fill-ups, then 10 Match terms (5 left, 5 right).</p>
+    <textarea id="wordInput" placeholder="Paste your document content here..."></textarea>
     
-    <button class="btn" onclick="generateSets()">Generate Sets 1(A-D) & 2(A-D)</button>
+    <button class="action-btn" onclick="generateAll()">Build All Sets (1A-D & 2A-D)</button>
 </div>
 
-<div id="outputArea"></div>
+<div id="printArea"></div>
 
 <script>
-    function clean(t) { return t ? t.replace(/[\$\/\*\\]/g, " ").replace(/\s\s+/g, ' ').trim() : ""; }
+    // Aggressive cleaning of Word symbols
+    function cleanWord(t) {
+        if (!t) return "";
+        return t.replace(/[\$\/\*\\]/g, " ") // Remove $, /, *, \
+                .replace(/[\u201C\u201D]/g, '"') // Smart quotes
+                .replace(/[\u2018\u2019]/g, "'") // Smart apostrophes
+                .replace(/\s\s+/g, ' ') // Remove extra spaces
+                .trim();
+    }
+
     function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
 
-    function parseInput(text) {
-        const lines = text.split('\n').filter(l => l.trim().length > 3);
-        let mcqs = [], others = [];
+    function parseWordData(text) {
+        // Logic to extract MCQs even if they are on multiple lines
+        const rawLines = text.split('\n').filter(l => l.trim().length > 1);
+        let mcqs = [];
+        let others = [];
 
-        lines.forEach(line => {
-            let parts = line.split(/([A-D][\)\.\s]|[a-d][\)\.\s])/);
-            if (parts.length >= 5) {
-                let q = clean(parts[0].replace(/^\d+[\.\)]\s*/, ''));
+        let currentMCQ = null;
+
+        rawLines.forEach(line => {
+            const cleanLine = cleanWord(line);
+            // Check if line contains A) or B) options
+            const hasOptions = cleanLine.match(/([A-D][\)\.\s])/i);
+            
+            if (hasOptions) {
+                let parts = cleanLine.split(/([A-D][\)\.\s])/i);
+                let qText = cleanWord(parts[0].replace(/^\d+[\.\)]\s*/, ''));
                 let o = [];
-                for (let i = 2; i < parts.length; i += 2) { if(parts[i]) o.push(clean(parts[i])); }
-                mcqs.push({ q, o });
+                for (let i = 2; i < parts.length; i += 2) { if(parts[i]) o.push(cleanWord(parts[i])); }
+                
+                // If it's a standalone option line for the previous question
+                if (qText === "" && currentMCQ) {
+                    currentMCQ.o = currentMCQ.o.concat(o);
+                } else {
+                    currentMCQ = { q: qText, o: o };
+                    mcqs.push(currentMCQ);
+                }
             } else {
-                others.push(clean(line.replace(/^\d+[\.\)]\s*/, '')));
+                others.push(cleanLine.replace(/^\d+[\.\)]\s*/, ''));
+                currentMCQ = null;
             }
         });
+
+        // If options are missing, attempt to move items from others to options
         return { mcqs, others };
     }
 
-    function generateSets() {
-        const data = parseInput(document.getElementById('bulkPaste').value);
+    function generateAll() {
+        const data = parseWordData(document.getElementById('wordInput').value);
         const config = {
             name: document.getElementById('sName').value,
             code: document.getElementById('sCode').value,
             units: document.getElementById('units').value,
             date: document.getElementById('date').value,
             mid: document.getElementById('mid').value,
-            mt: document.getElementById('marks').value
+            tm: document.getElementById('tm').value
         };
-
-        if (data.mcqs.length < 10) { alert("Please paste at least 10 MCQs."); return; }
 
         let html = "";
         [1, 2].forEach(setNum => {
             ['A', 'B', 'C', 'D'].forEach(letter => {
-                let page = `
+                let p = `
                 <div class="paper-page">
                     <table class="header-table">
                         <tr><td>Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
-                        <tr><td colspan="2" class="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
+                        <tr><td colspan="2" class="center"><b style="font-size:15pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
                         "I B.Tech. I Sem., ${config.mid}, ${config.date}"</td></tr>
-                        <tr><td colspan="2"><b>Subject: ${config.name}</b> <span style="float:right">Units: ${config.units}</span></td></tr>
+                        <tr><td colspan="2"><b>Subject name : ${config.name}</b> <span style="float:right">Units: ${config.units}</span></td></tr>
                         <tr><td colspan="2">Name: ______________________ Hall Ticket No: ${Array(10).fill('<div class="ht-box"></div>').join('')}</td></tr>
-                        <tr><td colspan="2" class="center" style="font-size:10pt">${config.mt}</td></tr>
+                        <tr><td colspan="2" class="center" style="font-size:10pt">${config.tm}</td></tr>
                     </table>
 
-                    <span class="sec-title">I. Multiple Choice Questions (1-10)</span>`;
+                    <span class="sec-header">I. Multiple Choice Questions (1-10)</span>`;
 
-                // Logic: Take first 10 MCQs
+                // 1. MCQs
                 data.mcqs.slice(0, 10).forEach((item, i) => {
-                    let opts = (letter === 'A') ? item.o : shuffle(item.o);
-                    page += `<div class="q-row"><div class="q-num">${i+1}.</div><div class="q-text">${item.q}<span class="bracket">[ &nbsp;&nbsp; ]</span><div class="opt-grid"><div>A) ${opts[0]||''}</div><div>B) ${opts[1]||''}</div><div>C) ${opts[2]||''}</div><div>D) ${opts[3]||''}</div></div></div></div>`;
+                    let displayOpts = (letter === 'A') ? item.o : shuffle(item.o);
+                    p += `<div class="q-block"><div class="q-row"><div class="q-num">${i+1}.</div><div class="q-text">${item.q}<span class="bracket">[ &nbsp;&nbsp; ]</span></div></div>
+                          <div class="opts-row"><div>A) ${displayOpts[0]||''}</div><div>B) ${displayOpts[1]||''}</div><div>C) ${displayOpts[2]||''}</div><div>D) ${displayOpts[3]||''}</div></div></div>`;
                 });
 
-                page += `<span class="sec-title">II. Fill in the Blanks (11-15)</span>`;
+                // 2. Fill in the Blanks
+                p += `<span class="sec-header">II. Fill in the Blanks (11-15)</span>`;
                 data.others.slice(0, 5).forEach((text, i) => {
-                    page += `<div class="q-row"><div class="q-num">${i+11}.</div><div class="q-text">${text} ______________</div></div>`;
+                    p += `<div class="q-block"><div class="q-row"><div class="q-num">${i+11}.</div><div class="q-text">${text} ________________</div></div></div>`;
                 });
 
-                page += `<span class="sec-title">III. Match the Following (16-20)</span>`;
-                let matchLeft = data.others.slice(5, 10);
-                let matchRight = data.others.slice(10, 15);
-                if (letter !== 'A') matchRight = shuffle(matchRight);
+                // 3. Matching
+                p += `<span class="sec-header">III. Match the Following (16-20)</span>`;
+                let left = data.others.slice(5, 10);
+                let right = (letter === 'A') ? data.others.slice(10, 15) : shuffle(data.others.slice(10, 15));
                 
+                p += `<table class="match-grid">`;
                 for(let i=0; i<5; i++) {
-                    page += `<div class="match-row"><div>${i+16}. ${matchLeft[i]||'___'}</div><div>(${String.fromCharCode(97+i)}) ${matchRight[i]||'___'}</div></div>`;
+                    p += `<tr><td width="5%">${i+16}.</td><td width="45%">${left[i]||'___'}</td><td width="10%">(${String.fromCharCode(97+i)})</td><td>${right[i]||'___'}</td></tr>`;
                 }
-
-                page += `</div>`;
-                html += page;
+                p += `</table></div>`;
+                html += p;
             });
         });
 
-        document.getElementById('outputArea').innerHTML = html;
+        document.getElementById('printArea').innerHTML = html;
         window.print();
     }
 </script>
