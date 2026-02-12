@@ -2,35 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BIET Exam Paper Generator</title>
+    <title>BIET Question Paper Generator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; }
-        .setup-container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; padding: 20px; }
+        .config-box { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .row { display: flex; gap: 15px; margin-bottom: 15px; }
         .row div { flex: 1; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        textarea { height: 200px; font-family: 'Courier New', Courier, monospace; font-size: 13px; }
-        button { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; margin-top: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        textarea { height: 100px; }
+        button { width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
         
-        /* Print Styles */
-        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; }
+        /* Paper Styling */
+        .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", serif; color: black; box-sizing: border-box; page-break-after: always; position: relative; }
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .header-table td { border: 1px solid black; padding: 8px; vertical-align: top; }
+        .header-table td { border: 1px solid black; padding: 5px; vertical-align: top; }
         .center { text-align: center; }
         .bold { font-weight: bold; }
-        .ht-box { border: 1px solid black; width: 20px; height: 20px; display: inline-block; text-align: center; line-height: 20px; font-size: 10pt; margin-left: -1px; }
+        .ht-box { width: 18px; height: 18px; border: 1px solid black; display: inline-block; text-align: center; line-height: 18px; font-size: 9pt; margin-left: -1px; }
         
-        .section-header { font-weight: bold; border-bottom: 1px solid black; margin: 20px 0 10px 0; display: block; }
-        .question-block { margin-bottom: 15px; display: block; page-break-inside: avoid; }
-        .q-main { display: flex; width: 100%; }
+        .section-title { font-weight: bold; text-decoration: underline; margin: 15px 0 5px 0; display: block; text-transform: uppercase; }
+        .q-row { margin-bottom: 10px; display: flex; page-break-inside: avoid; }
         .q-num { width: 30px; font-weight: bold; }
-        .q-text { flex: 1; position: relative; }
-        .bracket { float: right; font-weight: normal; }
-        .options-container { display: grid; grid-template-columns: 1fr 1fr; margin-left: 30px; margin-top: 5px; }
+        .q-body { flex: 1; }
+        .bracket { float: right; }
+        .options { display: grid; grid-template-columns: 1fr 1fr; margin-left: 20px; margin-top: 5px; }
+        .match-row { display: flex; justify-content: space-between; width: 80%; margin-left: 30px; }
 
         @media print {
-            .setup-container { display: none; }
+            .config-box { display: none; }
             .paper-page { display: block; margin: 0; border: none; }
             body { background: white; padding: 0; }
         }
@@ -38,144 +38,88 @@
 </head>
 <body>
 
-<div class="setup-container">
-    <h2 style="text-align: center; color: #0056b3;">BIET Question Paper Setup</h2>
+<div class="config-box">
+    <h2 style="text-align: center;">BIET Exam Generator</h2>
     <div class="row">
-        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Basic Electrical Engineering"></div>
-        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. EE101BS"></div>
+        <div><label>Subject Name</label><input type="text" id="subjName" value="Basic Electrical Engineering"></div>
+        <div><label>Subject Code</label><input type="text" id="subjCode" value="EE101BS"></div>
     </div>
     <div class="row">
-        <div><label>Month & Year</label><input type="text" id="examDate" placeholder="Oct - 2025"></div>
-        <div><label>Exam Type</label><input type="text" id="examType" placeholder="I Mid-Term Examinations"></div>
+        <div><label>Month & Year</label><input type="text" id="examDate" value="Oct - 2025"></div>
+        <div><label>Mid Type</label><input type="text" id="midType" value="I Mid-Term Examinations"></div>
     </div>
-    <div class="row">
-        <div><label>Marks</label><input type="text" id="marks" value="10"></div>
-        <div><label>Time</label><input type="text" id="time" value="30 Min"></div>
-        <div><label>Units Covered</label><input type="text" id="units" value="1 & 2"></div>
+    
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+        <label>Enter Topics (One per line)</label>
+        <textarea id="topicsInput" placeholder="e.g. Ohm's Law&#10;KCL & KVL&#10;Thevenin's Theorem"></textarea>
     </div>
 
-    <label>Paste ALL Questions Below (Subjective and Objective Mixed)</label>
-    <p style="font-size: 12px; color: #666;">Just paste your text directly. The code will remove $, / and detect A) B) C) D) automatically.</p>
-    <textarea id="rawInput" placeholder="Paste questions from Word here..."></textarea>
-
-    <button onclick="processAndGenerate()">Generate Sets 1 & 2 (A,B,C,D)</button>
+    <button onclick="generate()">Generate Set 1 & Set 2 (A, B, C, D)</button>
 </div>
 
-<div id="outputArea"></div>
+<div id="printOutput"></div>
 
 <script>
-    function clean(text) {
-        if (!text) return "";
-        // Removes $, /, and common LaTeX junk
-        return text.replace(/[\$\/\\]/g, " ").replace(/\s\s+/g, ' ').trim();
-    }
+    function clean(t) { return t ? t.replace(/[\$\/\\]/g, "").trim() : ""; }
+    function shuffle(a) { return a.sort(() => Math.random() - 0.5); }
 
-    function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
-
-    function processAndGenerate() {
-        const rawText = document.getElementById('rawInput').value;
+    function generate() {
         const config = {
             name: document.getElementById('subjName').value,
             code: document.getElementById('subjCode').value,
             date: document.getElementById('examDate').value,
-            type: document.getElementById('examType').value,
-            marks: document.getElementById('marks').value,
-            time: document.getElementById('time').value,
-            units: document.getElementById('units').value
+            mid: document.getElementById('midType').value
         };
-
-        // Split by lines and filter
-        const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 3);
+        const topics = document.getElementById('topicsInput').value.split('\n').filter(t => t.trim());
         
-        const subjectiveQs = [];
-        const objectiveQs = [];
+        let html = "";
 
-        lines.forEach(line => {
-            // Simple detection: If line contains A) or B) or C), it's objective
-            if (line.match(/[A-D][\)\.]/i)) {
-                // Try to split question from options
-                let parts = line.split(/([A-D][\)\.])/i);
-                let qText = clean(parts[0]);
-                let opts = [];
-                for(let i=2; i<parts.length; i+=2) {
-                    opts.push(clean(parts[i]));
-                }
-                if (opts.length > 0) objectiveQs.push({ q: qText, o: opts });
-            } else {
-                subjectiveQs.push(clean(line));
-            }
-        });
-
-        let finalHtml = "";
-
-        [1, 2].forEach(setNum => {
+        for (let setNum = 1; setNum <= 2; setNum++) {
+            const setTopics = (setNum === 1) ? topics.slice(0, Math.ceil(topics.length/2)) : topics.slice(Math.ceil(topics.length/2));
+            
             ['A', 'B', 'C', 'D'].forEach(letter => {
-                let pageHtml = `
+                let page = `
                 <div class="paper-page">
                     <table class="header-table">
-                        <tr>
-                            <td colspan="2">Subject Code No: <b>${config.code}</b></td>
-                            <td style="text-align:right">Set No. <b>${setNum}${letter}</b></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="center">
-                                <b style="font-size: 14pt;">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
-                                <span style="font-size: 11pt;">"I B.Tech. I Sem., ${config.type}, ${config.date}"</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <b>Subject name : ${config.name}</b> <span style="float:right">Units: ${config.units}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="padding: 10px 8px;">
-                                Name: ______________________________ <span style="margin-left: 15px;">Hall Ticket No.</span>
-                                <div style="display:inline-block; vertical-align:middle; margin-left:5px;">
-                                    ${Array(10).fill('<div class="ht-box"></div>').join('')}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="center" style="font-size: 10pt;">
-                                Answer All Questions. Time: ${config.time}. Marks: ${config.marks}.
-                            </td>
-                        </tr>
+                        <tr><td colspan="2">Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
+                        <tr><td colspan="3" class="center"><b style="font-size: 14pt;">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
+                        "I B.Tech. I Sem., ${config.mid}, ${config.date}"</td></tr>
+                        <tr><td colspan="3"><b>Subject: ${config.name}</b></td></tr>
+                        <tr><td colspan="3">Name: ______________________ Hall Ticket No: 
+                            <div style="display:inline-block; vertical-align:middle;">
+                                ${Array(10).fill('<div class="ht-box"></div>').join('')}
+                            </div>
+                        </td></tr>
                     </table>
 
-                    <span class="section-header">SECTION I: SUBJECTIVE QUESTIONS</span>`;
+                    <span class="section-title">Part A: 10 Multiple Choice Questions</span>`;
 
-                subjectiveQs.forEach((q, i) => {
-                    pageHtml += `<div class="question-block"><div class="q-main"><div class="q-num">${i+1}.</div><div class="q-text">${q}</div></div></div>`;
-                });
+                for(let i=1; i<=10; i++){
+                    let t = setTopics[i % setTopics.length] || "General Topic";
+                    let opts = ["Option 1", "Option 2", "Option 3", "Option 4"];
+                    if(letter !== 'A') opts = shuffle(opts);
+                    page += `<div class="q-row"><div class="q-num">${i}.</div><div class="q-body">Based on ${clean(t)}, select the correct answer: <span class="bracket">[ &nbsp;&nbsp; ]</span><div class="options"><div>A) ${opts[0]}</div><div>B) ${opts[1]}</div><div>C) ${opts[2]}</div><div>D) ${opts[3]}</div></div></div></div>`;
+                }
 
-                pageHtml += `<span class="section-header">SECTION II: OBJECTIVE QUESTIONS</span>`;
+                page += `<span class="section-title">Part B: 5 Fill in the Blanks</span>`;
+                for(let i=1; i<=5; i++){
+                    let t = setTopics[(i+2) % setTopics.length] || "General Topic";
+                    page += `<div class="q-row"><div class="q-num">${i+10}.</div><div class="q-body">Define the relationship of ${clean(t)} in the context of circuits: ____________________.</div></div>`;
+                }
 
-                objectiveQs.forEach((item, i) => {
-                    let displayOpts = (letter === 'A') ? item.o : shuffle([...item.o]);
-                    pageHtml += `
-                    <div class="question-block">
-                        <div class="q-main">
-                            <div class="q-num">${i+1}.</div>
-                            <div class="q-text">${item.q} <span class="bracket">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</span></div>
-                        </div>
-                        <div class="options-container">
-                            <div>A) ${displayOpts[0] || ''}</div>
-                            <div>B) ${displayOpts[1] || ''}</div>
-                            <div>C) ${displayOpts[2] || ''}</div>
-                            <div>D) ${displayOpts[3] || ''}</div>
-                        </div>
-                    </div>`;
-                });
+                page += `<span class="section-title">Part C: 5 Match the Following</span>`;
+                let left = ["Term 1", "Term 2", "Term 3", "Term 4", "Term 5"];
+                let right = ["Def A", "Def B", "Def C", "Def D", "Def E"];
+                if(letter !== 'A') right = shuffle(right);
+                for(let i=0; i<5; i++){
+                    page += `<div class="match-row"><div>${i+16}. ${left[i]}</div><div>(${String.fromCharCode(97+i)}) ${right[i]}</div></div>`;
+                }
 
-                pageHtml += `</div>`;
-                finalHtml += pageHtml;
+                page += `</div>`;
+                html += page;
             });
-        });
-
-        document.getElementById('outputArea').innerHTML = finalHtml;
+        }
+        document.getElementById('printOutput').innerHTML = html;
         window.print();
     }
 </script>
