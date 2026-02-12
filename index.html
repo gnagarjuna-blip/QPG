@@ -2,147 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BIET Set A-D Reconstructor</title>
+    <title>BIET Question-by-Question Builder</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f9; padding: 20px; }
-        .wrapper { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
-        .header-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        label { font-weight: bold; font-size: 13px; color: #444; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; }
-        textarea { height: 350px; font-family: 'Consolas', monospace; line-height: 1.6; background: #fafbfc; }
-        .btn-main { width: 100%; padding: 20px; background: #d93025; color: white; border: none; border-radius: 10px; font-size: 1.2rem; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
+        .builder-container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .config-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .section-box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 20px; background: #fafafa; }
+        h3 { margin-top: 0; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        .q-input-group { margin-bottom: 15px; padding: 10px; border-left: 4px solid #007bff; background: white; }
+        label { font-weight: bold; font-size: 0.85rem; display: block; margin-bottom: 4px; }
+        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; margin-bottom: 5px; }
+        .opt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .generate-btn { width: 100%; padding: 20px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 1.3rem; cursor: pointer; font-weight: bold; }
         
-        /* BIET Paper Styling */
+        /* Print Formatting */
         .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; }
-        .header-tbl { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .header-tbl td { border: 1px solid black; padding: 8px; vertical-align: top; font-size: 11pt; }
-        .center { text-align: center; }
-        .ht-box { border: 1px solid black; width: 19px; height: 19px; display: inline-block; text-align: center; line-height: 19px; font-size: 10pt; margin-left: -1px; }
-        .sec-label { font-weight: bold; text-decoration: underline; margin: 20px 0 10px 0; display: block; text-transform: uppercase; font-size: 11pt; }
-        .q-block { margin-bottom: 12px; display: block; page-break-inside: avoid; }
-        .q-row { display: flex; width: 100%; }
-        .q-num { width: 30px; font-weight: bold; font-size: 11pt; }
-        .q-txt { flex: 1; font-size: 11pt; line-height: 1.4; }
-        .bracket { float: right; border: 1px solid transparent; }
-        .opts-grid { display: grid; grid-template-columns: 1fr 1fr; margin-left: 30px; margin-top: 4px; font-size: 11pt; }
-        .match-tbl { width: 95%; margin-left: 30px; margin-top: 5px; }
-        .match-tbl td { padding: 4px 0; border: none; font-size: 11pt; }
-
-        @media print {
-            .wrapper { display: none; }
-            .paper-page { display: block; margin: 0; border: none; }
-            body { background: white; padding: 0; }
-        }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid black; }
+        .header-table td { border: 1px solid black; padding: 6px; font-size: 11pt; }
+        .ht-box { border: 1px solid black; width: 18px; height: 18px; display: inline-block; margin-left: -1px; }
+        .sec-title { font-weight: bold; text-decoration: underline; margin: 15px 0 10px 0; display: block; }
+        .q-row { display: flex; margin-bottom: 10px; page-break-inside: avoid; }
+        .q-num { width: 30px; font-weight: bold; }
+        .q-text { flex: 1; }
+        .opts-grid { display: grid; grid-template-columns: 1fr 1fr; margin-left: 30px; margin-top: 4px; }
+        @media print { .builder-container { display: none; } .paper-page { display: block; margin: 0; } }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <h2 style="text-align: center; color: #d93025;">BIET Question Paper Generator (Word Fix Mode)</h2>
+<div class="builder-container">
+    <h2 style="text-align: center;">BIET Exam Builder (Set A Entry)</h2>
     
-    <div class="header-fields">
-        <div><label>Subject</label><input type="text" id="subj" value="Basic Electrical Engineering"></div>
-        <div><label>Code</label><input type="text" id="code" value="EE101BS"></div>
-        <div><label>Units</label><input type="text" id="unit" value="1 & 2"></div>
-        <div><label>Date</label><input type="text" id="date" value="Oct - 2025"></div>
-        <div><label>Type</label><input type="text" id="type" value="I Mid-Term Examinations"></div>
-        <div><label>Marks/Time</label><input type="text" id="tm" value="30 Min / 10 Marks"></div>
+    <div class="config-row">
+        <div><label>Subject</label><input type="text" id="sName" value="Basic Electrical Engineering"></div>
+        <div><label>Code</label><input type="text" id="sCode" value="EE101BS"></div>
+        <div><label>Date</label><input type="text" id="sDate" value="Oct - 2025"></div>
     </div>
 
-    <label>Paste your 20 Questions for Set 1A (MCQs, then Fill-ups, then Matching)</label>
-    <textarea id="rawInput" placeholder="Paste your Set 1A content here..."></textarea>
-    
-    <button class="btn-main" onclick="reconstructAndGenerate()">Generate Shuffled Sets 1A, 1B, 1C, 1D</button>
+    <div class="section-box">
+        <h3>I. Multiple Choice Questions (1-10)</h3>
+        <div id="mcqContainer"></div>
+    </div>
+
+    <div class="section-box">
+        <h3>II. Fill in the Blanks (11-15)</h3>
+        <div id="fillContainer"></div>
+    </div>
+
+    <div class="section-box">
+        <h3>III. Match the Following (16-20)</h3>
+        <div id="matchContainer"></div>
+    </div>
+
+    <button class="generate-btn" onclick="generateAllSets()">Done - Generate Sets A, B, C, & D</button>
 </div>
 
-<div id="printOutput"></div>
+<div id="printArea"></div>
 
 <script>
-    function reconstructAndGenerate() {
-        const input = document.getElementById('rawInput').value;
-        const config = {
-            subj: document.getElementById('subj').value,
-            code: document.getElementById('code').value,
-            unit: document.getElementById('unit').value,
-            date: document.getElementById('date').value,
-            type: document.getElementById('type').value,
-            tm: document.getElementById('tm').value
-        };
+    // Create Input Fields on Load
+    window.onload = function() {
+        // Create 10 MCQ Inputs
+        for(let i=1; i<=10; i++) {
+            document.getElementById('mcqContainer').innerHTML += `
+            <div class="q-input-group">
+                <label>Question ${i}</label>
+                <input type="text" id="mq${i}" placeholder="Enter Question text">
+                <div class="opt-row">
+                    <input type="text" id="mq${i}a" placeholder="Option A">
+                    <input type="text" id="mq${i}b" placeholder="Option B">
+                    <input type="text" id="mq${i}c" placeholder="Option C">
+                    <input type="text" id="mq${i}d" placeholder="Option D">
+                </div>
+            </div>`;
+        }
+        // Create 5 Fill-up Inputs
+        for(let i=11; i<=15; i++) {
+            document.getElementById('fillContainer').innerHTML += `
+            <div class="q-input-group"><label>Fill-up ${i}</label><input type="text" id="f${i}"></div>`;
+        }
+        // Create 5 Matching Inputs
+        for(let i=16; i<=20; i++) {
+            document.getElementById('matchContainer').innerHTML += `
+            <div class="q-input-group">
+                <div class="opt-row">
+                    <input type="text" id="ml${i}" placeholder="Left Term ${i}">
+                    <input type="text" id="mr${i}" placeholder="Right Term ${i}">
+                </div>
+            </div>`;
+        }
+    };
 
-        // 1. Clean the text from symbols like , $, /, *
-        let cleanText = input.replace(/[\$\/\*\\]/g, "")
-                             .replace(//g, " ohms ")
-                             .replace(/\s\s+/g, ' ');
+    function shuffle(array) { return [...array].sort(() => Math.random() - 0.5); }
 
-        // 2. Extract Questions based on structure
-        const lines = cleanText.split('\n').filter(l => l.trim().length > 5);
-        let mcqs = [], fills = [], matchLeft = [], matchRight = [];
+    function generateAllSets() {
+        const config = { name: document.getElementById('sName').value, code: document.getElementById('sCode').value, date: document.getElementById('sDate').value };
+        let html = "";
 
-        lines.forEach(line => {
-            // Check for MCQ options A) B) C) D)
-            const optMatch = line.match(/([A-D][\)\.\s])/gi);
-            if (optMatch && optMatch.length >= 2) {
-                let parts = line.split(/([A-D][\)\.\s])/i);
-                let q = parts[0].replace(/^\d+[\.\)]\s*/, '').trim();
-                let opts = [];
-                for(let i=2; i < parts.length; i+=2) { if(parts[i].trim()) opts.push(parts[i].trim()); }
-                if (opts.length >= 2) mcqs.push({ q, o: opts });
-            } else if (line.toLowerCase().includes("____") || fills.length < 5) {
-                fills.push(line.replace(/^\d+[\.\)]\s*/, '').trim());
-            } else {
-                // Remaining lines used for matching
-                if (matchLeft.length < 5) matchLeft.push(line.trim());
-                else if (matchRight.length < 5) matchRight.push(line.trim());
-            }
-        });
-
-        // Ensure we have 10 MCQs
-        if (mcqs.length < 10) { alert("Found " + mcqs.length + " MCQs. Need at least 10 for a full paper."); }
-
-        let finalHtml = "";
         ['A', 'B', 'C', 'D'].forEach(letter => {
             let page = `
             <div class="paper-page">
-                <table class="header-tbl">
-                    <tr><td>Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>1${letter}</b></td></tr>
-                    <tr><td colspan="2" class="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
-                    "I B.Tech. I Sem., ${config.type}, ${config.date}"</td></tr>
-                    <tr><td colspan="2"><b>Subject name : ${config.subj}</b> <span style="float:right">Units: ${config.unit}</span></td></tr>
-                    <tr><td colspan="2">Name: ________________ Hall Ticket: ${Array(10).fill('<div class="ht-box"></div>').join('')}</td></tr>
-                    <tr><td colspan="2" class="center" style="font-size:10pt">${config.tm}</td></tr>
+                <table class="header-table">
+                    <tr><td width="70%">Subject Code No: <b>${config.code}</b></td><td align="right">Set No. <b>1${letter}</b></td></tr>
+                    <tr><td colspan="2" align="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>"I B.Tech. I Sem., I Mid-Term, ${config.date}"</td></tr>
+                    <tr><td colspan="2"><b>Subject: ${config.name}</b> <span style="float:right">Hall Ticket: ${Array(10).fill('<div class="ht-box"></div>').join('')}</span></td></tr>
                 </table>
+                <span class="sec-title">I. Multiple Choice Questions</span>`;
 
-                <span class="sec-label">I. Multiple Choice Questions (1-10)</span>`;
-
-            // Logic for Shuffling MCQs
-            mcqs.slice(0, 10).forEach((item, i) => {
-                let currentOpts = (letter === 'A') ? item.o : [...item.o].sort(() => Math.random() - 0.5);
-                page += `
-                <div class="q-block">
-                    <div class="q-row"><div class="q-num">${i+1}.</div><div class="q-txt">${item.q} <span class="bracket" style="float:right">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</span></div></div>
-                    <div class="opts-grid">
-                        <div>A) ${currentOpts[0]||''}</div><div>B) ${currentOpts[1]||''}</div>
-                        <div>C) ${currentOpts[2]||''}</div><div>D) ${currentOpts[3]||''}</div>
-                    </div>
-                </div>`;
-            });
-
-            page += `<span class="sec-label">II. Fill in the Blanks (11-15)</span>`;
-            fills.slice(0, 5).forEach((f, i) => {
-                page += `<div class="q-block"><div class="q-row"><div class="q-num">${i+11}.</div><div class="q-txt">${f}</div></div></div>`;
-            });
-
-            page += `<span class="sec-label">III. Match the Following (16-20)</span>`;
-            let rOrder = (letter === 'A') ? matchRight : [...matchRight].sort(() => Math.random() - 0.5);
-            page += `<table class="match-tbl">`;
-            for(let i=0; i<5; i++) {
-                page += `<tr><td width="5%">${i+16}.</td><td width="45%">${matchLeft[i]||'___'}</td><td width="8%">(${String.fromCharCode(97+i)})</td><td>${rOrder[i]||'___'}</td></tr>`;
+            for(let i=1; i<=10; i++) {
+                let opts = [document.getElementById(`mq${i}a`).value, document.getElementById(`mq${i}b`).value, document.getElementById(`mq${i}c`).value, document.getElementById(`mq${i}d`).value];
+                if(letter !== 'A') opts = shuffle(opts);
+                page += `<div class="q-row"><div class="q-num">${i}.</div><div class="q-text">${document.getElementById(`mq${i}`).value} <span style="float:right">[ &nbsp;&nbsp; ]</span><div class="opts-grid"><div>A) ${opts[0]}</div><div>B) ${opts[1]}</div><div>C) ${opts[2]}</div><div>D) ${opts[3]}</div></div></div></div>`;
             }
-            page += `</table></div>`;
-            finalHtml += page;
-        });
 
-        document.getElementById('printOutput').innerHTML = finalHtml;
+            page += `<span class="sec-title">II. Fill in the Blanks</span>`;
+            for(let i=11; i<=15; i++) { page += `<div class="q-row"><div class="q-num">${i}.</div><div class="q-text">${document.getElementById(`f${i}`).value} ____________</div></div>`; }
+
+            page += `<span class="sec-title">III. Match the Following</span>`;
+            let rights = [];
+            for(let i=16; i<=20; i++) rights.push(document.getElementById(`mr${i}`).value);
+            if(letter !== 'A') rights = shuffle(rights);
+            for(let i=16; i<=20; i++) {
+                page += `<div style="display:flex; justify-content:space-between; width:85%; margin-left:30px; margin-bottom:5px;">
+                    <div>${i}. ${document.getElementById(`ml${i-0}`).value}</div>
+                    <div>(${String.fromCharCode(96+i-15)}) ${rights[i-16]}</div>
+                </div>`;
+            }
+            page += `</div>`;
+            html += page;
+        });
+        document.getElementById('printArea').innerHTML = html;
         window.print();
     }
 </script>
