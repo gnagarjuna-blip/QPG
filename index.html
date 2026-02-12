@@ -2,36 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Universal Exam Generator</title>
+    <title>BIET Question Paper Generator</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; padding: 20px; }
-        .config-box { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+        .setup-container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .row { display: flex; gap: 15px; margin-bottom: 15px; }
         .row div { flex: 1; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        textarea { height: 120px; }
-        button { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        textarea { height: 180px; font-family: 'Courier New', monospace; font-size: 13px; }
+        button { width: 100%; padding: 15px; background: #0066cc; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         
-        /* Professional Paper Layout */
+        /* Print Styles - Exact Sample Match */
         .paper-page { display: none; width: 210mm; min-height: 297mm; padding: 15mm; margin: 10mm auto; background: white; font-family: "Times New Roman", Times, serif; color: black; box-sizing: border-box; page-break-after: always; position: relative; }
-        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .header-table td { border: 1px solid black; padding: 8px; vertical-align: top; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .header-table td { border: 1px solid black; padding: 6px; vertical-align: top; }
         .center { text-align: center; }
         .bold { font-weight: bold; }
-        .ht-box { width: 18px; height: 18px; border: 1px solid black; display: inline-block; margin-left: -1px; }
-
-        .section-title { font-weight: bold; text-decoration: underline; margin: 25px 0 10px 0; display: block; text-transform: uppercase; font-size: 12pt; }
-        .q-row { margin-bottom: 15px; display: flex; page-break-inside: avoid; }
+        .ht-box { border: 1px solid black; width: 18px; height: 18px; display: inline-block; text-align: center; line-height: 18px; font-size: 9pt; margin-left: -1px; }
+        
+        .section-header { font-weight: bold; border-bottom: 1px solid black; margin: 20px 0 10px 0; display: block; text-transform: uppercase; }
+        .question-block { margin-bottom: 15px; display: block; page-break-inside: avoid; }
+        .q-main { display: flex; width: 100%; }
         .q-num { width: 35px; font-weight: bold; }
-        .q-body { flex: 1; }
+        .q-text { flex: 1; position: relative; }
         .bracket { float: right; font-weight: normal; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 5px; margin-left: 10px; }
-        .match-table { width: 90%; margin-left: 30px; border: none; }
-        .match-table td { border: none; padding: 4px 0; }
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; margin-left: 35px; margin-top: 5px; }
 
         @media print {
-            .config-box { display: none; }
+            .setup-container { display: none; }
             .paper-page { display: block; margin: 0; border: none; }
             body { background: white; padding: 0; }
         }
@@ -39,109 +38,130 @@
 </head>
 <body>
 
-<div class="config-box">
-    <h2 style="text-align: center; color: #28a745;">Universal Topic-to-Paper Generator</h2>
+<div class="setup-container">
+    <h2 style="text-align: center; color: #0066cc;">Professional Paper Engine</h2>
     
     <div class="row">
-        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Applied Physics"></div>
-        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. PH101"></div>
+        <div><label>Subject Name</label><input type="text" id="subjName" placeholder="e.g. Mathematics"></div>
+        <div><label>Subject Code</label><input type="text" id="subjCode" placeholder="e.g. MA101"></div>
     </div>
     <div class="row">
         <div><label>Month & Year</label><input type="text" id="examDate" placeholder="Oct - 2025"></div>
-        <div><label>Exam Type (Mid-I/II)</label><input type="text" id="examType" placeholder="I Mid-Term Examinations"></div>
+        <div><label>Exam Type</label><input type="text" id="examType" placeholder="I Mid-Term Examinations"></div>
     </div>
-    
-    <label>Enter Key Topics/Terms (One per line - at least 10 topics)</label>
-    <textarea id="topicsInput" placeholder="Enter topics like:&#10;Photosynthesis&#10;Chlorophyll&#10;Solar Energy&#10;Carbon Dioxide..."></textarea>
-    
-    <button onclick="generatePaper()">Generate & Prepare Print (1A-D & 2A-D)</button>
+    <div class="row">
+        <div><label>Time</label><input type="text" id="time" value="30 Min"></div>
+        <div><label>Marks</label><input type="text" id="marks" value="10"></div>
+    </div>
+
+    <label>1. Paste Multiple Choice Questions (Directly from Word)</label>
+    <textarea id="mcqInput" placeholder="Paste questions like: 1. What is 2+2? A) 3 B) 4 C) 5 D) 6"></textarea>
+
+    <label style="margin-top:10px;">2. Paste Fill in the Blanks / Match the Following</label>
+    <textarea id="otherInput" placeholder="Paste Fill-ups or Matching terms directly here..."></textarea>
+
+    <button onclick="generate()">Generate All Sets (1A-D & 2A-D)</button>
 </div>
 
-<div id="output"></div>
+<div id="outputArea"></div>
 
 <script>
-    function clean(text) { return text ? text.replace(/[\$\/\\]/g, "").trim() : ""; }
-    function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+    function cleanText(t) {
+        if (!t) return "";
+        // Removes $, /, \, and extra spaces
+        return t.replace(/[\$\/\\]/g, " ").replace(/\s\s+/g, ' ').trim();
+    }
 
-    function generatePaper() {
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    // This function detects A) B) C) D) inside a pasted line
+    function parseMCQ(line) {
+        let parts = line.split(/([A-D][\)\.\s])/i);
+        if (parts.length < 3) return null;
+        
+        let question = cleanText(parts[0].replace(/^\d+[\.\)]\s*/, ''));
+        let options = [];
+        for (let i = 2; i < parts.length; i += 2) {
+            options.push(cleanText(parts[i]));
+        }
+        return { q: question, o: options };
+    }
+
+    function generate() {
         const config = {
             name: document.getElementById('subjName').value,
             code: document.getElementById('subjCode').value,
             date: document.getElementById('examDate').value,
-            type: document.getElementById('examType').value
+            type: document.getElementById('examType').value,
+            marks: document.getElementById('marks').value,
+            time: document.getElementById('time').value
         };
-        
-        const topics = document.getElementById('topicsInput').value.split('\n').map(t => clean(t)).filter(t => t.length > 1);
-        
-        if (topics.length < 10) {
-            alert("Please enter at least 10 topics to generate a full paper.");
-            return;
-        }
 
-        let html = "";
+        const mcqLines = document.getElementById('mcqInput').value.split('\n').filter(l => l.trim().length > 5);
+        const otherLines = document.getElementById('otherInput').value.split('\n').filter(l => l.trim().length > 2);
 
-        // Set 1 and Set 2
+        let finalHtml = "";
+
         [1, 2].forEach(setNum => {
-            // Variations A, B, C, D
             ['A', 'B', 'C', 'D'].forEach(letter => {
-                let currentTopics = (setNum === 1) ? topics : shuffle([...topics]);
-                
-                let page = `
+                let pageHtml = `
                 <div class="paper-page">
                     <table class="header-table">
-                        <tr><td>Code No: <b>${config.code}</b></td><td colspan="2" style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
-                        <tr><td colspan="3" class="center"><b style="font-size: 14pt;">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
+                        <tr><td colspan="2">Code No: <b>${config.code}</b></td><td style="text-align:right">Set No. <b>${setNum}${letter}</b></td></tr>
+                        <tr><td colspan="3" class="center"><b style="font-size:14pt">BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY</b><br>
                         "I B.Tech. I Sem., ${config.type}, ${config.date}"</td></tr>
-                        <tr><td colspan="3"><b>Subject: ${config.name}</b> <span style="float:right">Objective Type</span></td></tr>
+                        <tr><td colspan="3"><b>Subject name : ${config.name}</b> <span style="float:right">Objective Exam</span></td></tr>
                         <tr><td colspan="3">Name: ______________________ Hall Ticket No: 
                             <div style="display:inline-block; vertical-align:middle;">
                                 ${Array(10).fill('<div class="ht-box"></div>').join('')}
                             </div>
                         </td></tr>
+                        <tr><td colspan="3" class="center" style="font-size:10pt">Time: ${config.time}. Marks: ${config.marks}.</td></tr>
                     </table>
 
-                    <span class="section-title">I. Multiple Choice Questions (10 Marks)</span>`;
+                    <span class="section-header">Section I: Multiple Choice Questions</span>`;
 
-                // Generate 10 MCQs based on topics
-                for (let i = 0; i < 10; i++) {
-                    let topic = currentTopics[i % currentTopics.length];
-                    let opts = [`Primary function of ${topic}`, `Characteristics of ${topic}`, `Measurement of ${topic}`, `None of the above`];
-                    if (letter !== 'A') opts = shuffle(opts);
-                    
-                    page += `
-                    <div class="q-row">
-                        <div class="q-num">${i+1}.</div>
-                        <div class="q-body">Which of the following best describes the principle of <b>${topic}</b>? <span class="bracket">[ &nbsp;&nbsp; ]</span>
-                            <div class="options-grid">
-                                <div>A) ${opts[0]}</div><div>B) ${opts[1]}</div>
-                                <div>C) ${opts[2]}</div><div>D) ${opts[3]}</div>
+                mcqLines.forEach((line, i) => {
+                    let parsed = parseMCQ(line);
+                    if (parsed) {
+                        let displayOpts = (letter === 'A') ? parsed.o : shuffle([...parsed.o]);
+                        pageHtml += `
+                        <div class="question-block">
+                            <div class="q-main">
+                                <div class="q-num">${i+1}.</div>
+                                <div class="q-text">${parsed.q} <span class="bracket">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</span></div>
                             </div>
-                        </div>
-                    </div>`;
+                            <div class="options-container">
+                                <div>A) ${displayOpts[0] || ''}</div><div>B) ${displayOpts[1] || ''}</div>
+                                <div>C) ${displayOpts[2] || ''}</div><div>D) ${displayOpts[3] || ''}</div>
+                            </div>
+                        </div>`;
+                    } else {
+                        pageHtml += `<div class="question-block"><div class="q-main"><div class="q-num">${i+1}.</div><div class="q-text">${cleanText(line)}</div></div></div>`;
+                    }
+                });
+
+                if (otherLines.length > 0) {
+                    pageHtml += `<span class="section-header">Section II: Additional Questions</span>`;
+                    otherLines.forEach((line, i) => {
+                        pageHtml += `
+                        <div class="question-block">
+                            <div class="q-main">
+                                <div class="q-num">${mcqLines.length + i + 1}.</div>
+                                <div class="q-text">${cleanText(line)}</div>
+                            </div>
+                        </div>`;
+                    });
                 }
 
-                page += `<span class="section-title">II. Fill in the Blanks (5 Marks)</span>`;
-                for (let i = 0; i < 5; i++) {
-                    let topic = currentTopics[(i + 5) % currentTopics.length];
-                    page += `<div class="q-row"><div class="q-num">${i+11}.</div><div class="q-body">The standard unit or process associated with <b>${topic}</b> is _______________.</div></div>`;
-                }
-
-                page += `<span class="section-title">III. Match the Following (5 Marks)</span>`;
-                let left = currentTopics.slice(0, 5);
-                let right = left.map(t => "Related to " + t);
-                if (letter !== 'A') right = shuffle(right);
-
-                page += `<table class="match-table">`;
-                for (let i = 0; i < 5; i++) {
-                    page += `<tr><td width="5%">${i+16}.</td><td width="45%">${left[i]}</td><td width="10%">(${String.fromCharCode(97+i)})</td><td>${right[i]}</td></tr>`;
-                }
-                page += `</table></div>`;
-                
-                html += page;
+                pageHtml += `</div>`;
+                finalHtml += pageHtml;
             });
         });
 
-        document.getElementById('output').innerHTML = html;
+        document.getElementById('outputArea').innerHTML = finalHtml;
         window.print();
     }
 </script>
