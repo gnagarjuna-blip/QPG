@@ -59,7 +59,7 @@
             </div>
             
             <button id="processEngineBtn" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white font-black py-4 px-6 rounded-xl shadow-xl hover:shadow-indigo-500/20 transition duration-200 uppercase tracking-wider text-xs cursor-pointer disabled:opacity-40" disabled>
-                ⚡ Execute Batch Compile & Synced Calculations
+                ⚡ Execute Batch Highlight & Generate Structured Report
             </button>
         </div>
 
@@ -152,7 +152,6 @@
         let streamsChartInstance = null;
         let completionChartInstance = null;
 
-        // Structured column identity fields matching input dataset parameters
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
         const COL_COURSE = "Online Certification Courses";
@@ -211,7 +210,6 @@
             }
         }
 
-        // Hashing function seed calculation to guarantee non-repeating entries per student
         function computeUniqueStringSeedHashValue(nameStr, numID) {
             let runningHash = 0;
             for (let i = 0; i < nameStr.length; i++) {
@@ -220,7 +218,7 @@
             return Math.abs(runningHash + numID);
         }
 
-        // Procedural dictionary supplying 1-2 line descriptive logs and what was learnt
+        // Procedural generation library to provide 1-2 line description of video watched & what was learned
         function computeDescriptiveEceVideoLog(studentName, courseDomainTitle, currentVideoIndex) {
             const lowerDomain = String(courseDomainTitle).toLowerCase();
             const deterministicSeed = computeUniqueStringSeedHashValue(studentName, currentVideoIndex);
@@ -248,7 +246,6 @@
                 descriptivePair = modules[deterministicSeed % modules.length];
             } 
             else {
-                // Default Track / alternative IoT and Digital Networks
                 const modules = [
                     { w: "Video Lesson details peripheral device data gathering pipelines using continuous multi-channel successive-approximation ADC subsystems.", e: "Learned step quantization noise filters, active voltage resolution scaling math, and signal anti-aliasing filtration adjustments." },
                     { w: "Video Lesson demonstrates low-power configuration matrices, sleep modes execution layers, and active peripheral system clock gating properties.", e: "Understood techniques to manipulate clock prescalers to significantly extend cell battery runtimes during prolonged remote tracking operations." },
@@ -272,7 +269,6 @@
                 return;
             }
 
-            // Create horizontal date sequence array map list
             let linearCalendarDatesSequence = [];
             let startCursor = new Date(dateFromValueString);
             let endCursor = new Date(dateToValueString);
@@ -282,7 +278,6 @@
                 startCursor.setDate(startCursor.getDate() + 1);
             }
 
-            // Filter student lists targeting selection matches
             let finalMatchedStudentsDataRowsList = rawMasterDataFileRows.filter(studentObject => {
                 let name = studentObject[COL_NAME] ? String(studentObject[COL_NAME]).trim() : "";
                 let course = studentObject[COL_COURSE] ? String(studentObject[COL_COURSE]).trim() : "";
@@ -290,85 +285,54 @@
             });
 
             if(finalMatchedStudentsDataRowsList.length === 0) {
-                alert("Operation Aborted: Zero entries match your configured search parameter targets.");
+                alert("Operation Aborted: Zero entries match your configured search targets.");
                 return;
             }
 
-            // Sync Quick Statistics Counter Cards text strings
-            const distinctTracksCounter = new Set(finalMatchedStudentsDataRowsList.map(s => s[COL_COURSE])).size;
             document.getElementById('statBatchSize').innerText = finalMatchedStudentsDataRowsList.length;
-            document.getElementById('statTracksCount').innerText = distinctTracksCounter;
+            document.getElementById('statTracksCount').innerText = new Set(finalMatchedStudentsDataRowsList.map(s => s[COL_COURSE])).size;
             document.getElementById('statDaysCount').innerText = linearCalendarDatesSequence.length;
             document.getElementById('statLogsCount').innerText = finalMatchedStudentsDataRowsList.length * linearCalendarDatesSequence.length;
 
-            // Generate Professional Interactive Pie Charts
             renderExecutiveAnalyticsCharts(finalMatchedStudentsDataRowsList);
-
-            // 1. Process Tab View Deck 1: Visual Interactive Dashboard Analytics UI Grid Map
             compileAndRenderVisualAnalyticsDashboardDeck(finalMatchedStudentsDataRowsList, linearCalendarDatesSequence);
-
-            // 2. Process Tab View Deck 2: Horizontal Date column Spreadsheet Registry String Matrix
             compileAndRenderHorizontalMatrixSpreadsheetGrid(finalMatchedStudentsDataRowsList, linearCalendarDatesSequence);
 
             document.getElementById('tabsPanel').classList.remove('hidden');
         }
 
         function renderExecutiveAnalyticsCharts(studentsList) {
-            // Count course distributions
             let streamCounts = {};
             studentsList.forEach(s => {
                 let c = s[COL_COURSE] || "Other Track";
                 streamCounts[c] = (streamCounts[c] || 0) + 1;
             });
 
-            const streamLabels = Object.keys(streamCounts);
-            const streamValues = Object.values(streamCounts);
-
             if(streamsChartInstance) streamsChartInstance.destroy();
             if(completionChartInstance) completionChartInstance.destroy();
 
-            // Chart 1: Course Stream Distribution
             const ctxStreams = document.getElementById('chartStreamsContainer').getContext('2d');
             streamsChartInstance = new Chart(ctxStreams, {
                 type: 'pie',
                 data: {
-                    labels: streamLabels.map(l => l.length > 25 ? l.substring(0,25)+'...' : l),
+                    labels: Object.keys(streamCounts).map(l => l.length > 25 ? l.substring(0,25)+'...' : l),
                     datasets: [{
-                        data: streamValues,
+                        data: Object.values(streamCounts),
                         backgroundColor: ['#6366f1', '#a855f7', '#ec4899', '#f59e0b', '#10b981'],
-                        borderWidth: 2,
-                        borderColor: '#0f172a'
+                        borderWidth: 2, borderColor: '#0f172a'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } } } }
             });
 
-            // Chart 2: Milestone Target Progress
             const ctxCompletion = document.getElementById('chartCompletionContainer').getContext('2d');
             completionChartInstance = new Chart(ctxCompletion, {
                 type: 'doughnut',
                 data: {
                     labels: ['Fully Completed Tasks', 'In-Progress Blocks'],
-                    datasets: [{
-                        data: [studentsList.length, 0], // Every generation auto-creates matching verifiable records
-                        backgroundColor: ['#10b981', '#475569'],
-                        borderWidth: 2,
-                        borderColor: '#0f172a'
-                    }]
+                    datasets: [{ data: [studentsList.length, 0], backgroundColor: ['#10b981', '#475569'], borderWidth: 2, borderColor: '#0f172a' }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } } } }
             });
         }
 
@@ -377,12 +341,10 @@
             panelContainerElement.innerHTML = "";
 
             students.forEach((student, sIndex) => {
-                let currentStudentFullName = String(student[COL_NAME]).trim();
-                let currentStudentRollNumber = student[COL_ROLL] || "N/A";
-                let assignedCourseTrackTitle = student[COL_COURSE] || "General Core Track";
-                let assignedSdgTopicCategory = student[COL_SDG] || "Sustainable Development Parameters Review";
-
-                const sampleCompletenessSeedPercent = 100; // Complete population targets reached cleanly
+                let name = String(student[COL_NAME]).trim();
+                let roll = student[COL_ROLL] || "N/A";
+                let course = student[COL_COURSE] || "General Core Track";
+                let sdg = student[COL_SDG] || "Sustainable Development";
 
                 const aestheticColorPalettes = [
                     { borderGlow: "border-l-indigo-500", ringColor: "stroke-indigo-500", bgBadge: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20" },
@@ -391,49 +353,45 @@
                 ];
                 let currentUiPaletteSelected = aestheticColorPalettes[sIndex % aestheticColorPalettes.length];
 
-                let studentProfileCardLayoutString = `
-                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl border-l-4 ${currentUiPaletteSelected.borderGlow} flex flex-col justify-between space-y-4 hover:scale-[1.01] transition duration-200">
+                let studentCard = `
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl border-l-4 ${currentUiPaletteSelected.borderGlow} flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex justify-between items-start gap-4">
                                 <div>
-                                    <h4 class="text-base font-black text-white tracking-tight leading-snug">${currentStudentFullName}</h4>
-                                    <p class="text-[11px] font-mono text-slate-500 tracking-wider font-bold mt-0.5">${currentStudentRollNumber}</p>
+                                    <h4 class="text-base font-black text-white tracking-tight leading-snug">${name}</h4>
+                                    <p class="text-[11px] font-mono text-slate-500 tracking-wider font-bold mt-0.5">${roll}</p>
                                 </div>
                                 <div class="relative w-11 h-11 flex items-center justify-center shrink-0">
                                     <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                         <path class="stroke-slate-800" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                        <path class="${currentUiPaletteSelected.ringColor}" stroke-dasharray="${sampleCompletenessSeedPercent}, 100" stroke-width="3" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="${currentUiPaletteSelected.ringColor}" stroke-dasharray="100, 100" stroke-width="3" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
                                     </svg>
                                     <span class="absolute text-[9px] font-mono font-black text-emerald-400">100%</span>
                                 </div>
                             </div>
                             <div class="mt-2.5 flex flex-wrap gap-2 items-center">
-                                <span class="text-[10px] font-black px-2.5 py-1 rounded-md border ${currentUiPaletteSelected.bgBadge} uppercase tracking-wider">${assignedSdgTopicCategory}</span>
-                                <div class="text-[10px] text-slate-400 font-extrabold bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800/80">${assignedCourseTrackTitle}</div>
+                                <span class="text-[10px] font-black px-2.5 py-1 rounded-md border ${currentUiPaletteSelected.bgBadge} uppercase tracking-wider">${sdg}</span>
+                                <div class="text-[10px] text-slate-400 font-extrabold bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800/80">${course}</div>
                             </div>
                         </div>
                         <div class="border-t border-slate-950 pt-4 space-y-3">
-                            <h5 class="text-[10px] uppercase tracking-widest font-black text-slate-500 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Chronological Verified Logs</h5>
+                            <h5 class="text-[10px] uppercase tracking-widest font-black text-slate-500 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Chronological Logs</h5>
                 `;
 
                 datesList.forEach((activeDate, activeDateIndex) => {
-                    let cumulativeVideoModuleID = activeDateIndex + 1; 
-                    let explicitVideoLogSummaryTextString = computeDescriptiveEceVideoLog(currentStudentFullName, assignedCourseTrackTitle, cumulativeVideoModuleID);
-                    
-                    // Format for visual breaks line-by-line
-                    let visualFormattedString = explicitVideoLogSummaryTextString.replace('\n', '<br><span class="text-emerald-400 font-bold">');
-                    visualFormattedString += '</span>';
+                    let textLog = computeDescriptiveEceVideoLog(name, course, activeDateIndex + 1);
+                    let visualFormatted = textLog.replace('\n', '<br><span class="text-emerald-400 font-bold">') + '</span>';
 
-                    studentProfileCardLayoutString += `
+                    studentCard += `
                         <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/60 text-xs space-y-1">
                             <span class="font-mono font-bold text-indigo-400 text-[10px] block border-b border-slate-900 pb-1 mb-1">${activeDate} Matrix Log</span>
-                            <p class="text-slate-300 leading-relaxed font-medium text-[11px]">${visualFormattedString}</p>
+                            <p class="text-slate-300 leading-relaxed font-medium text-[11px]">${visualFormatted}</p>
                         </div>
                     `;
                 });
 
-                studentProfileCardLayoutString += `</div></div>`;
-                panelContainerElement.innerHTML += studentProfileCardLayoutString;
+                studentCard += `</div></div>`;
+                panelContainerElement.innerHTML += studentCard;
             });
         }
 
@@ -441,19 +399,21 @@
             const tableElement = document.getElementById('matrixViewTable');
             tableElement.innerHTML = "";
 
-            let worksheetHeaderHtmlString = `<thead class="bg-slate-900 font-bold uppercase text-slate-400 tracking-wider sticky top-0 border-b border-slate-800 shadow-xl z-20"><tr>`;
-            worksheetHeaderHtmlString += `<th class="p-4 bg-slate-900 border-r border-slate-800">Student Name</th>`;
-            worksheetHeaderHtmlString += `<th class="p-4 bg-slate-900 border-r border-slate-800">Roll Number</th>`;
-            worksheetHeaderHtmlString += `<th class="p-4 bg-slate-900 border-r border-slate-800">Registered Certification Course</th>`;
-            worksheetHeaderHtmlString += `<th class="p-4 bg-slate-900 border-r border-slate-800">ECE SDG Category Topic</th>`;
+            let headerHtml = `<thead class="bg-slate-900 font-bold uppercase text-slate-400 tracking-wider sticky top-0 border-b border-slate-800 shadow-xl z-20"><tr>`;
+            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Student Name</th>`;
+            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Roll Number</th>`;
+            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Registered Certification Course</th>`;
+            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">ECE SDG Category Topic</th>`;
             
-            datesList.forEach(dateHeaderString => {
-                worksheetHeaderHtmlString += `<th class="p-4 bg-slate-950 text-indigo-400 border-r border-slate-800 min-w-96 font-mono tracking-wider text-center">${dateHeaderString} Complete Log</th>`;
+            datesList.forEach(d => {
+                headerHtml += `<th class="p-4 bg-slate-950 text-indigo-400 border-r border-slate-800 min-w-96 font-mono tracking-wider text-center">${d} Complete Log</th>`;
             });
-            worksheetHeaderHtmlString += `</tr></thead>`;
+            headerHtml += `</tr></thead>`;
 
-            let worksheetBodyHtmlString = `<tbody class="divide-y divide-slate-800 bg-slate-950/30">`;
-            let flatTabDelimitedMatrixAccumulatorString = "Name of The Student\tRoll Number\tOnline Certification Courses\tCase Study on SDG (Sustainable Development Course) Topics Related to ECE\t" + datesList.map(d => `${d} Tracker Log`).join("\t") + "\n";
+            let bodyHtml = `<tbody class="divide-y divide-slate-800 bg-slate-950/30">`;
+            
+            // TSV header configuration
+            let excelStringAccumulator = "Name of The Student\tRoll Number\tOnline Certification Courses\tCase Study on SDG (Sustainable Development Course) Topics Related to ECE\t" + datesList.map(d => `${d} Tracker Log`).join("\t") + "\n";
 
             students.forEach(student => {
                 let name = String(student[COL_NAME]).trim();
@@ -461,37 +421,34 @@
                 let course = student[COL_COURSE] || "N/A";
                 let sdg = student[COL_SDG] || "N/A";
 
-                worksheetBodyHtmlString += `<tr class="hover:bg-slate-900/40 transition-all duration-150">`;
-                worksheetBodyHtmlString += `<td class="p-3.5 border-r border-slate-800 font-bold text-white bg-slate-900/10">${name}</td>`;
-                worksheetBodyHtmlString += `<td class="p-3.5 border-r border-slate-800 font-mono text-indigo-300 font-semibold">${roll}</td>`;
-                worksheetBodyHtmlString += `<td class="p-3.5 border-r border-slate-800 text-slate-300 text-xs font-medium max-w-xs">${course}</td>`;
-                worksheetBodyHtmlString += `<td class="p-3.5 border-r border-slate-800 text-slate-400 text-xs font-medium">${sdg}</td>`;
+                bodyHtml += `<tr class="hover:bg-slate-900/40 transition-all duration-150">`;
+                bodyHtml += `<td class="p-3.5 border-r border-slate-800 font-bold text-white bg-slate-900/10">${name}</td>`;
+                bodyHtml += `<td class="p-3.5 border-r border-slate-800 font-mono text-indigo-300 font-semibold">${roll}</td>`;
+                bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-300 text-xs font-medium max-w-xs">${course}</td>`;
+                bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-400 text-xs font-medium">${sdg}</td>`;
 
-                let localRowTabDelimitedStringLine = `${name}\t${roll}\t${course}\t${sdg}`;
+                let localRowString = `"${name}"\t"${roll}"\t"${course}"\t"${sdg}"`;
 
-                datesList.forEach((dateStringCursor, dateIndexCursor) => {
-                    let cumulativeVideoDailyID = dateIndexCursor + 1;
-                    let cellLogStringText = computeDescriptiveEceVideoLog(name, course, cumulativeVideoDailyID);
+                datesList.forEach((dateString, dateIndex) => {
+                    let cellLogText = computeDescriptiveEceVideoLog(name, course, dateIndex + 1);
                     
-                    let htmlFormattedCell = cellLogStringText.replace('\n', '<br><span class="text-emerald-400 font-bold font-mono text-[10px] mt-1 block">');
-                    htmlFormattedCell += '</span>';
-
-                    worksheetBodyHtmlString += `<td class="p-3.5 border-r border-slate-800 text-slate-300 bg-slate-900/5 leading-relaxed font-medium align-top text-[11px]">${htmlFormattedCell}</td>`;
+                    let htmlFormattedCell = cellLogText.replace('\n', '<br><span class="text-emerald-400 font-bold font-mono text-[10px] mt-1 block">') + '</span>';
+                    bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-300 bg-slate-900/5 leading-relaxed font-medium align-top text-[11px]">${htmlFormattedCell}</td>`;
                     
-                    // Replace interior line breaks with a safe whitespace divider for direct clipboard cell mapping
-                    let spreadsheetCleanText = cellLogStringText.replace(/\n/g, "  |  ").replace(/\t/g, " ");
-                    localRowTabDelimitedStringLine += `\t${spreadsheetCleanText}`;
+                    // CRITICAL EXCEL CELL CARRIAGE FIX: Double escape quotes, surround cell text with master quotes
+                    let escapedCellContent = cellLogText.replace(/"/g, '""');
+                    localRowString += `\t"${escapedCellContent}"`;
                 });
 
-                worksheetBodyHtmlString += `</tr>`;
-                flatTabDelimitedMatrixAccumulatorString += localRowTabDelimitedStringLine + "\n";
+                bodyHtml += `</tr>`;
+                excelStringAccumulator += localRowString + "\n";
             });
 
-            worksheetBodyHtmlString += `</tbody>`;
-            tableElement.innerHTML = worksheetHeaderHtmlString + worksheetBodyHtmlString;
+            bodyHtml += `</tbody>`;
+            tableElement.innerHTML = headerHtml + bodyHtml;
 
-            horizontalExcelStringContent = flatTabDelimitedMatrixAccumulatorString;
-            document.getElementById('hiddenMatrixBuffer').value = flatTabDelimitedMatrixAccumulatorString;
+            horizontalExcelStringContent = excelStringAccumulator;
+            document.getElementById('hiddenMatrixBuffer').value = excelStringAccumulator;
         }
 
         function handleClipboardCopyMatrixAction() {
@@ -502,9 +459,9 @@
             textBufferElement.setSelectionRange(0, 9999999); 
 
             navigator.clipboard.writeText(textBufferElement.value).then(() => {
-                alert("🚀 Horizontal Progress Matrix Copied Successfully!\n\nTo view instantly inside Excel:\n1. Open an empty Microsoft Excel file or Google Sheet.\n2. Click on the very first cell (A1).\n3. Press CTRL + V to paste.\n\nEvery date tracks perfectly as its own dedicated horizontal column filled with unique, detailed data!");
+                alert("🚀 Horizontal Matrix Copied and Fixed for Excel Custom Paragraph Breaks!\n\nTo view correctly inside Excel:\n1. Open an empty Microsoft Excel file or Google Sheet.\n2. Click on cell A1.\n3. Press CTRL + V to paste.\n\n[PRO TIP]: If the lines look squished, select your table rows, click 'Wrap Text' in your Excel home bar, and adjust the row heights!");
             }).catch(err => {
-                alert("Clipboard transaction exception. Please review browser clipboard permissions settings.");
+                alert("Clipboard transaction error.");
             });
         }
     </script>
