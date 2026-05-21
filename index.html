@@ -3,92 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Department - Premium Student Progress Analytics Hub</title>
+    <title>ECE Department III-I-C - Premium Analytics & Matrix Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
 
-    <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-6 py-4">
+    <header class="bg-slate-900/50 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50 px-6 py-4">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <span class="font-black text-white text-lg">⚡</span>
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 animate-pulse">
+                    <span class="font-black text-white text-xl">📊</span>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">ECE Department III-I-C</h1>
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Premium Video Lesson Matrix & Reporting Hub</p>
+                    <h1 class="text-2xl font-black bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent tracking-tight">ECE III-I-C Section</h1>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">Advanced Student Course Analytics & Data Matrix Engine</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <span class="text-xs font-bold px-3 py-1 bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">Academic Tracker 2026</span>
+            <div class="flex items-center gap-3 bg-slate-950 p-2 rounded-xl border border-slate-800">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">System Live | Academic Year 2026</span>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
         
-        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-2xl relative overflow-hidden group">
+        <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden group">
             <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none transition-all group-hover:bg-indigo-500/10"></div>
             
-            <h2 class="text-sm font-extrabold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> 1. Configuration & Source Matrix
+            <h2 class="text-xs font-extrabold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 1. Configuration & Operations Core
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="md:col-span-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800 hover:border-slate-700 transition">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Upload Master Student Excel File</label>
-                    <input type="file" id="uploadSource" accept=".xlsx, .xls, .csv" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 file:cursor-pointer file:transition"/>
+                <div class="md:col-span-3 bg-slate-950/60 p-5 rounded-2xl border border-slate-800 hover:border-slate-700/80 transition-all duration-200">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Upload "Summer Assignments For III-I-C Section" File</label>
+                    <input type="file" id="uploadSource" accept=".xlsx, .xls, .csv" class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-gradient-to-r file:from-indigo-600 file:to-purple-600 file:text-white hover:file:from-indigo-500 hover:file:to-purple-500 file:cursor-pointer file:transition file:shadow-lg file:shadow-indigo-900/30"/>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tracking From Date</label>
-                    <input type="date" id="dateStart" value="2026-05-18" class="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tracking Date range From</label>
+                    <input type="date" id="dateStart" value="2026-05-18" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none font-mono transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tracking To Date</label>
-                    <input type="date" id="dateEnd" value="2026-05-20" class="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tracking Date range To</label>
+                    <input type="date" id="dateEnd" value="2026-05-22" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none font-mono transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Quick Filter Domain Track</label>
-                    <select id="courseDrop" class="w-full p-3 bg-slate-900 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none" disabled>
-                        <option value="All">All Registered Courses</option>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Quick-Filter Course Track Selection</label>
+                    <select id="courseDrop" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:border-indigo-500 text-white outline-none transition" disabled>
+                        <option value="All">All Registered Courses (Processes Whole Batch)</option>
                     </select>
                 </div>
             </div>
             
-            <button id="processEngineBtn" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-xl hover:shadow-indigo-500/10 transition uppercase tracking-wider text-xs cursor-pointer disabled:opacity-40" disabled>
-                ⚡ Sync Master File & Run Optimization Engine
+            <button id="processEngineBtn" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white font-black py-4 px-6 rounded-xl shadow-xl shadow-indigo-900/20 hover:shadow-indigo-500/10 transition duration-200 uppercase tracking-wider text-xs cursor-pointer disabled:opacity-40" disabled>
+                ⚙️ Synchronize Datasets & Generate High-Fidelity Reports
             </button>
         </div>
 
         <div id="tabsPanel" class="hidden space-y-6">
-            <div class="flex border-b border-slate-800 p-1 bg-slate-950 rounded-xl max-w-md">
-                <button id="tabVisualBtn" onclick="switchActiveTab('visual')" class="flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition duration-150 bg-indigo-600 text-white">
-                    🎨 Visual Report Tab
+            
+            <div class="flex border-b border-slate-800 p-1.5 bg-slate-900/60 backdrop-blur-md rounded-2xl max-w-xl border border-slate-800">
+                <button id="tabVisualBtn" onclick="switchActiveTab('visual')" class="flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+                    🎨 Visual Analytics Dashboard
                 </button>
-                <button id="tabMatrixBtn" onclick="switchActiveTab('matrix')" class="flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition duration-150 text-slate-400 hover:text-slate-200">
-                    📋 Horizontal Matrix Tab (Excel)
+                <button id="tabMatrixBtn" onclick="switchActiveTab('matrix')" class="flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200 text-slate-400 hover:text-slate-200">
+                    📋 Horizontal Matrix Grid (Excel Perfect)
                 </button>
             </div>
 
             <div id="tabVisualView" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="visualReportCardsContainer">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Total Enrolled Batch Size</p>
+                            <h3 class="text-2xl font-black text-white mt-1" id="statBatchSize">0</h3>
+                        </div>
+                        <span class="text-2xl bg-indigo-500/10 p-2.5 rounded-xl border border-indigo-500/20 text-indigo-400">👥</span>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Active Course Tracks</p>
+                            <h3 class="text-2xl font-black text-purple-400 mt-1" id="statTracksCount">0</h3>
+                        </div>
+                        <span class="text-2xl bg-purple-500/10 p-2.5 rounded-xl border border-purple-500/20 text-purple-400">📚</span>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Total Calendar Days Input</p>
+                            <h3 class="text-2xl font-black text-amber-400 mt-1" id="statDaysCount">0</h3>
+                        </div>
+                        <span class="text-2xl bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 text-amber-400">📅</span>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Aggregated Individual Video Logs</p>
+                            <h3 class="text-2xl font-black text-pink-400 mt-1" id="statLogsCount">0</h3>
+                        </div>
+                        <span class="text-2xl bg-pink-500/10 p-2.5 rounded-xl border border-pink-500/20 text-pink-400">🎯</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="visualAnalyticsContainer">
                     </div>
             </div>
 
-            <div id="tabMatrixView" class="hidden bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-                <div class="p-5 border-b border-slate-800 bg-slate-950 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div id="tabMatrixView" class="hidden bg-slate-900/40 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+                <div class="p-5 border-b border-slate-800 bg-slate-950/60 backdrop-blur-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h3 class="text-sm font-black uppercase tracking-wider text-white">Horizontal Spreadsheet Data Block</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Dates stretch horizontally as columns exactly like your template layout.</p>
+                        <h3 class="text-base font-black text-white tracking-tight uppercase">Horizontal Progress Matrix Registry</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Dates are mapped horizontally as side-by-side columns exactly matching your specified Excel structure template layout.</p>
                     </div>
-                    <button onclick="copyHorizontalMatrixText()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-50 hover:to-teal-500 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl transition uppercase tracking-wider shadow shadow-emerald-900/20">
-                        ✨ Copy Matrix For Excel
+                    <button onclick="handleClipboardCopyMatrixAction()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black px-6 py-3 rounded-xl transition duration-150 uppercase tracking-wider shadow-lg shadow-emerald-900/20 cursor-pointer">
+                        ✨ Copy Horizontal Matrix For Excel
                     </button>
                 </div>
                 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-800 text-left text-xs" id="matrixViewTable">
+                <div class="overflow-x-auto max-h-[600px]">
+                    <table class="min-w-full divide-y divide-slate-800 text-left text-[11px]" id="matrixViewTable">
                         </table>
                 </div>
                 <textarea id="hiddenMatrixBuffer" class="absolute opacity-0 pointer-events-none"></textarea>
@@ -97,8 +130,8 @@
     </main>
 
     <script>
-        let excelRawDataRows = [];
-        let generatedMatrixString = "";
+        let rawMasterDataFileRows = [];
+        let horizontalExcelStringContent = "";
 
         // Raw master dataset mapping tokens
         const COL_NAME = "Name of The Student";
@@ -109,241 +142,39 @@
         const COL_COURSE = "Online Certification Courses";
         const COL_SDG = "Case Study on SDG (Sustainable Development Course) Topics Related to ECE";
 
-        document.getElementById('uploadSource').addEventListener('change', readMasterSourceSpreadsheet, false);
-        document.getElementById('processEngineBtn').addEventListener('click', runReportGenerationPipeline, false);
+        document.getElementById('uploadSource').addEventListener('change', parseInputMasterExcelSheet, false);
+        document.getElementById('processEngineBtn').addEventListener('click', executeDataCompilingPipeline, false);
 
-        function readMasterSourceSpreadsheet(e) {
-            const uploadedFiles = e.target.files;
-            if(!uploadedFiles || uploadedFiles.length === 0) return;
+        function parseInputMasterExcelSheet(e) {
+            const files = e.target.files;
+            if(!files || files.length === 0) return;
 
-            const readerObj = new FileReader();
-            readerObj.onload = function(event) {
-                const arrayBytes = new Uint8Array(event.target.result);
-                const bookInstance = XLSX.read(arrayBytes, {type: 'array'});
-                const sheetInstance = bookInstance.Sheets[bookInstance.SheetNames[0]];
+            const readerInstance = new FileReader();
+            readerInstance.onload = function(event) {
+                const binaryDataBytes = new Uint8Array(event.target.result);
+                const bookInstance = XLSX.read(binaryDataBytes, {type: 'array'});
+                const targetSheet = bookInstance.Sheets[bookInstance.SheetNames[0]];
                 
-                excelRawDataRows = XLSX.utils.sheet_to_json(sheetInstance, {defval: ""});
-                if(excelRawDataRows.length === 0) { alert("Source Error: No operational data found."); return; }
+                rawMasterDataFileRows = XLSX.utils.sheet_to_json(targetSheet, {defval: ""});
+                if(rawMasterDataFileRows.length === 0) { alert("Parsing Mismatch: File sheet contains no structural row properties."); return; }
                 
-                // Initialize select option items mapping
-                const uniqueCourses = new Set();
-                excelRawDataRows.forEach(item => {
-                    if(item[COL_COURSE]) uniqueCourses.add(String(item[COL_COURSE]).trim());
+                const trackingCoursesFoundList = new Set();
+                rawMasterDataFileRows.forEach(row => {
+                    if(row[COL_COURSE]) trackingCoursesFoundList.add(String(row[COL_COURSE]).trim());
                 });
 
-                const dropMenu = document.getElementById('courseDrop');
-                dropMenu.innerHTML = '<option value="All">All Registered Courses</option>';
-                uniqueCourses.forEach(c => dropMenu.innerHTML += `<option value="${c}">${c}</option>`);
-                dropMenu.disabled = false;
-                
+                const courseMenuDropElement = document.getElementById('courseDrop');
+                courseMenuDropElement.innerHTML = '<option value="All">All Registered Courses (Processes Whole Batch)</option>';
+                trackingCoursesFoundList.forEach(courseNameString => {
+                    courseMenuDropElement.innerHTML += `<option value="${courseNameString}">${courseNameString}</option>`;
+                });
+                courseMenuDropElement.disabled = false;
                 document.getElementById('processEngineBtn').disabled = false;
-                alert(`Successfully synchronized ${excelRawDataRows.length} active records! Click below to map logs.`);
+                
+                alert(`Data Sync Initialized! Successfully logged ${rawMasterDataFileRows.length} active ECE III-I-C records.`);
             };
-            readerObj.readAsArrayBuffer(uploadedFiles[0]);
+            readerInstance.readAsArrayBuffer(files[0]);
         }
 
-        function switchActiveTab(targetTab) {
-            const vTab = document.getElementById('tabVisualView');
-            const mTab = document.getElementById('tabMatrixView');
-            const vBtn = document.getElementById('tabVisualBtn');
-            const mBtn = document.getElementById('tabMatrixBtn');
-
-            if(targetTab === 'visual') {
-                vTab.classList.remove('hidden');
-                mTab.classList.add('hidden');
-                vBtn.className = "flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition bg-indigo-600 text-white";
-                mBtn.className = "flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition text-slate-400 hover:text-slate-200";
-            } else {
-                vTab.classList.add('hidden');
-                mTab.classList.remove('hidden');
-                mBtn.className = "flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition bg-indigo-600 text-white";
-                vBtn.className = "flex-1 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition text-slate-400 hover:text-slate-200";
-            }
-        }
-
-        function createDeterministicHashSeed(str, num) {
-            let runningHash = 0;
-            for (let i = 0; i < str.length; i++) {
-                runningHash = str.charCodeAt(i) + ((runningHash << 5) - runningHash);
-            }
-            return Math.abs(runningHash + num);
-        }
-
-        function buildDynamicHashedLogs(studentName, courseDomain, videoId) {
-            const cleanStr = String(courseDomain).toLowerCase();
-            const seedVal = createDeterministicHashSeed(studentName, videoId);
-            let logs = { task: "", outcome: "" };
-
-            if (cleanStr.includes('semiconductors') || cleanStr.includes('vlsi') || cleanStr.includes('embedded')) {
-                const tracks = [
-                    { t: "Analyzed sub-micron semiconductor physical layouts and gate models.", o: "Understood drain-induced barrier lowering scaling constraints and quantum gate tunneling anomalies." },
-                    { t: "Designed hardware layouts for synchronous multi-stage pipeline registers.", o: "Acquired competency resolving critical hold time margin errors inside high-frequency design trees." },
-                    { t: "Simulated structural cell propagation path delays using custom LTSpice models.", o: "Calculated voltage transfer optimization properties and validated power dissipation loops." }
-                ];
-                logs = tracks[seedVal % tracks.length];
-            } else if (cleanStr.includes('pcb') || cleanStr.includes('layout') || cleanStr.includes('design')) {
-                const tracks = [
-                    { t: "Mapped library footprint schemas for complex high-density microprocessor modules.", o: "Mastered programmatic netlist properties sync constraints and multi-layer board trace parameters." },
-                    { t: "Executed high-frequency trace path routing and differential alignment loops.", o: "Acquired insights into reducing signal loop cross-talk properties and trace impedance mismatching paths." },
-                    { t: "Conducted design rule checks (DRC) to optimize surface tracking spacing parameters.", o: "Resolved critical layout pad spacing issues and finalized production-ready Gerber datasets." }
-                ];
-                logs = tracks[seedVal % tracks.length];
-            } else {
-                const tracks = [
-                    { t: "Interfaced instrumentation sensor arrays with microcontroller hardware channels.", o: "Understood analog-to-digital converter signal mapping matrices and quantization noise filters." },
-                    { t: "Programmed low-power peripheral firmware using sleep state timer configurations.", o: "Acquired tracking engineering concepts regarding hardware clock prescaler line configurations." },
-                    { t: "Configured local device data streams linking to specialized MQTT message brokers.", o: "Mastered lightweight client publish-subscribe parameters across dynamic external networks." }
-                ];
-                logs = tracks[seedVal % tracks.length];
-            }
-            return `Video Module #${videoId}: ${logs.t} ${logs.outcome}`;
-        }
-
-        function runReportGenerationPipeline() {
-            const startVal = document.getElementById('dateStart').value;
-            const endVal = document.getElementById('dateEnd').value;
-            const courseVal = document.getElementById('courseDrop').value;
-
-            if(!startVal || !endVal) { alert("Please declare the calendar range boundary dates."); return; }
-
-            let calendarDatesArray = [];
-            let currentDayCursor = new Date(startVal);
-            let endingDayCursor = new Date(endVal);
-
-            while(currentDayCursor <= endingDayCursor) {
-                calendarDatesArray.push(new Date(currentDayCursor).toISOString().split('T')[0]);
-                currentDayCursor.setDate(currentDayCursor.getDate() + 1);
-            }
-
-            let filteredStudentsList = excelRawDataRows.filter(row => {
-                let name = row[COL_NAME] ? String(row[COL_NAME]).trim() : "";
-                let course = row[COL_COURSE] ? String(row[COL_COURSE]).trim() : "";
-                return name && (courseVal === "All" || course === courseVal);
-            });
-
-            if(filteredStudentsList.length === 0) { alert("No student records match the filters."); return; }
-
-            // 1. GENERATE TABULAR DATA FOR TAB 1: PREMIUM COLOR VISUAL LOG DASHBOARD
-            buildPremiumVisualCards(filteredStudentsList, calendarDatesArray);
-
-            // 2. GENERATE MATRIX DATA FOR TAB 2: HORIZONTAL MATRICES LAYOUT
-            buildHorizontalMatrixLayout(filteredStudentsList, calendarDatesArray);
-
-            document.getElementById('tabsPanel').classList.remove('hidden');
-        }
-
-        function buildPremiumVisualCards(students, dates) {
-            const cardContainer = document.getElementById('visualReportCardsContainer');
-            cardContainer.innerHTML = "";
-
-            students.forEach((student, index) => {
-                let sName = String(student[COL_NAME]).trim();
-                let sCourse = student[COL_COURSE] || "General Track";
-                let sRoll = student[COL_ROLL] || "N/A";
-                let sSdg = student[COL_SDG] || "General System Study";
-
-                // Cycle color themes dynamically across elements
-                const badgesPalette = [
-                    { bg: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20", glow: "border-l-indigo-500" },
-                    { bg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20", glow: "border-l-emerald-500" },
-                    { bg: "bg-amber-500/10 text-amber-400 border-amber-500/20", glow: "border-l-amber-500" }
-                ];
-                let theme = badgesPalette[index % badgesPalette.length];
-
-                let cardHtml = `
-                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 shadow-xl border-l-4 ${theme.glow} flex flex-col justify-between space-y-4">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-base font-black text-white tracking-tight">${sName}</h4>
-                                    <p class="text-xs font-mono text-slate-500 mt-0.5">${sRoll}</p>
-                                </div>
-                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-md border ${theme.bg} uppercase tracking-wider">${sSdg}</span>
-                            </div>
-                            <div class="text-xs text-slate-400 font-bold mt-2 bg-slate-900/50 px-3 py-1.5 border border-slate-800/60 rounded-lg inline-block">${sCourse}</div>
-                        </div>
-                        <div class="border-t border-slate-900 pt-3 space-y-2.5">
-                            <h5 class="text-[10px] uppercase tracking-widest font-extrabold text-slate-500">Timeline Progress Breakdown</h5>
-                `;
-
-                dates.forEach((targetDate, dIdx) => {
-                    let videoId = dIdx + 1;
-                    let logsText = buildDynamicHashedLogs(sName, sCourse, videoId);
-                    cardHtml += `
-                        <div class="bg-slate-900/40 p-2 rounded-lg border border-slate-800 text-xs flex gap-3 items-start">
-                            <div class="bg-slate-950 px-2 py-1 rounded border border-slate-800 font-mono font-black text-[10px] text-indigo-400 mt-0.5 whitespace-nowrap">${targetDate}</div>
-                            <p class="text-slate-300 leading-relaxed font-medium">${logsText}</p>
-                        </div>
-                    `;
-                });
-
-                cardHtml += `</div></div>`;
-                cardContainer.innerHTML += cardHtml;
-            });
-        }
-
-        function buildHorizontalMatrixLayout(students, dates) {
-            const tableElement = document.getElementById('matrixViewTable');
-            tableElement.innerHTML = "";
-
-            // 1. Build Table Structural Header Rows (Horizontal dates stretch rightwards)
-            let headerHtml = `<thead class="bg-slate-900 font-bold uppercase text-slate-400 tracking-wider sticky top-0 border-b border-slate-800 shadow-sm"><tr>`;
-            headerHtml += `<th class="p-3 bg-slate-900 whitespace-nowrap border-r border-slate-800">Student Particulars</th>`;
-            headerHtml += `<th class="p-3 bg-slate-900 whitespace-nowrap border-r border-slate-800">Assigned Course Track</th>`;
-            
-            dates.forEach(d => {
-                headerHtml += `<th class="p-3 bg-slate-950 text-indigo-400 text-center border-r border-slate-800 min-w-80">${d} Log</th>`;
-            });
-            headerHtml += `</tr></thead>`;
-
-            // 2. Build Structural Table Body rows
-            let bodyHtml = `<tbody class="divide-y divide-slate-800 bg-slate-950/40">`;
-            
-            // Background Tab delimited compilation string layer
-            let matrixStringAccumulator = "Student Details\tCourse Track\t" + dates.join("\t") + "\n";
-
-            students.forEach(student => {
-                let name = String(student[COL_NAME]).trim();
-                let roll = student[COL_ROLL] || "N/A";
-                let course = student[COL_COURSE] || "N/A";
-
-                bodyHtml += `<tr class="hover:bg-slate-900/60 transition">`;
-                bodyHtml += `<td class="p-3 border-r border-slate-800"><div class="font-bold text-white">${name}</div><div class="text-[10px] font-mono text-slate-500 mt-0.5">${roll}</div></td>`;
-                bodyHtml += `<td class="p-3 text-slate-400 border-r border-slate-800 text-xs font-medium max-w-xs">${course}</td>`;
-
-                let excelRowString = `${name} (${roll})\t${course}`;
-
-                dates.forEach((d, dIdx) => {
-                    let videoId = dIdx + 1;
-                    let logCellText = buildDynamicHashedLogs(name, course, videoId);
-                    
-                    bodyHtml += `<td class="p-3 border-r border-slate-800 text-slate-300 bg-slate-900/20 leading-relaxed font-medium text-[11px] align-top">${logCellText}</td>`;
-                    excelRowString += `\t${logCellText}`;
-                });
-
-                bodyHtml += `</tr>`;
-                matrixStringAccumulator += excelRowString + "\n";
-            });
-
-            bodyHtml += `</tbody>`;
-            tableElement.innerHTML = headerHtml + bodyHtml;
-
-            // Cache generated flat string into virtual buffer area box
-            generatedMatrixString = matrixStringAccumulator;
-            document.getElementById('hiddenMatrixBuffer').value = matrixStringAccumulator;
-        }
-
-        function copyHorizontalMatrixText() {
-            if(!generatedMatrixString) return;
-            const bufferArea = document.getElementById('hiddenMatrixBuffer');
-            bufferArea.select();
-            
-            navigator.clipboard.writeText(bufferArea.value).then(() => {
-                alert("Horizontal Data Matrix Copied Successfully!\n\nOpen an empty sheet, click cell A1, and press CTRL + V to paste.");
-            }).catch(() => {
-                alert("Failed to copy automatically. Please select text manually from the window.");
-            });
-        }
-    </script>
-</body>
-</html>
+        function switchActiveTab(targetTabToken) {
+            const visual
