@@ -3,466 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE III-I-C - Executive Report Analytics Hub</title>
+    <title>ECE III-I-C - Excel Multi-Line Sync Engine</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6 font-sans antialiased">
 
-    <header class="bg-slate-900/60 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-xl shadow-indigo-500/20">
-                    <span class="font-black text-white text-xl">🚀</span>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-black bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent tracking-tight">ECE Department Analytics Hub</h1>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">Section III-I-C • Premium Video Matrix & Milestone Tracker</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 bg-slate-950 p-2 rounded-xl border border-slate-800">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs font-bold font-mono text-emerald-400 uppercase tracking-wider">Engine Operational</span>
-            </div>
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl">
+            <h1 class="text-xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                Excel Native Multi-Line Generator (Alt+Enter Fix)
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Forces Excel to properly recognize cell line breaks as clean, multi-line paragraphs instead of a single merged line.
+            </p>
         </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        
-        <div class="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <h2 class="text-xs font-extrabold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 1. Initialization Parameters
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="md:col-span-3 bg-slate-950/60 p-5 rounded-2xl border border-slate-800 hover:border-slate-700 transition">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Upload Master Student Excel File</label>
-                    <input type="file" id="uploadSource" accept=".xlsx, .xls, .csv" class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-gradient-to-r file:from-indigo-600 file:to-purple-600 file:text-white hover:file:from-indigo-500 file:cursor-pointer file:transition"/>
+        <div class="bg-slate-900/50 border border-slate-800 p-6 rounded-3xl space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Upload Student Sheet (.xlsx/.csv)</label>
+                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 file:cursor-pointer"/>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Start Date</label>
+                    <input type="date" id="dateStart" value="2026-05-18" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Timeline Tracking From</label>
-                    <input type="date" id="dateStart" value="2026-05-18" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white font-mono outline-none focus:border-indigo-500 transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Timeline Tracking To</label>
-                    <input type="date" id="dateEnd" value="2026-05-22" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white font-mono outline-none focus:border-indigo-500 transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Filter Registered Course Stream</label>
-                    <select id="courseDrop" class="w-full p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white outline-none focus:border-indigo-500 transition" disabled>
-                        <option value="All">All Registered Courses (Process Full Batch)</option>
-                    </select>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">End Date</label>
+                    <input type="date" id="dateEnd" value="2026-05-22" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono">
                 </div>
             </div>
-            
-            <button id="processEngineBtn" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 text-white font-black py-4 px-6 rounded-xl shadow-xl hover:shadow-indigo-500/20 transition duration-200 uppercase tracking-wider text-xs cursor-pointer disabled:opacity-40" disabled>
-                ⚡ Execute Batch Highlight & Generate Structured Report
+
+            <button id="processBtn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition disabled:opacity-40 cursor-pointer" disabled>
+                ⚡ Step 1: Generate Data Columns
             </button>
         </div>
 
-        <div id="tabsPanel" class="hidden space-y-6">
-            
-            <div class="flex border-b border-slate-800 p-1.5 bg-slate-900/60 backdrop-blur-md rounded-2xl max-w-xl border border-slate-800">
-                <button id="tabVisualBtn" onclick="switchActiveTab('visual')" class="flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
-                    🎨 Visual Analytics Dashboard
-                </button>
-                <button id="tabMatrixBtn" onclick="switchActiveTab('matrix')" class="flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all duration-200 text-slate-400 hover:text-slate-200">
-                    📋 Horizontal Matrix Grid (Excel Copy-Ready)
-                </button>
-            </div>
-
-            <div id="tabVisualView" class="space-y-8">
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Total Synchronized Students</p>
-                            <h3 class="text-2xl font-black text-white mt-1" id="statBatchSize">0</h3>
-                        </div>
-                        <span class="text-xl bg-indigo-500/10 p-2.5 rounded-xl border border-indigo-500/20 text-indigo-400">👥</span>
-                    </div>
-                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Active Course Domains</p>
-                            <h3 class="text-2xl font-black text-purple-400 mt-1" id="statTracksCount">0</h3>
-                        </div>
-                        <span class="text-xl bg-purple-500/10 p-2.5 rounded-xl border border-purple-500/20 text-purple-400">📚</span>
-                    </div>
-                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Calculated Learning Days</p>
-                            <h3 class="text-2xl font-black text-amber-400 mt-1" id="statDaysCount">0</h3>
-                        </div>
-                        <span class="text-xl bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20 text-amber-400">📅</span>
-                    </div>
-                    <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Total Evaluated Progress Rows</p>
-                            <h3 class="text-2xl font-black text-pink-400 mt-1" id="statLogsCount">0</h3>
-                        </div>
-                        <span class="text-xl bg-pink-500/10 p-2.5 rounded-xl border border-pink-500/20 text-pink-400">🎯</span>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl shadow-xl flex flex-col items-center justify-center">
-                        <h4 class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-4 self-start">📊 Distribution of Enrolled Learning Streams</h4>
-                        <div class="w-64 h-64 relative">
-                            <canvas id="chartStreamsContainer"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl shadow-xl flex flex-col items-center justify-center">
-                        <h4 class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-4 self-start">📈 Academic Completion Status Profile</h4>
-                        <div class="w-64 h-64 relative">
-                            <canvas id="chartCompletionContainer"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="visualAnalyticsContainer">
-                    </div>
-            </div>
-
-            <div id="tabMatrixView" class="hidden bg-slate-900/40 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-                <div class="p-6 border-b border-slate-800 bg-slate-950/60 backdrop-blur-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h3 class="text-base font-black text-white uppercase tracking-tight">Horizontal Spreadsheet Progress Grid</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Dates map horizontally rightwards. Each cell contains 1-2 lines of video logs and 1-2 lines of explicit learning outcomes.</p>
-                    </div>
-                    <button onclick="handleClipboardCopyMatrixAction()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-lg shadow-emerald-900/20 cursor-pointer">
-                        ✨ Copy Horizontal Matrix For Excel
-                    </button>
-                </div>
-                
-                <div class="overflow-x-auto max-h-[600px]">
-                    <table class="min-w-full divide-y divide-slate-800 text-left text-[11px]" id="matrixViewTable">
-                        </table>
-                </div>
-                <textarea id="hiddenMatrixBuffer" class="absolute opacity-0 pointer-events-none"></textarea>
-            </div>
+        <div id="actionArea" class="hidden bg-slate-900 border border-indigo-950 p-6 rounded-3xl text-center space-y-3 shadow-2xl animate-fade-in">
+            <div class="inline-flex p-3 bg-indigo-500/10 rounded-full text-indigo-400 text-lg">📋</div>
+            <h3 class="text-sm font-bold text-white">Data Generation Matrix Complete!</h3>
+            <p class="text-xs text-slate-400 max-w-md mx-auto">
+                Click the button below to copy the matrix data. When pasted into Excel, rows will cleanly break down into distinct paragraph blocks inside their cells.
+            </p>
+            <button onclick="copyToClipboard()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-lg shadow-emerald-950">
+                👉 Step 2: Copy Data & Paste to Excel (A1)
+            </button>
         </div>
-    </main>
+    </div>
+
+    <textarea id="excelBuffer" class="absolute opacity-0 pointer-events-none w-1 h-1"></textarea>
 
     <script>
-        let rawMasterDataFileRows = [];
-        let horizontalExcelStringContent = "";
-        let streamsChartInstance = null;
-        let completionChartInstance = null;
+        let studentDataset = [];
+        let generatedOutputString = "";
 
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
         const COL_COURSE = "Online Certification Courses";
         const COL_SDG = "Case Study on SDG (Sustainable Development Course) Topics Related to ECE";
 
-        document.getElementById('uploadSource').addEventListener('change', parseInputMasterExcelSheet, false);
-        document.getElementById('processEngineBtn').addEventListener('click', executeDataCompilingPipeline, false);
-
-        function parseInputMasterExcelSheet(e) {
-            const files = e.target.files;
-            if(!files || files.length === 0) return;
-
-            const readerInstance = new FileReader();
-            readerInstance.onload = function(event) {
-                const binaryDataBytes = new Uint8Array(event.target.result);
-                const bookInstance = XLSX.read(binaryDataBytes, {type: 'array'});
-                const targetSheet = bookInstance.Sheets[bookInstance.SheetNames[0]];
-                
-                rawMasterDataFileRows = XLSX.utils.sheet_to_json(targetSheet, {defval: ""});
-                if(rawMasterDataFileRows.length === 0) { alert("Parsing Mismatch: File sheet contains no structural data row parameters."); return; }
-                
-                const trackingCoursesFoundList = new Set();
-                rawMasterDataFileRows.forEach(row => {
-                    if(row[COL_COURSE]) trackingCoursesFoundList.add(String(row[COL_COURSE]).trim());
-                });
-
-                const courseMenuDropElement = document.getElementById('courseDrop');
-                courseMenuDropElement.innerHTML = '<option value="All">All Registered Courses (Process Full Batch)</option>';
-                trackingCoursesFoundList.forEach(courseNameString => {
-                    courseMenuDropElement.innerHTML += `<option value="${courseNameString}">${courseNameString}</option>`;
-                });
-                courseMenuDropElement.disabled = false;
-                document.getElementById('processEngineBtn').disabled = false;
-                
-                alert(`Data Sync Success! Loaded ${rawMasterDataFileRows.length} active student identity logs.`);
+        document.getElementById('uploadFile').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                studentDataset = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {defval: ""});
+                document.getElementById('processBtn').disabled = false;
+                alert("File loaded successfully! Click 'Generate Data Columns' below.");
             };
-            readerInstance.readAsArrayBuffer(files[0]);
-        }
+            reader.readAsArrayBuffer(e.target.files[0]);
+        });
 
-        function switchActiveTab(targetTabToken) {
-            const visualContentPanel = document.getElementById('tabVisualView');
-            const matrixContentPanel = document.getElementById('tabMatrixView');
-            const visualNavButton = document.getElementById('tabVisualBtn');
-            const matrixNavButton = document.getElementById('tabMatrixBtn');
+        document.getElementById('processBtn').addEventListener('click', function() {
+            const start = new Date(document.getElementById('dateStart').value);
+            const end = new Date(document.getElementById('dateEnd').value);
+            
+            let dates = [];
+            let current = new Date(start);
+            while(current <= end) {
+                dates.push(new Date(current).toISOString().split('T')[0]);
+                current.setDate(current.getDate() + 1);
+            }
 
-            if(targetTabToken === 'visual') {
-                visualContentPanel.classList.remove('hidden');
-                matrixContentPanel.classList.add('hidden');
-                visualNavButton.className = "flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg";
-                matrixNavButton.className = "flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition text-slate-400 hover:text-slate-200";
+            // Create clean tab-delimited file structures
+            let headers = ["Student Name", "Roll Number", "Certification Course", "SDG Category"];
+            dates.forEach(d => headers.push(`${d} Daily Log Summary`));
+            
+            let outputLines = [];
+            outputLines.push(headers.join("\t"));
+
+            studentDataset.forEach((student, index) => {
+                let name = String(student[COL_NAME] || "").trim();
+                let roll = String(student[COL_ROLL] || "").trim();
+                let course = String(student[COL_COURSE] || "").trim();
+                let sdg = String(student[COL_SDG] || "").trim();
+
+                if(!name) return;
+
+                let rowCells = [name, roll, course, sdg];
+
+                dates.forEach((dateStr, dIndex) => {
+                    let logPair = getEceLogContent(name, course, dIndex + index);
+                    
+                    // CRITICAL FIX: Excel treats text inside standard system quotation marks 
+                    // and a literal carriage return (\r\n) as a cell break (Alt+Enter)
+                    let multiLineCellText = `VIDEO WATCHED: ${logPair.watched}\r\nWHAT LEARNT: ${logPair.learnt}`;
+                    
+                    // Escape internal quotes to prevent string breaking
+                    multiLineCellText = multiLineCellText.replace(/"/g, '""');
+                    
+                    rowCells.push(`"${multiLineCellText}"`);
+                });
+
+                outputLines.push(rowCells.join("\t"));
+            });
+
+            generatedOutputString = outputLines.join("\r\n");
+            document.getElementById('excelBuffer').value = generatedOutputString;
+            document.getElementById('actionArea').classList.remove('hidden');
+        });
+
+        function getEceLogContent(name, course, seed) {
+            const domain = String(course).toLowerCase();
+            const variant = Math.abs((name.charCodeAt(0) || 0) + seed) % 4;
+
+            if (domain.includes('semiconductor') || domain.includes('vlsi') || domain.includes('embedded')) {
+                const logs = [
+                    { watched: "Video lesson covers sub-micron CMOS logic scaling architectures, channel lengths, and active voltage distributions.", learnt: "Learned methods to minimize drain-induced barrier lowering constraints and control leakage paths on silicon wafers." },
+                    { watched: "Video session breaks down synchronous clock distribution routing profiles and multi-stage pipeline register timing.", learnt: "Learned how to design balanced layout buffer networks to safely eliminate metastability runtime faults." },
+                    { watched: "Video covers layout footprint schema creation constraints for high-density ball grid array microprocessors.", learnt: "Learned to build dynamic pin verification configurations and program clean schematic component netlists." },
+                    { watched: "Video details behavioral RTL design syntax for automated finite state machine control logic loops.", learnt: "Learned optimization methods to reduce logic delay hazards using advanced Xilinx design packages." }
+                ];
+                return logs[variant];
+            } else if (domain.includes('pcb') || domain.includes('layout')) {
+                const logs = [
+                    { watched: "Video details high-speed trace tracking layouts, signal reflections, line impedances, and transmission boundaries.", learnt: "Learned to calculate characteristic impedance factors and minimize signal mismatch crosstalk distortion layers." },
+                    { watched: "Video systematically maps solid heat dissipation planes and copper weight thickness assignments.", learnt: "Learned how to embed via matrices beneath linear voltage drop-down drops to dissipate heat effectively." },
+                    { watched: "Video explores design clearance constraints, trace boundaries, and automated footprint mask tolerances.", learnt: "Learned to clear standard board geometric verification conflicts to package verified production Gerber models." },
+                    { watched: "Video outlines integrated ground isolations, multi-layer stack return routes, and loop area management.", learnt: "Learned options to minimize return track routes to prevent electromagnetic interference leaks across lines." }
+                ];
+                return logs[variant];
             } else {
-                visualContentPanel.classList.add('hidden');
-                matrixContentPanel.classList.remove('hidden');
-                matrixNavButton.className = "flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg";
-                visualNavButton.className = "flex-1 py-3 text-xs font-extrabold uppercase tracking-wider rounded-xl transition text-slate-400 hover:text-slate-200";
-            }
-        }
-
-        function computeUniqueStringSeedHashValue(nameStr, numID) {
-            let runningHash = 0;
-            for (let i = 0; i < nameStr.length; i++) {
-                runningHash = nameStr.charCodeAt(i) + ((runningHash << 5) - runningHash);
-            }
-            return Math.abs(runningHash + numID);
-        }
-
-        // Procedural generation library to provide 1-2 line description of video watched & what was learned
-        function computeDescriptiveEceVideoLog(studentName, courseDomainTitle, currentVideoIndex) {
-            const lowerDomain = String(courseDomainTitle).toLowerCase();
-            const deterministicSeed = computeUniqueStringSeedHashValue(studentName, currentVideoIndex);
-            
-            let descriptivePair = { watched: "", evaluation: "" };
-
-            if (lowerDomain.includes('semiconductors') || lowerDomain.includes('vlsi') || lowerDomain.includes('embedded')) {
-                const modules = [
-                    { w: "Video Lesson details sub-micron CMOS logic scaling, mapping channel lengths, gate dielectric structures, and active power distribution thresholds.", e: "Learned how to mitigate severe drain-induced barrier lowering constraints and control hazardous quantum gate tunneling leakage pathways." },
-                    { w: "Video Lesson explores synchronous clock network architectures, distribution trees, and multi-stage pipeline register timing properties.", e: "Mastered methods to balance setup and hold margin requirements to prevent critical metastability issues under high system clock frequencies." },
-                    { w: "Video Lesson systematically covers dynamic domino logic circuit states, evaluate networks, pre-charge nodes, and parasitic discharge paths.", e: "Understood the application of charge sharing mitigation circuits and validated noise margin configurations on the silicon wafer." },
-                    { w: "Video Lesson details behavioral RTL design for finite state machine controllers, tracking state encodings, and register optimization maps.", e: "Learned how to reduce system clock skew parameters and safely configure fan-out buffer distributions inside Xilinx Vivado." },
-                    { w: "Video Lesson reviews low-level register interfaces for hardware handling loops, processing vector addresses, and nested interrupt controllers.", e: "Acquired insights into writing edge-triggered exception handler routines to maintain precise timing bounds inside real-time operating systems." }
+                const logs = [
+                    { watched: "Video analyzes peripheral telemetry sensor data aggregation architectures over continuous multi-channel ADCs.", learnt: "Learned signal noise reduction filtering steps alongside active resolution voltage mapping formulas." },
+                    { watched: "Video outlines low-power hardware modes, deep sleep routines, and peripheral system clock gating matrices.", learnt: "Learned to configure internal clock prescalers to prolong tracking battery lifespans in real-world settings." },
+                    { watched: "Video demonstrates telemetry packet transmission frames and client network registration over secure MQTT.", learnt: "Learned to apply message quality-of-service parameters to preserve telemetry payloads across unstable links." },
+                    { watched: "Video details encrypted transmission layer protocols, transport security layers, and public hash handshakes.", learnt: "Learned edge-node data verification structures to block outside sensor spoofing injection vectors." }
                 ];
-                descriptivePair = modules[deterministicSeed % modules.length];
-            } 
-            else if (lowerDomain.includes('pcb') || lowerDomain.includes('layout') || lowerDomain.includes('design')) {
-                const modules = [
-                    { w: "Video Lesson walks through footprint schema creation rules for high-density multi-pin microprocessors and ball grid arrays.", e: "Learned how to execute dynamic pin mapping validations and program secure electrical netlist synchronization pathways." },
-                    { w: "Video Lesson covers high-speed trace design principles, transmission line reflections, layer transitions, and differential pair matching parameters.", e: "Understood methods to calculate cross-talk coefficient rates and minimize signal distortion caused by trace characteristic impedance variations." },
-                    { w: "Video Lesson models continuous thermal dissipation planes, internal heat spreading profiles, copper weight metrics, and power distribution paths.", e: "Learned how to design thermal via matrices under heavy drop-down voltage regulators to eliminate localized component overheating." },
-                    { w: "Video Lesson outlines the deployment of specialized Design Rule Checking scripts, trace safety clear boundaries, and solder mask expansion limits.", e: "Mastered resolving pad separation anomalies to safely generate factory production-ready Gerber file datasets with zero defects." },
-                    { w: "Video Lesson maps out embedded shielding architectures, unified power plane isolation splits, and localized high-frequency ground loop paths.", e: "Learned how to optimize return current paths to drastically minimize overall electromagnetic interference across dense component layers." }
-                ];
-                descriptivePair = modules[deterministicSeed % modules.length];
-            } 
-            else {
-                const modules = [
-                    { w: "Video Lesson details peripheral device data gathering pipelines using continuous multi-channel successive-approximation ADC subsystems.", e: "Learned step quantization noise filters, active voltage resolution scaling math, and signal anti-aliasing filtration adjustments." },
-                    { w: "Video Lesson demonstrates low-power configuration matrices, sleep modes execution layers, and active peripheral system clock gating properties.", e: "Understood techniques to manipulate clock prescalers to significantly extend cell battery runtimes during prolonged remote tracking operations." },
-                    { w: "Video Lesson maps out client terminal registration packets, handshake frame formats, and telemetry data publishing pathways over MQTT layers.", e: "Mastered configuring quality of service network levels and managing message retention buffers to ensure data integrity over unstable Wi-Fi links." },
-                    { w: "Video Lesson reviews structured telemetry serialization formatting, handling payload string representations, and packet framing configurations.", e: "Learned how to embed cyclic redundancy check bits into outgoing arrays to detect and isolate data corruption issues during transit." },
-                    { w: "Video Lesson introduces encrypted transport layer security protocols, authentication handshakes, and private cryptographic key exchanges.", e: "Understood verification processes used to protect connected edge node data channels against data injection attacks." }
-                ];
-                descriptivePair = modules[deterministicSeed % modules.length];
+                return logs[variant];
             }
-
-            return `VIDEO WATCHED: ${descriptivePair.watched}\nWHAT LEARNED: ${descriptivePair.evaluation}`;
         }
 
-        function executeDataCompilingPipeline() {
-            const dateFromValueString = document.getElementById('dateStart').value;
-            const dateToValueString = document.getElementById('dateEnd').value;
-            const chosenCourseFilterValue = document.getElementById('courseDrop').value;
-
-            if(!dateFromValueString || !dateToValueString) {
-                alert("Operation Aborted: Please select both boundaries of the tracking timeline date range.");
-                return;
-            }
-
-            let linearCalendarDatesSequence = [];
-            let startCursor = new Date(dateFromValueString);
-            let endCursor = new Date(dateToValueString);
-
-            while(startCursor <= endCursor) {
-                linearCalendarDatesSequence.push(new Date(startCursor).toISOString().split('T')[0]);
-                startCursor.setDate(startCursor.getDate() + 1);
-            }
-
-            let finalMatchedStudentsDataRowsList = rawMasterDataFileRows.filter(studentObject => {
-                let name = studentObject[COL_NAME] ? String(studentObject[COL_NAME]).trim() : "";
-                let course = studentObject[COL_COURSE] ? String(studentObject[COL_COURSE]).trim() : "";
-                return name && (chosenCourseFilterValue === "All" || course === chosenCourseFilterValue);
-            });
-
-            if(finalMatchedStudentsDataRowsList.length === 0) {
-                alert("Operation Aborted: Zero entries match your configured search targets.");
-                return;
-            }
-
-            document.getElementById('statBatchSize').innerText = finalMatchedStudentsDataRowsList.length;
-            document.getElementById('statTracksCount').innerText = new Set(finalMatchedStudentsDataRowsList.map(s => s[COL_COURSE])).size;
-            document.getElementById('statDaysCount').innerText = linearCalendarDatesSequence.length;
-            document.getElementById('statLogsCount').innerText = finalMatchedStudentsDataRowsList.length * linearCalendarDatesSequence.length;
-
-            renderExecutiveAnalyticsCharts(finalMatchedStudentsDataRowsList);
-            compileAndRenderVisualAnalyticsDashboardDeck(finalMatchedStudentsDataRowsList, linearCalendarDatesSequence);
-            compileAndRenderHorizontalMatrixSpreadsheetGrid(finalMatchedStudentsDataRowsList, linearCalendarDatesSequence);
-
-            document.getElementById('tabsPanel').classList.remove('hidden');
-        }
-
-        function renderExecutiveAnalyticsCharts(studentsList) {
-            let streamCounts = {};
-            studentsList.forEach(s => {
-                let c = s[COL_COURSE] || "Other Track";
-                streamCounts[c] = (streamCounts[c] || 0) + 1;
-            });
-
-            if(streamsChartInstance) streamsChartInstance.destroy();
-            if(completionChartInstance) completionChartInstance.destroy();
-
-            const ctxStreams = document.getElementById('chartStreamsContainer').getContext('2d');
-            streamsChartInstance = new Chart(ctxStreams, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(streamCounts).map(l => l.length > 25 ? l.substring(0,25)+'...' : l),
-                    datasets: [{
-                        data: Object.values(streamCounts),
-                        backgroundColor: ['#6366f1', '#a855f7', '#ec4899', '#f59e0b', '#10b981'],
-                        borderWidth: 2, borderColor: '#0f172a'
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } } } }
-            });
-
-            const ctxCompletion = document.getElementById('chartCompletionContainer').getContext('2d');
-            completionChartInstance = new Chart(ctxCompletion, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Fully Completed Tasks', 'In-Progress Blocks'],
-                    datasets: [{ data: [studentsList.length, 0], backgroundColor: ['#10b981', '#475569'], borderWidth: 2, borderColor: '#0f172a' }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } } } } }
-            });
-        }
-
-        function compileAndRenderVisualAnalyticsDashboardDeck(students, datesList) {
-            const panelContainerElement = document.getElementById('visualAnalyticsContainer');
-            panelContainerElement.innerHTML = "";
-
-            students.forEach((student, sIndex) => {
-                let name = String(student[COL_NAME]).trim();
-                let roll = student[COL_ROLL] || "N/A";
-                let course = student[COL_COURSE] || "General Core Track";
-                let sdg = student[COL_SDG] || "Sustainable Development";
-
-                const aestheticColorPalettes = [
-                    { borderGlow: "border-l-indigo-500", ringColor: "stroke-indigo-500", bgBadge: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20" },
-                    { borderGlow: "border-l-purple-500", ringColor: "stroke-purple-500", bgBadge: "bg-purple-500/10 text-purple-400 border-purple-500/20" },
-                    { borderGlow: "border-l-pink-500", ringColor: "stroke-pink-500", bgBadge: "bg-pink-500/10 text-pink-400 border-pink-500/20" }
-                ];
-                let currentUiPaletteSelected = aestheticColorPalettes[sIndex % aestheticColorPalettes.length];
-
-                let studentCard = `
-                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl border-l-4 ${currentUiPaletteSelected.borderGlow} flex flex-col justify-between space-y-4">
-                        <div>
-                            <div class="flex justify-between items-start gap-4">
-                                <div>
-                                    <h4 class="text-base font-black text-white tracking-tight leading-snug">${name}</h4>
-                                    <p class="text-[11px] font-mono text-slate-500 tracking-wider font-bold mt-0.5">${roll}</p>
-                                </div>
-                                <div class="relative w-11 h-11 flex items-center justify-center shrink-0">
-                                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                                        <path class="stroke-slate-800" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                        <path class="${currentUiPaletteSelected.ringColor}" stroke-dasharray="100, 100" stroke-width="3" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                    </svg>
-                                    <span class="absolute text-[9px] font-mono font-black text-emerald-400">100%</span>
-                                </div>
-                            </div>
-                            <div class="mt-2.5 flex flex-wrap gap-2 items-center">
-                                <span class="text-[10px] font-black px-2.5 py-1 rounded-md border ${currentUiPaletteSelected.bgBadge} uppercase tracking-wider">${sdg}</span>
-                                <div class="text-[10px] text-slate-400 font-extrabold bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800/80">${course}</div>
-                            </div>
-                        </div>
-                        <div class="border-t border-slate-950 pt-4 space-y-3">
-                            <h5 class="text-[10px] uppercase tracking-widest font-black text-slate-500 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Chronological Logs</h5>
-                `;
-
-                datesList.forEach((activeDate, activeDateIndex) => {
-                    let textLog = computeDescriptiveEceVideoLog(name, course, activeDateIndex + 1);
-                    let visualFormatted = textLog.replace('\n', '<br><span class="text-emerald-400 font-bold">') + '</span>';
-
-                    studentCard += `
-                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/60 text-xs space-y-1">
-                            <span class="font-mono font-bold text-indigo-400 text-[10px] block border-b border-slate-900 pb-1 mb-1">${activeDate} Matrix Log</span>
-                            <p class="text-slate-300 leading-relaxed font-medium text-[11px]">${visualFormatted}</p>
-                        </div>
-                    `;
-                });
-
-                studentCard += `</div></div>`;
-                panelContainerElement.innerHTML += studentCard;
-            });
-        }
-
-        function compileAndRenderHorizontalMatrixSpreadsheetGrid(students, datesList) {
-            const tableElement = document.getElementById('matrixViewTable');
-            tableElement.innerHTML = "";
-
-            let headerHtml = `<thead class="bg-slate-900 font-bold uppercase text-slate-400 tracking-wider sticky top-0 border-b border-slate-800 shadow-xl z-20"><tr>`;
-            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Student Name</th>`;
-            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Roll Number</th>`;
-            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">Registered Certification Course</th>`;
-            headerHtml += `<th class="p-4 bg-slate-900 border-r border-slate-800">ECE SDG Category Topic</th>`;
+        function copyToClipboard() {
+            const buffer = document.getElementById('excelBuffer');
+            buffer.select();
+            document.execCommand('copy');
             
-            datesList.forEach(d => {
-                headerHtml += `<th class="p-4 bg-slate-950 text-indigo-400 border-r border-slate-800 min-w-96 font-mono tracking-wider text-center">${d} Complete Log</th>`;
-            });
-            headerHtml += `</tr></thead>`;
-
-            let bodyHtml = `<tbody class="divide-y divide-slate-800 bg-slate-950/30">`;
-            
-            // TSV header configuration
-            let excelStringAccumulator = "Name of The Student\tRoll Number\tOnline Certification Courses\tCase Study on SDG (Sustainable Development Course) Topics Related to ECE\t" + datesList.map(d => `${d} Tracker Log`).join("\t") + "\n";
-
-            students.forEach(student => {
-                let name = String(student[COL_NAME]).trim();
-                let roll = student[COL_ROLL] || "N/A";
-                let course = student[COL_COURSE] || "N/A";
-                let sdg = student[COL_SDG] || "N/A";
-
-                bodyHtml += `<tr class="hover:bg-slate-900/40 transition-all duration-150">`;
-                bodyHtml += `<td class="p-3.5 border-r border-slate-800 font-bold text-white bg-slate-900/10">${name}</td>`;
-                bodyHtml += `<td class="p-3.5 border-r border-slate-800 font-mono text-indigo-300 font-semibold">${roll}</td>`;
-                bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-300 text-xs font-medium max-w-xs">${course}</td>`;
-                bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-400 text-xs font-medium">${sdg}</td>`;
-
-                let localRowString = `"${name}"\t"${roll}"\t"${course}"\t"${sdg}"`;
-
-                datesList.forEach((dateString, dateIndex) => {
-                    let cellLogText = computeDescriptiveEceVideoLog(name, course, dateIndex + 1);
-                    
-                    let htmlFormattedCell = cellLogText.replace('\n', '<br><span class="text-emerald-400 font-bold font-mono text-[10px] mt-1 block">') + '</span>';
-                    bodyHtml += `<td class="p-3.5 border-r border-slate-800 text-slate-300 bg-slate-900/5 leading-relaxed font-medium align-top text-[11px]">${htmlFormattedCell}</td>`;
-                    
-                    // CRITICAL EXCEL CELL CARRIAGE FIX: Double escape quotes, surround cell text with master quotes
-                    let escapedCellContent = cellLogText.replace(/"/g, '""');
-                    localRowString += `\t"${escapedCellContent}"`;
-                });
-
-                bodyHtml += `</tr>`;
-                excelStringAccumulator += localRowString + "\n";
-            });
-
-            bodyHtml += `</tbody>`;
-            tableElement.innerHTML = headerHtml + bodyHtml;
-
-            horizontalExcelStringContent = excelStringAccumulator;
-            document.getElementById('hiddenMatrixBuffer').value = excelStringAccumulator;
-        }
-
-        function handleClipboardCopyMatrixAction() {
-            if(!horizontalExcelStringContent) return;
-            
-            const textBufferElement = document.getElementById('hiddenMatrixBuffer');
-            textBufferElement.select();
-            textBufferElement.setSelectionRange(0, 9999999); 
-
-            navigator.clipboard.writeText(textBufferElement.value).then(() => {
-                alert("🚀 Horizontal Matrix Copied and Fixed for Excel Custom Paragraph Breaks!\n\nTo view correctly inside Excel:\n1. Open an empty Microsoft Excel file or Google Sheet.\n2. Click on cell A1.\n3. Press CTRL + V to paste.\n\n[PRO TIP]: If the lines look squished, select your table rows, click 'Wrap Text' in your Excel home bar, and adjust the row heights!");
-            }).catch(err => {
-                alert("Clipboard transaction error.");
-            });
+            alert("🚀 Copied successfully!\n\nHOW TO PASTE IN EXCEL:\n1. Open your Excel Sheet.\n2. Click on Cell A1.\n3. Press CTRL + V.\n4. (Crucial) Select your table data columns and click 'Wrap Text' in the top Excel Toolbar!\n\nYour data will now format onto two stacked lines per cell.");
         }
     </script>
 </body>
