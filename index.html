@@ -3,405 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Department - Student Daily Progress & Analytics Dashboard</title>
+    <title>ECE Class Daily Excel Report Bulk Exporter</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen font-sans">
+<body class="bg-slate-100 text-slate-800 min-h-screen p-6 font-sans">
 
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 text-white shadow-xl py-6 px-8 mb-8 border-b-4 border-amber-500 print:bg-white print:text-black print:border-b-0">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mt-10">
+        <div class="border-b-2 border-indigo-600 pb-4 mb-6">
+            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold uppercase px-3 py-1 rounded-full">ECE Department Tracker</span>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">Bulk Excel Daily Log Report Generator</h1>
+            <p class="text-slate-500 text-sm mt-1">Upload your master enrollment sheet to generate a multi-day chronological course progress sheet downloadable directly as a formatted Excel spreadsheet.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="md:col-span-3 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300">
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Select Your Master Excel File</label>
+                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 file:cursor-pointer"/>
+            </div>
+
             <div>
-                <span class="bg-amber-500 text-blue-900 text-xs font-bold uppercase px-3 py-1 rounded-full shadow-sm">ECE Department - III-I-C Section</span>
-                <h1 class="text-3xl font-extrabold tracking-tight mt-1">Summer Internship & Assignment Tracking System</h1>
-                <p class="text-blue-200 text-sm mt-1 print:hidden">Generates distinct, completely non-repeating daily technical logs and HOD reviews per student.</p>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 md:px-8 pb-16">
-        
-        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-8 print:hidden">
-            <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <span class="w-2 h-5 bg-blue-600 rounded-sm inline-block"></span> Control & Filtering Matrix
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-5">
-                <div class="bg-slate-50 p-3 rounded-xl border border-dashed border-slate-300 hover:border-blue-500 transition">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">1. Master Excel Input</label>
-                    <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 file:cursor-pointer"/>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">2. Target From Date</label>
-                    <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">3. Target To Date</label>
-                    <input type="date" id="toDate" value="2026-05-20" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">4. Online Course Domain</label>
-                    <select id="courseFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none" disabled>
-                        <option value="All">All Registered Courses</option>
-                    </select>
-                </div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">2. Tracking From Date</label>
+                <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">5. Student Filter Profile</label>
-                    <select id="studentFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none" disabled>
-                        <option value="All">All Students (Group by Date chronologically for HOD)</option>
-                    </select>
-                </div>
-                <div>
-                    <button id="generateBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition duration-200 uppercase tracking-wide text-xs disabled:opacity-50" disabled>
-                        ⚡ Generate Unique Logs
-                    </button>
-                </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">3. Tracking To Date</label>
+                <input type="date" id="toDate" value="2026-05-20" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">4. Target Course Domain</label>
+                <select id="courseFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" disabled>
+                    <option value="All">All Registered Courses</option>
+                </select>
             </div>
         </div>
 
-        <div id="analyticsSection" class="hidden mb-10">
-            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2 print:hidden">
-                📊 Statistical Metrics Portfolio (HOD Submission Preview)
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col items-center justify-between min-h-80">
-                    <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wide text-center mb-2" id="pieTitle">Course Track Metrics</h4>
-                    <div class="w-full h-64 flex justify-center items-center">
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col items-center justify-between md:col-span-2 min-h-80">
-                    <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wide text-center mb-2" id="barTitle">Daily Dynamic Tracking Activity Volume</h4>
-                    <div class="w-full h-64">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-            </div>
+        <div class="mb-6">
+            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">5. Student Filter Profile</label>
+            <select id="studentFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" disabled>
+                <option value="All">All Students (Compiles structured chronological day-by-day logs)</option>
+            </select>
         </div>
 
-        <div id="reportSection" class="hidden bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-            <div class="bg-slate-900 text-white p-5 flex flex-col sm:flex-row justify-between items-center gap-4 print:bg-white print:text-black print:border-b-2 print:border-slate-300">
-                <div>
-                    <h3 class="text-lg font-bold">DEPARTMENT DAILY PROGRESS VERIFICATION LOGS</h3>
-                    <p class="text-xs text-slate-400 print:text-slate-600">Chronological submission list broken down smoothly day-by-day.</p>
-                </div>
-                <button onclick="window.print()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2 rounded-xl text-xs uppercase tracking-wide shadow transition print:hidden">
-                    🖨️ Export Portfolio to PDF / Print
-                </button>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200 text-left text-xs">
-                    <thead class="bg-slate-100 font-bold uppercase text-slate-700 tracking-wider">
-                        <tr>
-                            <th class="p-4 w-28">Date Log</th>
-                            <th class="p-4 w-60">Student Particulars</th>
-                            <th class="p-4 w-64">Assigned Course Track</th>
-                            <th class="p-4">Daily Implementation Details & Learning Metrics</th>
-                            <th class="p-4 w-80 bg-blue-50/50 text-blue-900">Academic Remarks (Auto-Generated)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reportTableBody" class="divide-y divide-slate-200 bg-white">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
+        <button id="exportExcelBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-200 uppercase tracking-wider text-xs flex justify-center items-center gap-2 disabled:opacity-50" disabled>
+            💾 Process & Download Formatted Excel Report
+        </button>
+    </div>
 
     <script>
-        let excelEntries = [];
-        let pieChartObj = null;
-        let barChartObj = null;
+        let masterSheetData = [];
 
+        // Map column tags exactly to match your provided document structure
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
+        const COL_YEAR_SEC = "Year & Section";
+        const COL_MAIL = "Mail ID";
+        const COL_PHONE = "Mobile Number";
         const COL_COURSE = "Online Certification Courses";
         const COL_SDG = "Case Study on SDG (Sustainable Development Course) Topics Related to ECE";
 
-        document.getElementById('uploadFile').addEventListener('change', parseInputFile, false);
-        document.getElementById('generateBtn').addEventListener('click', constructDashboardReport, false);
+        document.getElementById('uploadFile').addEventListener('change', readMasterExcel, false);
+        document.getElementById('exportExcelBtn').addEventListener('click', processAndDownloadExcel, false);
 
-        function parseInputFile(e) {
-            const uploadedFile = e.target.files[0];
-            if (!uploadedFile) return;
+        // 1. Parse Uploaded Input Document
+        function readMasterExcel(e) {
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+            const file = files[0];
 
-            const fileLoader = new FileReader();
-            fileLoader.onload = function(event) {
-                const bufferArray = new Uint8Array(event.target.result);
-                const workingBook = XLSX.read(bufferArray, {type: 'array'});
-                const activeSheet = workingBook.Sheets[workingBook.SheetNames[0]];
-                excelEntries = XLSX.utils.sheet_to_json(activeSheet, {defval: ""});
-                if(excelEntries.length === 0) { alert("File structure mismatch."); return; }
-                buildFiltersMenu(excelEntries);
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const targetSheet = workbook.Sheets[workbook.SheetNames[0]];
+                
+                masterSheetData = XLSX.utils.sheet_to_json(targetSheet, {defval: ""});
+
+                if(masterSheetData.length === 0) {
+                    alert("Error parsing document. File appears to have missing dataset layouts.");
+                    return;
+                }
+
+                activateControls(masterSheetData);
             };
-            fileLoader.readAsArrayBuffer(uploadedFile);
+            reader.readAsArrayBuffer(file);
         }
 
-        function buildFiltersMenu(data) {
-            const courseSet = new Set();
-            const studentSet = new Set();
-            data.forEach(item => {
-                if(item[COL_COURSE]) courseSet.add(String(item[COL_COURSE]).trim());
-                if(item[COL_NAME]) studentSet.add(String(item[COL_NAME]).trim());
+        // 2. Load Select Controls
+        function activateControls(data) {
+            const courses = new Set();
+            const students = new Set();
+
+            data.forEach(row => {
+                if (row[COL_COURSE]) courses.add(String(row[row[COL_COURSE] ? COL_COURSE : '']).trim());
+                if (row[COL_NAME]) students.add(String(row[COL_NAME]).trim());
             });
-            const courseMenu = document.getElementById('courseFilter');
-            courseMenu.innerHTML = '<option value="All">All Registered Courses</option>';
-            courseSet.forEach(c => courseMenu.innerHTML += `<option value="${c}">${c}</option>`);
-            courseMenu.disabled = false;
 
-            const studentMenu = document.getElementById('studentFilter');
-            studentMenu.innerHTML = '<option value="All">All Students (Group by Date chronologically for HOD)</option>';
-            studentSet.forEach(s => studentMenu.innerHTML += `<option value="${s}">${s}</option>`);
-            studentMenu.disabled = false;
+            const cMenu = document.getElementById('courseFilter');
+            cMenu.innerHTML = '<option value="All">All Registered Courses</option>';
+            courses.forEach(c => { if(c) cMenu.innerHTML += `<option value="${c}">${c}</option>`; });
+            cMenu.disabled = false;
 
-            document.getElementById('generateBtn').disabled = false;
-            alert(`Synchronized ${data.length} records successfully!`);
+            const sMenu = document.getElementById('studentFilter');
+            sMenu.innerHTML = '<option value="All">All Students (Compiles structured chronological day-by-day logs)</option>';
+            students.forEach(s => { if(s) sMenu.innerHTML += `<option value="${s}">${s}</option>`; });
+            sMenu.disabled = false;
+
+            document.getElementById('exportExcelBtn').disabled = false;
+            alert(`File parsed successfully! Sync completed for ${data.length} student records.`);
         }
 
-        // Helper string scrambler to ensure uniqueness among 50+ students
-        function getDeterministicUniqueIndex(str, day) {
+        // Generate unique technical hashed values so outcomes are non-repeating
+        function produceUniqueHash(str, value) {
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 hash = str.charCodeAt(i) + ((hash << 5) - hash);
             }
-            return Math.abs(hash + day);
+            return Math.abs(hash + value);
         }
 
-        // DEEP DYNAMIC ECE VOCABULARY ENGINE FOR UNIQUE LOG GENERATION
-        function generateHighlyUniqueLogs(studentName, course, sdgTopic, dateString) {
-            const cLower = String(course).toLowerCase();
-            const dayInt = new Date(dateString).getDate() || 18;
-            const seed = getDeterministicUniqueIndex(studentName, dayInt);
+        // 3. Dynamic Daily Lesson Learning outcome mapping dictionary
+        function compileDailyVideoProgress(studentName, courseDomain, videoNumber) {
+            const cClean = String(courseDomain).toLowerCase();
+            const seedId = produceUniqueHash(studentName, videoNumber);
+            
+            let logDetails = { task: "", outcome: "" };
 
-            let logData = { work: "", learned: "", review: "" };
-
-            // Randomized vocab pools for VLSI track
-            const vlsiTools = ["LTSpice environment", "Xilinx Vivado engine", "Cadence Virtuoso platform", "ModelSim simulator"];
-            const vlsiWork = [
-                "Drafted schematics for high-speed dynamic logic circuits and measured voltage transfer characteristics.",
-                "Designed clear behavioral architecture files for multi-stage synchronous combinational operations.",
-                "Constructed parasitic layout configurations focusing on internal interconnect resistance properties.",
-                "Executed comprehensive static timing analysis (STA) tracking setup/hold time margin variations."
-            ];
-            const vlsiLearned = [
-                "Acquired precise domain concepts regarding transistor sizing parameters and logic gate switching thresholds.",
-                "Mastered modular design compilation, propagation data path routing, and verification simulation steps.",
-                "Discovered critical layout design methodologies including dynamic latch-up optimization and isolation wells.",
-                "Understood clock skew mitigation methods, propagation paths, and digital power grid routing design."
-            ];
-            const vlsiReviews = [
-                "The student shows excellent technical accuracy in simulation workflows. Output documents conform perfectly to department parameters.",
-                "Clear documentation logs showcase meticulous engineering research logic. Foundational grasp of digital networks confirmed.",
-                "Demonstrates great adaptability in optimizing multi-parameter circuits under constraints. Highly satisfactory daily milestone tracking.",
-                "Comprehensive and analytical tracking entry. The progress indicates clear mastery over theoretical concepts applied practically."
-            ];
-
-            // Pools for PCB Layout Track
-            const pcbTools = ["Altium Designer suite", "KiCad layout manager", "Eagle CAD engine", "Proteus design studio"];
-            const pcbWork = [
-                "Configured library schematic footprints and verified complex netlist linkages across multi-pin modules.",
-                "Engineered critical routing layouts utilizing localized trace shielding and custom ground pour segments.",
-                "Calculated trace widths for power distribution rails considering explicit thermal impedance ratings.",
-                "Conducted rule check optimizations (DRC) to discover board design rule manufacturing anomalies."
-            ];
-            const pcbLearned = [
-                "Acquired deep procedural skill in mapping structural multi-layer grid alignments and decoupling properties.",
-                "Understood explicit methods to minimize mutual inductance crosstalk loops and RF signal attenuation.",
-                "Mastered copper sheet thickness ratings, heat dissipation mechanics, and safety board insulation.",
-                "Discovered dynamic Gerber fabrication requirements, solder mask patterns, and surface layer placement maps."
-            ];
-            const pcbReviews = [
-                "Practical layout skills map flawlessly to industrial prototyping standards. Excellent performance record logged.",
-                "The student successfully identified and optimized routing hazards. Clear technical presentation throughout.",
-                "Demonstrates excellent focus on production readiness. Detailed trace configurations match instructions beautifully.",
-                "Highly reliable board construction entries. Solid engineering competence displayed across all daily parameters."
-            ];
-
-            // Pools for IoT Track
-            const iotTools = ["Node-RED setups", "Keil uVision IDE", "Arduino IDE core microcode", "Raspberry Pi OS setups"];
-            const iotWork = [
-                "Programmed interrupt handler protocols for external peripheral sensor array telemetry tracking.",
-                "Configured localized UART/SPI serial interface connections to stream asynchronous hardware registers.",
-                "Engineered firmware structural loops utilizing sleep state managers to control power consumption lines.",
-                "Constructed network communication configurations using specialized MQTT message broker routing links."
-            ];
-            const iotLearned = [
-                "Mastered ADC register resolution structures, input pull-up signal filters, and sensor voltage mapping arrays.",
-                "Acquired operational expertise in tracking clock synchronization intervals and error-free byte array transmissions.",
-                "Discovered hardware clock prescaling mechanisms and localized duty cycle power saving models.",
-                "Understood network packet payload setups, publish-subscribe topologies, and security key integration loops."
-            ];
-            const iotReviews = [
-                "Hardware firmware integration operates reliably under localized stress testing. Great procedural log formatting.",
-                "Shows robust logical problem-solving abilities inside peripheral interaction tracks. Work is fully up to code.",
-                "Very methodical implementation of optimization layers. Student exhibits keen insights into processing limitations.",
-                "Impressive embedded scripting routines. Structural design execution matches department grading expectations."
-            ];
-
-            // Pick elements dynamically using the unique seed calculation
-            if(cLower.includes('semiconductors') || cLower.includes('vlsi')) {
-                let idx = seed % 4;
-                logData.work = `${vlsiWork[idx]} Utilizing the ${vlsiTools[(idx+1)%4]} for evaluation. Added custom focus on ECE-SDG target requirements: ${sdgTopic}.`;
-                logData.learned = `${vlsiLearned[idx]} Evaluated critical behavioral patterns under different workload situations.`;
-                logData.review = `${vlsiReviews[idx]} Minimum 2 lines met. Ready for advance unit evaluations.`;
+            if (cClean.includes('semiconductors') || cClean.includes('vlsi') || cClean.includes('embedded')) {
+                const subModules = [
+                    { t: "Analyzed deep sub-micron physical transistor layouts and gate geometry models.", o: "Understood drain-induced barrier lowering (DIBL) scaling dynamics and gate leakage reduction techniques." },
+                    { t: "Designed behavioral architectures for synchronous pipeline registers and clock counters.", o: "Acquired competency in resolving setup/hold timing margin errors across high-frequency logic arrays." },
+                    { t: "Simulated structural propagation path delays across complex domino logic trees in LTSpice.", o: "Calculated voltage transfer optimization curves and verified active power dissipation parameters." },
+                    { t: "Configured modular finite state machine (FSM) control parameters inside Xilinx Vivado environment.", o: "Mastered synthesis constraints, clock skew mitigation steps, and multi-stage block optimizations." }
+                ];
+                let choice = subModules[seedId % subModules.length];
+                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
+                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
             } 
-            else if(cLower.includes('pcb') || cLower.includes('layout')) {
-                let idx = seed % 4;
-                logData.work = `${pcbWork[idx]} Designed custom test layers via ${pcbTools[(idx+2)%4]}. Integrated targeted case observations mapping back to ${sdgTopic}.`;
-                logData.learned = `${pcbLearned[idx]} Evaluated industrial standard criteria parameters to ensure design safety compliance.`;
-                logData.review = `${pcbReviews[idx]} Minimum 2 lines verified. Comprehensive assignment validation confirmed.`;
-            }
+            else if (cClean.includes('pcb') || cClean.includes('layout') || cClean.includes('design')) {
+                const subModules = [
+                    { t: "Mapped schematic library footprint configurations for high-density multi-pin microprocessor modules.", o: "Mastered programmatic netlist synchronization constraints and custom component packaging rules." },
+                    { t: "Executed high-frequency localized layout routing and configured custom differential trace paths.", o: "Acquired insights into reducing signal loop cross-talk properties and managing impedance match integrity parameters." },
+                    { t: "Calculated multi-layer copper power rail thickness dimensions relative to strict temperature constraints.", o: "Understood advanced thermal dissipation grid patterns and plane insulation safety layers." },
+                    { t: "Conducted automated Design Rule Checking (DRC) to discover board layer alignment mask issues.", o: "Resolved critical manufacturing spacing parameters and finalized production Gerber output packages." }
+                ];
+                let choice = subModules[seedId % subModules.length];
+                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
+                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
+            } 
             else {
-                // IoT / Embedded Track
-                let idx = seed % 4;
-                logData.work = `${iotWork[idx]} Built specific embedded test scripts compiled via ${iotTools[(idx+3)%4]} tracking structural ECE parameters of: ${sdgTopic}.`;
-                logData.learned = `${iotLearned[idx]} Analyzed continuous loop state data trends to optimize structural execution performance values.`;
-                logData.review = `${iotReviews[idx]} Minimum 2 lines confirmed. The daily report data matches all review protocols successfully.`;
+                // Internet of Things / Alternate Track Systems
+                const subModules = [
+                    { t: "Interfaced peripheral sensor instrumentation arrays with micro-controller interrupt lines.", o: "Understood analog-to-digital converter (ADC) sample filtering equations and register configuration parameters." },
+                    { t: "Programmed low-power firmware routines using localized peripheral polling sleep cycles.", o: "Acquired insights into hardware clock prescaling configurations to maximize battery life metrics." },
+                    { t: "Configured network communication architecture profiles using MQTT data routing structures.", o: "Mastered light payload publish-subscribe transmission pipelines across unsecured external client paths." },
+                    { t: "Constructed structural JSON data packet schemas to stream telemetry arrays safely to cloud hubs.", o: "Evaluated transmission data rate optimization matrices and packet error detection algorithms." }
+                ];
+                let choice = subModules[seedId % subModules.length];
+                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
+                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
             }
 
-            return logData;
+            return logDetails;
         }
 
-        function constructDashboardReport() {
-            const startStr = document.getElementById('fromDate').value;
-            const endStr = document.getElementById('toDate').value;
-            const courseVal = document.getElementById('courseFilter').value;
-            const studentVal = document.getElementById('studentFilter').value;
+        // 4. Main Matrix Engine to build custom download files
+        function processAndDownloadExcel() {
+            const startVal = document.getElementById('fromDate').value;
+            const endVal = document.getElementById('toDate').value;
+            const chosenCourse = document.getElementById('courseFilter').value;
+            const chosenStudent = document.getElementById('studentFilter').value;
 
-            if(!startStr || !endStr) { alert("Please define target dates."); return; }
-
-            let timelineArray = [];
-            let cursorDate = new Date(startStr);
-            let endingDate = new Date(endStr);
-            while(cursorDate <= endingDate) {
-                timelineArray.push(new Date(cursorDate).toISOString().split('T')[0]);
-                cursorDate.setDate(cursorDate.getDate() + 1);
+            if (!startVal || !endVal) {
+                alert("Please declare complete target filter date parameters.");
+                return;
             }
 
-            let synthesizedDataRows = [];
+            // Generate structural calendar date strings within bounds
+            let chronologicalDates = [];
+            let currentDayCursor = new Date(startVal);
+            let absoluteEndDay = new Date(endVal);
 
-            // INSTEAD OF GROUPING BY SINGLE STUDENT ALL DATES, CHRONOLOGICAL DATES GROUPING FOR THE WHOLE CLASS
-            timelineArray.forEach(currentDate => {
-                excelEntries.forEach(student => {
-                    let sName = student[COL_NAME] ? String(student[COL_NAME]).trim() : "";
-                    let sCourse = student[COL_COURSE] ? String(student[COL_COURSE]).trim() : "";
+            while (currentDayCursor <= absoluteEndDay) {
+                chronologicalDates.push(new Date(currentDayCursor).toISOString().split('T')[0]);
+                currentDayCursor.setDate(currentDayCursor.getDate() + 1);
+            }
 
-                    let matchCourse = (courseVal === "All" || sCourse === courseVal);
-                    let matchStudent = (studentVal === "All" || sName === studentVal);
+            // Create target Excel data rows matrix matching the schema order perfectly
+            let structuralRowsForExcel = [];
 
-                    if(sName && matchCourse && matchStudent) {
-                        let logs = generateHighlyUniqueLogs(sName, sCourse, student[COL_SDG] || "General System Study", currentDate);
-                        synthesizedDataRows.push({
-                            date: currentDate,
-                            name: sName,
-                            roll: student[COL_ROLL] || "N/A",
-                            course: sCourse,
-                            sdg: student[COL_SDG] || "N/A",
-                            work: logs.work,
-                            learned: logs.learned,
-                            review: logs.review
+            // CHRONOLOGICAL LOOP ORDER: Process Day 1 for all matching records first, then Day 2, etc.
+            chronologicalDates.forEach((targetDate, dateIndex) => {
+                
+                // Track video iteration count across timeline sequence progression
+                let associatedVideoNumber = dateIndex + 1; 
+
+                masterSheetData.forEach(studentObj => {
+                    let nameStr = studentObj[COL_NAME] ? String(studentObj[COL_NAME]).trim() : "";
+                    let courseStr = studentObj[COL_COURSE] ? String(studentObj[COL_COURSE]).trim() : "";
+
+                    let matchCourse = (chosenCourse === "All" || courseStr === chosenCourse);
+                    let matchStudent = (chosenStudent === "All" || nameStr === chosenStudent);
+
+                    if (nameStr && matchCourse && matchStudent) {
+                        
+                        // Extract localized technical text
+                        let videoContent = compileDailyVideoProgress(nameStr, courseStr, associatedVideoNumber);
+
+                        // Structure flat tracking object matching your raw file columns with new timeline data insertion
+                        structuralRowsForExcel.push({
+                            "Date Log": targetDate,
+                            "Name of The Student": nameStr,
+                            "Roll Number": studentObj[COL_ROLL] || "N/A",
+                            "Year & Section": studentObj[COL_YEAR_SEC] || "N/A",
+                            "Mail ID": studentObj[COL_MAIL] || "N/A",
+                            "Mobile Number": studentObj[COL_PHONE] || "N/A",
+                            "Online Certification Courses": courseStr,
+                            "Case Study on SDG Topics Related to ECE": studentObj[COL_SDG] || "N/A",
+                            "Daily Video Task Completed": videoContent.task,
+                            "Concepts & Learnings Acquired": videoContent.outcome
                         });
                     }
                 });
             });
 
-            if(synthesizedDataRows.length === 0) { alert("No data matches current choices."); return; }
-
-            populateTable(synthesizedDataRows);
-            generateVisualizationCharts(synthesizedDataRows, studentVal);
-        }
-
-        function populateTable(dataList) {
-            const tableBody = document.getElementById('reportTableBody');
-            tableBody.innerHTML = "";
-
-            dataList.forEach(item => {
-                let rowElement = document.createElement('tr');
-                rowElement.className = "hover:bg-slate-50 border-b border-slate-200 transition text-xs print:break-inside-avoid";
-                rowElement.innerHTML = `
-                    <td class="p-4 font-bold text-slate-700 bg-slate-50/50 text-center whitespace-nowrap border-r border-slate-100">${item.date}</td>
-                    <td class="p-4">
-                        <div class="font-extrabold text-indigo-900">${item.name}</div>
-                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">${item.roll}</div>
-                    </td>
-                    <td class="p-4">
-                        <div class="font-bold text-slate-800">${item.course}</div>
-                        <div class="text-[10px] text-emerald-700 font-semibold mt-1 bg-emerald-50 px-2 py-1 rounded border border-emerald-200 inline-block leading-tight">SDG focus: ${item.sdg}</div>
-                    </td>
-                    <td class="p-4 space-y-2 leading-relaxed max-w-md">
-                        <div><strong class="text-blue-700 text-[10px] uppercase tracking-wider block font-bold mb-0.5">🔨 Daily Technical Task Completed:</strong> <span class="text-slate-700">${item.work}</span></div>
-                        <div><strong class="text-emerald-700 text-[10px] uppercase tracking-wider block font-bold mb-0.5">💡 Concepts & Competencies Acquired:</strong> <span class="text-slate-700">${item.learned}</span></div>
-                    </td>
-                    <td class="p-4 bg-indigo-50/40 text-slate-700 italic border-l-4 border-indigo-600 leading-relaxed font-medium">
-                        ${item.review}
-                    </td>
-                `;
-                tableBody.appendChild(rowElement);
-            });
-
-            document.getElementById('reportSection').classList.remove('hidden');
-        }
-
-        function generateVisualizationCharts(dataList, selectedStudent) {
-            document.getElementById('analyticsSection').classList.remove('hidden');
-            let chartLabels = [];
-            let chartValues = [];
-            let pieHeader = "";
-            let barHeader = "";
-
-            if (selectedStudent === "All") {
-                pieHeader = "Distribution Matrix by Course Stream Selection";
-                barHeader = "Aggregated Record Submissions Checked per Course";
-                let categorizationCounts = {};
-                dataList.forEach(item => {
-                    let courseKey = item.course || "Other Modules";
-                    categorizationCounts[courseKey] = (categorizationCounts[courseKey] || 0) + 1;
-                });
-                chartLabels = Object.keys(categorizationCounts);
-                chartValues = Object.values(categorizationCounts);
-            } else {
-                pieHeader = `Target Performance Mix: ${selectedStudent}`;
-                barHeader = "Activity Tracking Density Matrix per Working Date";
-                let dayCounts = {};
-                dataList.forEach(item => {
-                    dayCounts[item.date] = (dayCounts[item.date] || 0) + 1;
-                });
-                chartLabels = Object.keys(dayCounts);
-                chartValues = Object.values(dayCounts);
+            if (structuralRowsForExcel.length === 0) {
+                alert("Zero records matched the defined filter variables. Please expand parameters.");
+                return;
             }
 
-            document.getElementById('pieTitle').innerText = pieHeader;
-            document.getElementById('barTitle').innerText = barHeader;
+            // 5. Compile SheetJS Binaries & Inject Clean Presentation Custom Colors
+            const targetWorksheet = XLSX.utils.json_to_sheet(structuralRowsForExcel);
+            const targetWorkbook = XLSX.utils.book_new();
+            XLSX.book_append_sheet(targetWorkbook, targetWorksheet, "Daily Progress Report");
 
-            if (pieChartObj) pieChartObj.destroy();
-            if (barChartObj) barChartObj.destroy();
+            // Auto-calculate structural text column widths dynamically for professional look
+            const columnWidths = [
+                { wch: 12 }, // Date Log
+                { wch: 25 }, // Name of The Student
+                { wch: 15 }, // Roll Number
+                { wch: 15 }, // Year & Section
+                { wch: 28 }, // Mail ID
+                { wch: 15 }, // Mobile Number
+                { wch: 38 }, // Online Certification Courses
+                { wch: 30 }, // SDG Topics
+                { wch: 42 }, // Daily Video Task Completed
+                { wch: 55 }  // Concepts & Learnings Acquired
+            ];
+            targetWorksheet['!cols'] = columnWidths;
 
-            const colorPalette = ['#1e3a8a', '#059669', '#d97706', '#dc2626', '#7c3aed', '#db2777', '#2563eb'];
-
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            pieChartObj = new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{ data: chartValues, backgroundColor: colorPalette.slice(0, chartLabels.length) }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
-            });
-
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            barChartObj = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{ label: 'Verified Reports Logged', data: chartValues, backgroundColor: '#2563eb', borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } } } }
-            });
+            // Trigger file download to browser instantly
+            const timestampString = new Date().toISOString().slice(0,10);
+            XLSX.writeFile(targetWorkbook, `ECE_III-I-C_Daily_Progress_Report_${timestampString}.xlsx`);
         }
     </script>
 </body>
