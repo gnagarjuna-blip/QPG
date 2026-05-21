@@ -10,9 +10,9 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen p-6">
 
-    <div class="max-w-6xl mx-auto bg-white p-8 rounded-xl shadow-md">
+    <div class="max-w-7xl mx-auto bg-white p-8 rounded-xl shadow-md">
         <h1 class="text-3xl font-bold text-blue-700 mb-2 text-center">Student Daily Report Generator</h1>
-        <p class="text-gray-500 text-center mb-8">Upload any student Excel sheet to filter reports and generate HOD analytics.</p>
+        <p class="text-gray-500 text-center mb-8">Upload your structured Excel sheet to filter reports and generate HOD analytics.</p>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-100 rounded-lg">
             <div>
@@ -37,7 +37,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 p-4 bg-gray-100 rounded-lg">
             <div>
-                <label class="block text-sm font-semibold mb-1">5. Filter by Student (Optional)</label>
+                <label class="block text-sm font-semibold mb-1">5. Filter by Student</label>
                 <select id="studentFilter" class="w-full p-2 border rounded-md text-sm bg-white" disabled>
                     <option value="All">All Students (Overall Analytics)</option>
                 </select>
@@ -52,7 +52,7 @@
         <hr class="border-gray-200 mb-8">
 
         <div id="analyticsSection" class="hidden mb-10">
-            <h2 class="text-2xl font-bold text-gray-700 mb-4">Visual Analytics (For HOD Submission)</h2>
+            <h2 class="text-2xl font-bold text-gray-700 mb-4 text-center md:text-left">Visual Analytics (For HOD Submission)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-gray-50 p-6 rounded-xl border border-gray-200">
                 <div class="max-h-80 flex justify-center">
                     <canvas id="pieChart"></canvas>
@@ -72,12 +72,12 @@
             </div>
             <div class="overflow-x-auto border border-gray-200 rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
-                    <thead class="bg-gray-50 text-gray-700 font-semibold">
+                    <thead class="bg-blue-700 text-white font-semibold">
                         <tr>
-                            <th class="p-3">Date</th>
-                            <th class="p-3">Student Name</th>
-                            <th class="p-3">Course</th>
-                            <th class="p-3">Daily Report / Tasks Completed</th>
+                            <th class="p-3 w-32">Date</th>
+                            <th class="p-3 w-48">Student Name</th>
+                            <th class="p-3 w-40">Course</th>
+                            <th class="p-3">Work Completed & Learnings</th>
                         </tr>
                     </thead>
                     <tbody id="reportTableBody" class="divide-y divide-gray-200 bg-white">
@@ -93,8 +93,13 @@
         let pieChartInstance = null;
         let barChartInstance = null;
 
-        // Smart keys to hold discovered column names from your excel sheet
-        let detectedKeys = { name: "", course: "", date: "", report: "" };
+        // EXACT Column Keys explicitly configured based on your form structure
+        const COL_TIMESTAMP = "Timestamp";
+        const COL_EMAIL = "Email Address";
+        const COL_NAME = "STUDENT NAME";
+        const COL_COURSE = "COURSE";
+        const COL_WORK = "WHAT WORK COMPLETED TODAY";
+        const COL_LEARNED = "WHAT YOU LEARN TODAY";
 
         document.getElementById('uploadFile').addEventListener('change', handleFile, false);
         document.getElementById('generateBtn').addEventListener('click', generateReport, false);
@@ -107,7 +112,8 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array', cellDates: true});
+                // raw: false ensures SheetJS parses dates nicely
+                const workbook = XLSX.read(data, {type: 'array', cellDates: true, raw: false});
                 
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
@@ -119,60 +125,38 @@
                     return;
                 }
 
-                // Run automatic column matcher
-                detectColumns(rawExcelData[0]);
                 populateFilters(rawExcelData);
             };
             reader.readAsArrayBuffer(file);
         }
 
-        // 2. Automatically find column names matching date, name, course, and report keywords
-        function detectColumns(firstRow) {
-            const keys = Object.keys(firstRow);
-            
-            keys.forEach(k => {
-                let lowerK = k.toLowerCase().replace(/[\s_\-]/g, ''); // strip spaces and symbols
-                
-                if (lowerK.includes('date')) detectedKeys.date = k;
-                else if (lowerK.includes('name') || lowerK.includes('student')) detectedKeys.name = k;
-                else if (lowerK.includes('course') || lowerK.includes('subject') || lowerK.includes('branch')) detectedKeys.course = k;
-                else if (lowerK.includes('report') || lowerK.includes('task') || lowerK.includes('work') || lowerK.includes('status')) detectedKeys.report = k;
-            });
-
-            // Fallbacks just in case headers are entirely custom (e.g. Column A, Column B)
-            if(!detectedKeys.date) detectedKeys.date = keys[0];
-            if(!detectedKeys.name) detectedKeys.name = keys[1];
-            if(!detectedKeys.course) detectedKeys.course = keys[2];
-            if(!detectedKeys.report) detectedKeys.report = keys[3] || keys[keys.length - 1];
-        }
-
-        // 3. Populate Dropdowns dynamically
+        // 2. Populate Dropdowns dynamically
         function populateFilters(data) {
             const courses = new Set();
             const students = new Set();
 
             data.forEach(row => {
-                if(row[detectedKeys.course]) courses.add(String(row[detectedKeys.course]).trim());
-                if(row[detectedKeys.name]) students.add(String(row[detectedKeys.name]).trim());
+                if(row[COL_COURSE]) courses.add(String(row[COL_COURSE]).trim());
+                if(row[COL_NAME]) students.add(String(row[COL_NAME]).trim());
             });
 
-            // Populate Courses
+            // Populate Courses Dropdown
             const courseSelect = document.getElementById('courseFilter');
             courseSelect.innerHTML = '<option value="All">All Courses</option>';
             courses.forEach(c => courseSelect.innerHTML += `<option value="${c}">${c}</option>`);
             courseSelect.disabled = false;
 
-            // Populate Students
+            // Populate Students Dropdown
             const studentSelect = document.getElementById('studentFilter');
             studentSelect.innerHTML = '<option value="All">All Students (Overall Analytics)</option>';
             students.forEach(s => studentSelect.innerHTML += `<option value="${s}">${s}</option>`);
             studentSelect.disabled = false;
 
             document.getElementById('generateBtn').disabled = false;
-            alert("Excel parsed successfully! System auto-mapped your column configurations.");
+            alert("Excel sheet uploaded and parsed correctly!");
         }
 
-        // 4. Main Filter & Report Logic
+        // 3. Main Filter & Report Processing Logic
         function generateReport() {
             const fromDateVal = document.getElementById('fromDate').value;
             const toDateVal = document.getElementById('toDate').value;
@@ -180,8 +164,8 @@
             const selectedStudent = document.getElementById('studentFilter').value;
 
             let filteredData = rawExcelData.filter(row => {
-                // Flexible Date Parsing
-                let rawDate = row[detectedKeys.date];
+                // Parse standard Timestamp column
+                let rawDate = row[COL_TIMESTAMP];
                 let rowDate = new Date(rawDate);
                 let matchesDate = true;
 
@@ -192,19 +176,19 @@
                     matchesDate = matchesDate && (rowDate <= new Date(toDateVal + "T23:59:59"));
                 }
 
-                // Course filtering
-                let rowCourse = row[detectedKeys.course] ? String(row[detectedKeys.course]).trim() : "";
+                // Course match
+                let rowCourse = row[COL_COURSE] ? String(row[COL_COURSE]).trim() : "";
                 let matchesCourse = (selectedCourse === "All" || rowCourse === selectedCourse);
 
-                // Student filtering
-                let rowName = row[detectedKeys.name] ? String(row[detectedKeys.name]).trim() : "";
+                // Student name match
+                let rowName = row[COL_NAME] ? String(row[COL_NAME]).trim() : "";
                 let matchesStudent = (selectedStudent === "All" || rowName === selectedStudent);
 
                 return matchesDate && matchesCourse && matchesStudent;
             });
 
             if(filteredData.length === 0) {
-                alert("No data records found matching your date range or filters. Try adjusting the From/To Dates.");
+                alert("No logs found for the selected inputs. Try modifying your dates or dropdown selections.");
                 return;
             }
 
@@ -212,24 +196,32 @@
             renderCharts(filteredData, selectedStudent);
         }
 
-        // 5. Render Table
+        // 4. Render Layout Table
         function renderTable(data) {
             const tbody = document.getElementById('reportTableBody');
             tbody.innerHTML = "";
 
             data.forEach(row => {
                 let formattedDate = "";
-                if(row[detectedKeys.date]) {
-                    const d = new Date(row[detectedKeys.date]);
-                    formattedDate = !isNaN(d) ? d.toLocaleDateString() : row[detectedKeys.date];
+                if(row[COL_TIMESTAMP]) {
+                    const d = new Date(row[COL_TIMESTAMP]);
+                    formattedDate = !isNaN(d) ? d.toLocaleDateString() : row[COL_TIMESTAMP];
                 }
 
+                // Clean visual presentation for HOD viewing
+                let workDone = row[COL_WORK] || "No data logged";
+                let whatLearned = row[COL_LEARNED] || "No data logged";
+
                 let tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50/70 transition";
                 tr.innerHTML = `
-                    <td class="p-3 font-medium whitespace-nowrap">${formattedDate}</td>
-                    <td class="p-3 font-semibold text-blue-900">${row[detectedKeys.name] || 'N/A'}</td>
-                    <td class="p-3 text-gray-600">${row[detectedKeys.course] || 'N/A'}</td>
-                    <td class="p-3 bg-gray-50/50">${row[detectedKeys.report] || '<span class="text-red-400 italic">No report submitted</span>'}</td>
+                    <td class="p-3 font-medium text-gray-600 whitespace-nowrap">${formattedDate}</td>
+                    <td class="p-3 font-bold text-blue-900">${row[COL_NAME] || 'N/A'}</td>
+                    <td class="p-3 text-gray-700 font-medium">${row[COL_COURSE] || 'N/A'}</td>
+                    <td class="p-3 text-gray-700 leading-relaxed space-y-2">
+                        <div><strong class="text-blue-600 text-xs tracking-wide uppercase block">🔨 Work Completed:</strong> ${workDone}</div>
+                        <div class="mt-1"><strong class="text-green-600 text-xs tracking-wide uppercase block">💡 Concepts Learned:</strong> ${whatLearned}</div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -237,7 +229,7 @@
             document.getElementById('reportSection').classList.remove('hidden');
         }
 
-        // 6. Render Charts
+        // 5. Render Chart Dashboard Analytics
         function renderCharts(data, selectedStudent) {
             document.getElementById('analyticsSection').classList.remove('hidden');
 
@@ -247,24 +239,26 @@
             let barTitle = "";
 
             if (selectedStudent === "All") {
-                pieTitle = "Report Submissions Split by Course";
-                barTitle = "Total Submissions per Course";
+                // Grouping by Course Metrics
+                pieTitle = "Submissions Breakup by Course Domain";
+                barTitle = "Total Volume of Submissions";
                 
                 let courseCounts = {};
                 data.forEach(row => {
-                    let course = row[detectedKeys.course] || "Unknown Course";
+                    let course = row[COL_COURSE] || "Unassigned Course";
                     courseCounts[course] = (courseCounts[course] || 0) + 1;
                 });
 
                 chartLabels = Object.keys(courseCounts);
                 chartDataValues = Object.values(courseCounts);
             } else {
-                pieTitle = `Report Distribution for ${selectedStudent}`;
-                barTitle = "Submissions Timeline Tracker";
+                // Grouping metrics per day for individual target student
+                pieTitle = `Work Allocation Mix for ${selectedStudent}`;
+                barTitle = "Active Submission Timeline";
                 
                 let dateCounts = {};
                 data.forEach(row => {
-                    let d = new Date(row[detectedKeys.date]);
+                    let d = new Date(row[COL_TIMESTAMP]);
                     let dateStr = !isNaN(d) ? d.toLocaleDateString() : "Unknown Date";
                     dateCounts[dateStr] = (dateCounts[dateStr] || 0) + 1;
                 });
@@ -276,7 +270,7 @@
             if (pieChartInstance) pieChartInstance.destroy();
             if (barChartInstance) barChartInstance.destroy();
 
-            const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1'];
+            const colors = ['#2563EB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1'];
 
             const ctxPie = document.getElementById('pieChart').getContext('2d');
             pieChartInstance = new Chart(ctxPie, {
@@ -287,7 +281,7 @@
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { position: 'bottom' }, title: { display: true, text: pieTitle, font: { size: 16 } } }
+                    plugins: { legend: { position: 'bottom' }, title: { display: true, text: pieTitle, font: { size: 15, weight: 'bold' } } }
                 }
             });
 
@@ -296,12 +290,12 @@
                 type: 'bar',
                 data: {
                     labels: chartLabels,
-                    datasets: [{ label: 'Submissions', data: chartDataValues, backgroundColor: '#3B82F6', borderRadius: 5 }]
+                    datasets: [{ label: 'Submissions Count', data: chartDataValues, backgroundColor: '#2563EB', borderRadius: 4 }]
                 },
                 options: {
                     responsive: true,
                     scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
-                    plugins: { legend: { display: false }, title: { display: true, text: barTitle, font: { size: 16 } } }
+                    plugins: { legend: { display: false }, title: { display: true, text: barTitle, font: { size: 15, weight: 'bold' } } }
                 }
             });
         }
