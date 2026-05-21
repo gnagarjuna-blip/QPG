@@ -10,8 +10,8 @@
 <body class="bg-slate-100 text-slate-800 min-h-screen p-6 font-sans">
 
     <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mt-10">
-        <div class="border-b-2 border-indigo-600 pb-4 mb-6">
-            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold uppercase px-3 py-1 rounded-full">ECE Department Tracker</span>
+        <div class="border-b-2 border-emerald-600 pb-4 mb-6">
+            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold uppercase px-3 py-1 rounded-full">ECE Department Tracker</span>
             <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">Bulk Excel Daily Log Report Generator</h1>
             <p class="text-slate-500 text-sm mt-1">Upload your master enrollment sheet to generate a multi-day chronological course progress sheet downloadable directly as a formatted Excel spreadsheet.</p>
         </div>
@@ -19,22 +19,22 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="md:col-span-3 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300">
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Select Your Master Excel File</label>
-                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 file:cursor-pointer"/>
+                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 file:cursor-pointer"/>
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">2. Tracking From Date</label>
-                <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+                <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">3. Tracking To Date</label>
-                <input type="date" id="toDate" value="2026-05-20" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+                <input type="date" id="toDate" value="2026-05-20" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">4. Target Course Domain</label>
-                <select id="courseFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" disabled>
+                <select id="courseFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white" disabled>
                     <option value="All">All Registered Courses</option>
                 </select>
             </div>
@@ -42,20 +42,20 @@
 
         <div class="mb-6">
             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">5. Student Filter Profile</label>
-            <select id="studentFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white" disabled>
+            <select id="studentFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white" disabled>
                 <option value="All">All Students (Compiles structured chronological day-by-day logs)</option>
             </select>
         </div>
 
         <button id="exportExcelBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-200 uppercase tracking-wider text-xs flex justify-center items-center gap-2 disabled:opacity-50" disabled>
-            💾 Process & Download Formatted Excel Report
+            💾 Process & Download Excel Report (.XLSX)
         </button>
     </div>
 
     <script>
         let masterSheetData = [];
 
-        // Map column tags exactly to match your provided document structure
+        // Exact column keys mapping to your file format
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
         const COL_YEAR_SEC = "Year & Section";
@@ -67,7 +67,6 @@
         document.getElementById('uploadFile').addEventListener('change', readMasterExcel, false);
         document.getElementById('exportExcelBtn').addEventListener('click', processAndDownloadExcel, false);
 
-        // 1. Parse Uploaded Input Document
         function readMasterExcel(e) {
             const files = e.target.files;
             if (!files || files.length === 0) return;
@@ -91,13 +90,12 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // 2. Load Select Controls
         function activateControls(data) {
             const courses = new Set();
             const students = new Set();
 
             data.forEach(row => {
-                if (row[COL_COURSE]) courses.add(String(row[row[COL_COURSE] ? COL_COURSE : '']).trim());
+                if (row[COL_COURSE]) courses.add(String(row[COL_COURSE]).trim());
                 if (row[COL_NAME]) students.add(String(row[COL_NAME]).trim());
             });
 
@@ -112,10 +110,9 @@
             sMenu.disabled = false;
 
             document.getElementById('exportExcelBtn').disabled = false;
-            alert(`File parsed successfully! Sync completed for ${data.length} student records.`);
+            alert(`File synced perfectly for ${data.length} student records!`);
         }
 
-        // Generate unique technical hashed values so outcomes are non-repeating
         function produceUniqueHash(str, value) {
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
@@ -124,7 +121,7 @@
             return Math.abs(hash + value);
         }
 
-        // 3. Dynamic Daily Lesson Learning outcome mapping dictionary
+        // Comprehensive Lesson generation index dictionary matching hourly assignments
         function compileDailyVideoProgress(studentName, courseDomain, videoNumber) {
             const cClean = String(courseDomain).toLowerCase();
             const seedId = produceUniqueHash(studentName, videoNumber);
@@ -154,7 +151,6 @@
                 logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
             } 
             else {
-                // Internet of Things / Alternate Track Systems
                 const subModules = [
                     { t: "Interfaced peripheral sensor instrumentation arrays with micro-controller interrupt lines.", o: "Understood analog-to-digital converter (ADC) sample filtering equations and register configuration parameters." },
                     { t: "Programmed low-power firmware routines using localized peripheral polling sleep cycles.", o: "Acquired insights into hardware clock prescaling configurations to maximize battery life metrics." },
@@ -169,7 +165,6 @@
             return logDetails;
         }
 
-        // 4. Main Matrix Engine to build custom download files
         function processAndDownloadExcel() {
             const startVal = document.getElementById('fromDate').value;
             const endVal = document.getElementById('toDate').value;
@@ -181,7 +176,6 @@
                 return;
             }
 
-            // Generate structural calendar date strings within bounds
             let chronologicalDates = [];
             let currentDayCursor = new Date(startVal);
             let absoluteEndDay = new Date(endVal);
@@ -191,13 +185,10 @@
                 currentDayCursor.setDate(currentDayCursor.getDate() + 1);
             }
 
-            // Create target Excel data rows matrix matching the schema order perfectly
             let structuralRowsForExcel = [];
 
-            // CHRONOLOGICAL LOOP ORDER: Process Day 1 for all matching records first, then Day 2, etc.
+            // Chronological Sorting: Date loop runs outside so data is sorted Day-by-Day seamlessly
             chronologicalDates.forEach((targetDate, dateIndex) => {
-                
-                // Track video iteration count across timeline sequence progression
                 let associatedVideoNumber = dateIndex + 1; 
 
                 masterSheetData.forEach(studentObj => {
@@ -208,11 +199,8 @@
                     let matchStudent = (chosenStudent === "All" || nameStr === chosenStudent);
 
                     if (nameStr && matchCourse && matchStudent) {
-                        
-                        // Extract localized technical text
                         let videoContent = compileDailyVideoProgress(nameStr, courseStr, associatedVideoNumber);
 
-                        // Structure flat tracking object matching your raw file columns with new timeline data insertion
                         structuralRowsForExcel.push({
                             "Date Log": targetDate,
                             "Name of The Student": nameStr,
@@ -230,31 +218,30 @@
             });
 
             if (structuralRowsForExcel.length === 0) {
-                alert("Zero records matched the defined filter variables. Please expand parameters.");
+                alert("Zero records matched the defined variables.");
                 return;
             }
 
-            // 5. Compile SheetJS Binaries & Inject Clean Presentation Custom Colors
+            // Generate clean un-styled array layout data sheets
             const targetWorksheet = XLSX.utils.json_to_sheet(structuralRowsForExcel);
             const targetWorkbook = XLSX.utils.book_new();
             XLSX.book_append_sheet(targetWorkbook, targetWorksheet, "Daily Progress Report");
 
-            // Auto-calculate structural text column widths dynamically for professional look
-            const columnWidths = [
-                { wch: 12 }, // Date Log
+            // Auto-calculate exact column text layouts widths for beautiful column reading
+            targetWorksheet['!cols'] = [
+                { wch: 14 }, // Date Log
                 { wch: 25 }, // Name of The Student
                 { wch: 15 }, // Roll Number
                 { wch: 15 }, // Year & Section
                 { wch: 28 }, // Mail ID
                 { wch: 15 }, // Mobile Number
-                { wch: 38 }, // Online Certification Courses
-                { wch: 30 }, // SDG Topics
-                { wch: 42 }, // Daily Video Task Completed
-                { wch: 55 }  // Concepts & Learnings Acquired
+                { wch: 40 }, // Online Certification Courses
+                { wch: 32 }, // SDG Topics
+                { wch: 45 }, // Daily Video Task Completed
+                { wch: 60 }  // Concepts & Learnings Acquired
             ];
-            targetWorksheet['!cols'] = columnWidths;
 
-            // Trigger file download to browser instantly
+            // Direct execution call to bypass browser sandboxing rules
             const timestampString = new Date().toISOString().slice(0,10);
             XLSX.writeFile(targetWorkbook, `ECE_III-I-C_Daily_Progress_Report_${timestampString}.xlsx`);
         }
