@@ -3,59 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Class Daily Excel Report Bulk Exporter</title>
+    <title>ECE Class Daily Log - Excel Generator & Preview Track</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen p-6 font-sans">
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8 font-sans">
 
-    <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-200 mt-10">
-        <div class="border-b-2 border-emerald-600 pb-4 mb-6">
-            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold uppercase px-3 py-1 rounded-full">ECE Department Tracker</span>
-            <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">Bulk Excel Daily Log Report Generator</h1>
-            <p class="text-slate-500 text-sm mt-1">Upload your master enrollment sheet to generate a multi-day chronological course progress sheet downloadable directly as a formatted Excel spreadsheet.</p>
+    <div class="max-w-7xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200">
+        <div class="border-b-2 border-indigo-600 pb-4 mb-6">
+            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold uppercase px-3 py-1 rounded-full">ECE Department Tracker</span>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">Bulk Excel Progress Log Generator</h1>
+            <p class="text-slate-500 text-sm mt-1">Upload the student master file. Select dates to automatically divide tasks by video lesson numbers chronologically.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="md:col-span-3 bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300">
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Select Your Master Excel File</label>
-                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 file:cursor-pointer"/>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="md:col-span-4">
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Upload Master Student Excel/CSV File</label>
+                <input type="file" id="uploadFile" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 file:cursor-pointer"/>
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">2. Tracking From Date</label>
-                <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">2. From Date</label>
+                <input type="date" id="fromDate" value="2026-05-18" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white">
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">3. Tracking To Date</label>
-                <input type="date" id="toDate" value="2026-05-20" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white">
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">3. To Date</label>
+                <input type="date" id="toDate" value="2026-05-20" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white">
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">4. Target Course Domain</label>
-                <select id="courseFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white" disabled>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">4. Filter Course Track</label>
+                <select id="courseFilter" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white" disabled>
                     <option value="All">All Registered Courses</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">5. Filter Student</label>
+                <select id="studentFilter" class="w-full p-2 border border-slate-300 rounded-lg text-sm bg-white" disabled>
+                    <option value="All">All Students</option>
                 </select>
             </div>
         </div>
 
-        <div class="mb-6">
-            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">5. Student Filter Profile</label>
-            <select id="studentFilter" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white" disabled>
-                <option value="All">All Students (Compiles structured chronological day-by-day logs)</option>
-            </select>
+        <div class="mb-8">
+            <button id="exportExcelBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-200 uppercase tracking-wider text-xs flex justify-center items-center gap-2 disabled:opacity-40" disabled>
+                💾 1. Generate & Download Excel Spreadsheet (.XLSX)
+            </button>
         </div>
 
-        <button id="exportExcelBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-200 uppercase tracking-wider text-xs flex justify-center items-center gap-2 disabled:opacity-50" disabled>
-            💾 Process & Download Excel Report (.XLSX)
-        </button>
+        <div id="previewContainer" class="hidden border border-slate-200 rounded-xl overflow-hidden shadow-inner bg-white">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-wider">Live Preview Table Data</h2>
+                    <p class="text-[11px] text-slate-400">If your browser security parameters blocked the automatic popup download window, you can view or copy all logs directly below:</p>
+                </div>
+                <span class="bg-indigo-600 text-white font-mono text-xs px-2.5 py-1 rounded" id="rowCountBadge">0 Rows</span>
+            </div>
+            
+            <div class="overflow-x-auto max-h-[500px]">
+                <table id="previewTable" class="min-w-full divide-y divide-slate-200 text-left text-xs">
+                    <thead class="bg-slate-100 font-bold uppercase text-slate-700 tracking-wider sticky top-0 shadow-sm z-10">
+                        <tr>
+                            <th class="p-3 bg-slate-100">Date Log</th>
+                            <th class="p-3 bg-slate-100">Student Name</th>
+                            <th class="p-3 bg-slate-100">Roll Number</th>
+                            <th class="p-3 bg-slate-100">Course Track</th>
+                            <th class="p-3 bg-slate-100">SDG Topic</th>
+                            <th class="p-3 bg-slate-100 text-blue-800">Daily Video Module Log</th>
+                            <th class="p-3 bg-slate-100 text-emerald-800">Concepts Learned Matrix (2+ lines)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewTableBody" class="divide-y divide-slate-200 bg-white text-slate-700">
+                        </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        let masterSheetData = [];
+        let rawMasterData = [];
 
-        // Exact column keys mapping to your file format
+        // Dynamic Column References corresponding directly to your uploaded assignment master file
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
         const COL_YEAR_SEC = "Year & Section";
@@ -64,186 +94,205 @@
         const COL_COURSE = "Online Certification Courses";
         const COL_SDG = "Case Study on SDG (Sustainable Development Course) Topics Related to ECE";
 
-        document.getElementById('uploadFile').addEventListener('change', readMasterExcel, false);
-        document.getElementById('exportExcelBtn').addEventListener('click', processAndDownloadExcel, false);
+        document.getElementById('uploadFile').addEventListener('change', loadExcelSourceFile, false);
+        document.getElementById('exportExcelBtn').addEventListener('click', generateClassReportMatrix, false);
 
-        function readMasterExcel(e) {
-            const files = e.target.files;
-            if (!files || files.length === 0) return;
-            const file = files[0];
+        function loadExcelSourceFile(e) {
+            const uploadedFiles = e.target.files;
+            if (!uploadedFiles || uploadedFiles.length === 0) return;
+            const targetFile = uploadedFiles[0];
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const data = new Uint8Array(event.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const targetSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const fileFileReader = new FileReader();
+            fileFileReader.onload = function(event) {
+                const binaryData = new Uint8Array(event.target.result);
+                const workbookInstance = XLSX.read(binaryData, {type: 'array'});
+                const targetSheet = workbookInstance.Sheets[workbookInstance.SheetNames[0]];
                 
-                masterSheetData = XLSX.utils.sheet_to_json(targetSheet, {defval: ""});
+                rawMasterData = XLSX.utils.sheet_to_json(targetSheet, {defval: ""});
 
-                if(masterSheetData.length === 0) {
-                    alert("Error parsing document. File appears to have missing dataset layouts.");
+                if(rawMasterData.length === 0) {
+                    alert("Parsing Mismatch: Checked file columns but zero usable datasets were recovered.");
                     return;
                 }
 
-                activateControls(masterSheetData);
+                initializeDropdownMenus(rawMasterData);
             };
-            reader.readAsArrayBuffer(file);
+            fileFileReader.readAsArrayBuffer(targetFile);
         }
 
-        function activateControls(data) {
-            const courses = new Set();
-            const students = new Set();
+        function initializeDropdownMenus(data) {
+            const courseSet = new Set();
+            const studentSet = new Set();
 
             data.forEach(row => {
-                if (row[COL_COURSE]) courses.add(String(row[COL_COURSE]).trim());
-                if (row[COL_NAME]) students.add(String(row[COL_NAME]).trim());
+                if (row[COL_COURSE]) courseSet.add(String(row[COL_COURSE]).trim());
+                if (row[COL_NAME]) studentSet.add(String(row[COL_NAME]).trim());
             });
 
-            const cMenu = document.getElementById('courseFilter');
-            cMenu.innerHTML = '<option value="All">All Registered Courses</option>';
-            courses.forEach(c => { if(c) cMenu.innerHTML += `<option value="${c}">${c}</option>`; });
-            cMenu.disabled = false;
+            const courseMenu = document.getElementById('courseFilter');
+            courseMenu.innerHTML = '<option value="All">All Registered Courses</option>';
+            courseSet.forEach(c => { if(c) courseMenu.innerHTML += `<option value="${c}">${c}</option>`; });
+            courseMenu.disabled = false;
 
-            const sMenu = document.getElementById('studentFilter');
-            sMenu.innerHTML = '<option value="All">All Students (Compiles structured chronological day-by-day logs)</option>';
-            students.forEach(s => { if(s) sMenu.innerHTML += `<option value="${s}">${s}</option>`; });
-            sMenu.disabled = false;
+            const studentMenu = document.getElementById('studentFilter');
+            studentMenu.innerHTML = '<option value="All">All Students</option>';
+            studentSet.forEach(s => { if(s) studentMenu.innerHTML += `<option value="${s}">${s}</option>`; });
+            studentMenu.disabled = false;
 
             document.getElementById('exportExcelBtn').disabled = false;
-            alert(`File synced perfectly for ${data.length} student records!`);
+            alert(`File parsed perfectly! synchronized ${data.length} student tracking entries.`);
         }
 
-        function produceUniqueHash(str, value) {
-            let hash = 0;
+        function createUniqueHashSeed(str, num) {
+            let runningHash = 0;
             for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                runningHash = str.charCodeAt(i) + ((runningHash << 5) - runningHash);
             }
-            return Math.abs(hash + value);
+            return Math.abs(runningHash + num);
         }
 
-        // Comprehensive Lesson generation index dictionary matching hourly assignments
-        function compileDailyVideoProgress(studentName, courseDomain, videoNumber) {
-            const cClean = String(courseDomain).toLowerCase();
-            const seedId = produceUniqueHash(studentName, videoNumber);
+        // Structural Dictionary holding distinct lesson tokens to fulfill the 2-line length requirement
+        function generateVideoLessonContent(studentName, courseString, currentVideoID) {
+            const cleanStr = String(courseString).toLowerCase();
+            const seedVal = createUniqueHashSeed(studentName, currentVideoID);
             
-            let logDetails = { task: "", outcome: "" };
+            let logPair = { task: "", outcome: "" };
 
-            if (cClean.includes('semiconductors') || cClean.includes('vlsi') || cClean.includes('embedded')) {
-                const subModules = [
-                    { t: "Analyzed deep sub-micron physical transistor layouts and gate geometry models.", o: "Understood drain-induced barrier lowering (DIBL) scaling dynamics and gate leakage reduction techniques." },
-                    { t: "Designed behavioral architectures for synchronous pipeline registers and clock counters.", o: "Acquired competency in resolving setup/hold timing margin errors across high-frequency logic arrays." },
-                    { t: "Simulated structural propagation path delays across complex domino logic trees in LTSpice.", o: "Calculated voltage transfer optimization curves and verified active power dissipation parameters." },
-                    { t: "Configured modular finite state machine (FSM) control parameters inside Xilinx Vivado environment.", o: "Mastered synthesis constraints, clock skew mitigation steps, and multi-stage block optimizations." }
+            if (cleanStr.includes('semiconductors') || cleanStr.includes('vlsi') || cleanStr.includes('embedded')) {
+                const tracks = [
+                    { t: "Analyzed sub-micron semiconductor physical layouts and gate geometry configuration rules.", o: "Understood drain-induced barrier lowering scaling dynamics alongside localized gate leakage reduction models.\nVerified operational state characteristics under extreme environmental temperature stress thresholds." },
+                    { t: "Designed behavioral hardware layout models for synchronous multi-stage clock counters.", o: "Acquired competency in locating and optimizing setup and hold timing margin errors across digital arrays.\nSuccessfully structured structural execution paths inside the active compiler network framework." },
+                    { t: "Simulated structural cell propagation path delays across complex domino logic gate structures.", o: "Calculated multi-parameter voltage transfer criteria optimization parameters utilizing digital scope simulation loops.\nMinimized static power leakage paths through precise gate sizing criteria models." },
+                    { t: "Configured modular finite state machine register attributes inside the Xilinx Vivado environment.", o: "Mastered programmatic synthesis design constraints, network delay tracking loops, and fan-out path optimization metrics.\nEnsured layout architecture met rigorous system timing parameters cleanly." }
                 ];
-                let choice = subModules[seedId % subModules.length];
-                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
-                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
+                logPair = tracks[seedVal % tracks.length];
             } 
-            else if (cClean.includes('pcb') || cClean.includes('layout') || cClean.includes('design')) {
-                const subModules = [
-                    { t: "Mapped schematic library footprint configurations for high-density multi-pin microprocessor modules.", o: "Mastered programmatic netlist synchronization constraints and custom component packaging rules." },
-                    { t: "Executed high-frequency localized layout routing and configured custom differential trace paths.", o: "Acquired insights into reducing signal loop cross-talk properties and managing impedance match integrity parameters." },
-                    { t: "Calculated multi-layer copper power rail thickness dimensions relative to strict temperature constraints.", o: "Understood advanced thermal dissipation grid patterns and plane insulation safety layers." },
-                    { t: "Conducted automated Design Rule Checking (DRC) to discover board layer alignment mask issues.", o: "Resolved critical manufacturing spacing parameters and finalized production Gerber output packages." }
+            else if (cleanStr.includes('pcb') || cleanStr.includes('layout') || cleanStr.includes('design')) {
+                const tracks = [
+                    { t: "Mapped footprint schema parameters for high-density multi-pin microprocessors and microcontrollers.", o: "Mastered programmatic netlist synchronization constraints alongside manufacturing library packaging rules.\nEnsured footprint integrity matched physical design guidelines cleanly." },
+                    { t: "Executed high-frequency localized traces layout setups using specialized cross-talk trace isolation parameters.", o: "Acquired deep insights into minimizing electromagnetic interference paths and trace impedance mismatching profiles.\nOptimized path lengths to preserve high-frequency signal propagation speeds safely." },
+                    { t: "Calculated multi-layer copper board routing rail thicknesses relative to continuous electrical load ratings.", o: "Understood advanced thermal dissipation surface copper patterns and internal plane dielectric safety coefficients.\nEliminated thermal bottleneck zones across heavy distribution points." },
+                    { t: "Conducted automated Design Rule Verification (DRC) processes to scan for structural spacing mismatches.", o: "Resolved critical layer spacing layout parameters and compiled production-ready Gerber manufacturing datasets.\nValidated layout compatibility relative to industrial fabrication machinery tolerances." }
                 ];
-                let choice = subModules[seedId % subModules.length];
-                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
-                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
+                logPair = tracks[seedVal % tracks.length];
             } 
             else {
-                const subModules = [
-                    { t: "Interfaced peripheral sensor instrumentation arrays with micro-controller interrupt lines.", o: "Understood analog-to-digital converter (ADC) sample filtering equations and register configuration parameters." },
-                    { t: "Programmed low-power firmware routines using localized peripheral polling sleep cycles.", o: "Acquired insights into hardware clock prescaling configurations to maximize battery life metrics." },
-                    { t: "Configured network communication architecture profiles using MQTT data routing structures.", o: "Mastered light payload publish-subscribe transmission pipelines across unsecured external client paths." },
-                    { t: "Constructed structural JSON data packet schemas to stream telemetry arrays safely to cloud hubs.", o: "Evaluated transmission data rate optimization matrices and packet error detection algorithms." }
+                const tracks = [
+                    { t: "Interfaced peripheral analog hardware sensor arrays with micro-controller dynamic interrupt registers.", o: "Understood embedded analog-to-digital converter signal sampling resolution steps and quantization error filtration.\nSuccessfully written custom low-level polling drivers to stabilize real-time device outputs." },
+                    { t: "Programmed power-saving embedded firmware modules utilizing sleep state clock prescaler registers.", o: "Acquired clear operational engineering insights into reducing passive microcontroller power grid draws during idle loops.\nExtended battery runtime estimates significantly through targeted code configuration loops." },
+                    { t: "Configured local network communication data paths mapping to MQTT publish-subscribe messaging brokers.", o: "Mastered light payload processing structures, transmission packet formatting, and client routing setups.\nMaintained data stream consistency under irregular latency constraints." },
+                    { t: "Constructed structural telemetry JSON dataset streams to push physical sensor data points to remote dashboards.", o: "Evaluated transmission data rate optimization matrices and implemented cyclic redundancy check error verification.\nSecured terminal packet validation steps across external transmission nodes." }
                 ];
-                let choice = subModules[seedId % subModules.length];
-                logDetails.task = `Completed Video Lesson Module #${videoNumber}: ${choice.t}`;
-                logDetails.outcome = `Successfully evaluated the concept. ${choice.o}`;
+                logPair = tracks[seedVal % tracks.length];
             }
 
-            return logDetails;
+            return {
+                task: `Completed Video Lesson Module #${currentVideoID}: ${logPair.t}`,
+                outcome: logPair.o
+            };
         }
 
-        function processAndDownloadExcel() {
-            const startVal = document.getElementById('fromDate').value;
-            const endVal = document.getElementById('toDate').value;
-            const chosenCourse = document.getElementById('courseFilter').value;
-            const chosenStudent = document.getElementById('studentFilter').value;
+        function generateClassReportMatrix() {
+            const dateFromStr = document.getElementById('fromDate').value;
+            const dateToStr = document.getElementById('toDate').value;
+            const filterCourse = document.getElementById('courseFilter').value;
+            const filterStudent = document.getElementById('studentFilter').value;
 
-            if (!startVal || !endVal) {
-                alert("Please declare complete target filter date parameters.");
+            if (!dateFromStr || !dateToStr) {
+                alert("Please declare both starting and targeted range dates first.");
                 return;
             }
 
-            let chronologicalDates = [];
-            let currentDayCursor = new Date(startVal);
-            let absoluteEndDay = new Date(endVal);
+            let datesSequence = [];
+            let startCursor = new Date(dateFromStr);
+            let endCursor = new Date(dateToStr);
 
-            while (currentDayCursor <= absoluteEndDay) {
-                chronologicalDates.push(new Date(currentDayCursor).toISOString().split('T')[0]);
-                currentDayCursor.setDate(currentDayCursor.getDate() + 1);
+            while (startCursor <= endCursor) {
+                datesSequence.push(new Date(startCursor).toISOString().split('T')[0]);
+                startCursor.setDate(startCursor.getDate() + 1);
             }
 
-            let structuralRowsForExcel = [];
+            let flattenedFinalRows = [];
 
-            // Chronological Sorting: Date loop runs outside so data is sorted Day-by-Day seamlessly
-            chronologicalDates.forEach((targetDate, dateIndex) => {
-                let associatedVideoNumber = dateIndex + 1; 
+            // CHRONOLOGICAL ASSIGNMENT TIMELINE: Loop dates first to ensure clean chronological group logs
+            datesSequence.forEach((currentLoopDate, dayIndex) => {
+                let videoCounterNum = dayIndex + 1; // Converts Day 1 to Video Lesson 1, etc.
 
-                masterSheetData.forEach(studentObj => {
-                    let nameStr = studentObj[COL_NAME] ? String(studentObj[COL_NAME]).trim() : "";
-                    let courseStr = studentObj[COL_COURSE] ? String(studentObj[COL_COURSE]).trim() : "";
+                rawMasterData.forEach(studentObj => {
+                    let sName = studentObj[COL_NAME] ? String(studentObj[COL_NAME]).trim() : "";
+                    let sCourse = studentObj[COL_COURSE] ? String(studentObj[COL_COURSE]).trim() : "";
 
-                    let matchCourse = (chosenCourse === "All" || courseStr === chosenCourse);
-                    let matchStudent = (chosenStudent === "All" || nameStr === chosenStudent);
+                    let passCourse = (filterCourse === "All" || sCourse === filterCourse);
+                    let passStudent = (filterStudent === "All" || sName === filterStudent);
 
-                    if (nameStr && matchCourse && matchStudent) {
-                        let videoContent = compileDailyVideoProgress(nameStr, courseStr, associatedVideoNumber);
+                    if (sName && passCourse && passStudent) {
+                        let dynamicLogs = generateVideoLessonContent(sName, sCourse, videoCounterNum);
 
-                        structuralRowsForExcel.push({
-                            "Date Log": targetDate,
-                            "Name of The Student": nameStr,
+                        flattenedFinalRows.push({
+                            "Date Log": currentLoopDate,
+                            "Name of The Student": sName,
                             "Roll Number": studentObj[COL_ROLL] || "N/A",
                             "Year & Section": studentObj[COL_YEAR_SEC] || "N/A",
                             "Mail ID": studentObj[COL_MAIL] || "N/A",
                             "Mobile Number": studentObj[COL_PHONE] || "N/A",
-                            "Online Certification Courses": courseStr,
+                            "Online Certification Courses": sCourse,
                             "Case Study on SDG Topics Related to ECE": studentObj[COL_SDG] || "N/A",
-                            "Daily Video Task Completed": videoContent.task,
-                            "Concepts & Learnings Acquired": videoContent.outcome
+                            "Daily Video Task Completed": dynamicLogs.task,
+                            "Concepts & Learnings Acquired": dynamicLogs.outcome
                         });
                     }
                 });
             });
 
-            if (structuralRowsForExcel.length === 0) {
-                alert("Zero records matched the defined variables.");
+            if (flattenedFinalRows.length === 0) {
+                alert("No student entries matched your filter selections.");
                 return;
             }
 
-            // Generate clean un-styled array layout data sheets
-            const targetWorksheet = XLSX.utils.json_to_sheet(structuralRowsForExcel);
-            const targetWorkbook = XLSX.utils.book_new();
-            XLSX.book_append_sheet(targetWorkbook, targetWorksheet, "Daily Progress Report");
+            // 1. Render rows into on-screen backup preview layout container immediately
+            renderPreviewTableData(flattenedFinalRows);
 
-            // Auto-calculate exact column text layouts widths for beautiful column reading
-            targetWorksheet['!cols'] = [
-                { wch: 14 }, // Date Log
-                { wch: 25 }, // Name of The Student
-                { wch: 15 }, // Roll Number
-                { wch: 15 }, // Year & Section
-                { wch: 28 }, // Mail ID
-                { wch: 15 }, // Mobile Number
-                { wch: 40 }, // Online Certification Courses
-                { wch: 32 }, // SDG Topics
-                { wch: 45 }, // Daily Video Task Completed
-                { wch: 60 }  // Concepts & Learnings Acquired
-            ];
+            // 2. Trigger standard clean binary SheetJS download workflow step
+            try {
+                const worksheet = XLSX.utils.json_to_sheet(flattenedFinalRows);
+                const workbook = XLSX.utils.book_new();
+                XLSX.book_append_sheet(workbook, worksheet, "Daily Progress Sheet");
 
-            // Direct execution call to bypass browser sandboxing rules
-            const timestampString = new Date().toISOString().slice(0,10);
-            XLSX.writeFile(targetWorkbook, `ECE_III-I-C_Daily_Progress_Report_${timestampString}.xlsx`);
+                worksheet['!cols'] = [
+                    { wch: 14 }, { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 26 },
+                    { wch: 15 }, { wch: 38 }, { wch: 30 }, { wch: 45 }, { wch: 65 }
+                ];
+
+                const currentFileStamp = new Date().toISOString().slice(0,10);
+                XLSX.writeFile(workbook, `ECE_III-I-C_Daily_Progress_Logs_${currentFileStamp}.xlsx`);
+            } catch(excelError) {
+                console.log("Excel Download blocked by browser layout engine, preview remains active.", excelError);
+                alert("Excel file creation download popup was intercepted by browser system blocks. Use the screen preview logs below.");
+            }
+        }
+
+        function renderPreviewTableData(finalRowsList) {
+            const tableBodyElement = document.getElementById('previewTableBody');
+            tableBodyElement.innerHTML = "";
+
+            document.getElementById('rowCountBadge').innerText = `${finalRowsList.length} Rows Generated`;
+
+            finalRowsList.forEach(item => {
+                let row = document.createElement('tr');
+                row.className = "hover:bg-slate-50 transition border-b border-slate-200";
+                row.innerHTML = `
+                    <td class="p-3 font-mono font-bold whitespace-nowrap bg-slate-50/50">${item["Date Log"]}</td>
+                    <td class="p-3 font-bold text-slate-900">${item["Name of The Student"]}</td>
+                    <td class="p-3 font-mono text-slate-600">${item["Roll Number"]}</td>
+                    <td class="p-3 font-medium">${item["Online Certification Courses"]}</td>
+                    <td class="p-3 text-slate-500">${item["Case Study on SDG Topics Related to ECE"]}</td>
+                    <td class="p-3 text-blue-700 font-medium max-w-xs">${item["Daily Video Task Completed"]}</td>
+                    <td class="p-3 text-emerald-800 whitespace-pre-line max-w-md bg-emerald-50/20 leading-relaxed font-medium">${item["Concepts & Learnings Acquired"]}</td>
+                `;
+                tableBodyElement.appendChild(row);
+            });
+
+            document.getElementById('previewContainer').classList.remove('hidden');
         }
     </script>
 </body>
