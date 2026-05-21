@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECE Department - Fixed Excel Log Exporter</title>
+    <title>ECE Class Log - Direct Copy Paste Matrix</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen p-4 md:p-8 font-sans">
 
-    <div class="max-w-5xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 mt-6">
-        <div class="border-b-4 border-emerald-600 pb-4 mb-6">
-            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold uppercase px-3 py-1 rounded-full">Bypass Engine Active</span>
-            <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">Verified ECE Daily Report Generator</h1>
-            <p class="text-slate-500 text-sm mt-1">This version uses a native download layer to force your browser to allow the direct download of the generated spreadsheet.</p>
+    <div class="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 mt-4">
+        <div class="border-b-4 border-indigo-600 pb-4 mb-6">
+            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold uppercase px-3 py-1 rounded-full">100% Reliable Safe Mode</span>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 mt-2">ECE Daily Log Manual Copy-Paste Hub</h1>
+            <p class="text-slate-500 text-sm mt-1">If your browser blocks standard downloads, use this system. It creates raw data rows that you can copy instantly and paste into Excel or Google Sheets.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div class="md:col-span-4">
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Select Input Student Master Sheet File</label>
-                <input type="file" id="uploadSource" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 file:cursor-pointer"/>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">1. Select Input Student Master Excel File</label>
+                <input type="file" id="uploadSource" accept=".xlsx, .xls, .csv" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 file:cursor-pointer"/>
             </div>
 
             <div>
@@ -47,49 +47,28 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <button id="generateMatrixBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow transition duration-150 uppercase tracking-wider text-xs" disabled>
-                ⚙️ 1. Process Timeline Rows & Preview
-            </button>
-            <button id="downloadNativeBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl shadow transition duration-150 uppercase tracking-wider text-xs hidden">
-                📥 2. Download Formatted Excel Sheet Now
-            </button>
-        </div>
+        <button id="generateTextMatrixBtn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow transition duration-150 uppercase tracking-wider text-xs" disabled>
+            🚀 Process & Generate Copyable Sheet Data
+        </button>
 
-        <div id="previewWrapper" class="hidden border border-slate-200 rounded-xl overflow-hidden shadow-md bg-white">
-            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+        <div id="outputContainer" class="hidden mt-8 border border-slate-300 rounded-xl overflow-hidden shadow-lg bg-white">
+            <div class="bg-slate-900 text-white p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
-                    <h2 class="text-sm font-bold uppercase tracking-wider">Generated Class Timeline Matrix</h2>
-                    <p class="text-[11px] text-slate-400">Data compiled day-by-day smoothly. Click the emerald download button above to save as a native Excel file.</p>
+                    <h2 class="text-sm font-bold uppercase tracking-wider">📋 Clean Table Data Block Generated</h2>
+                    <p class="text-[11px] text-slate-400">Click the green button on the right, open your spreadsheet, click cell <strong>A1</strong>, and press <strong>CTRL + V</strong>.</p>
                 </div>
-                <span class="bg-indigo-600 font-mono text-xs px-2.5 py-1 rounded" id="rowsBadge">0 Records</span>
+                <button id="copyToClipboardBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wide transition shadow">
+                    ✨ Copy All Rows Instantly
+                </button>
             </div>
-            
-            <div class="overflow-x-auto max-h-[450px]">
-                <table class="min-w-full divide-y divide-slate-200 text-left text-xs">
-                    <thead class="bg-slate-100 font-bold uppercase text-slate-600 tracking-wider sticky top-0 shadow-sm z-10">
-                        <tr>
-                            <th class="p-3 bg-slate-100">Date</th>
-                            <th class="p-3 bg-slate-100">Student Name</th>
-                            <th class="p-3 bg-slate-100">Roll Number</th>
-                            <th class="p-3 bg-slate-100">Online Course Selection</th>
-                            <th class="p-3 bg-slate-100">SDG Topic Target</th>
-                            <th class="p-3 bg-slate-100 text-blue-700">Daily Video Task Completed</th>
-                            <th class="p-3 bg-slate-100 text-emerald-700">Concepts & Learnings Acquired (2+ Lines)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="previewBody" class="divide-y divide-slate-200 bg-white text-slate-700">
-                        </tbody>
-                </table>
-            </div>
+            <textarea id="rawOutputDataBox" readonly class="w-full h-80 p-4 font-mono text-xs bg-slate-50 text-slate-700 outline-none border-t border-slate-200 resize-none leading-relaxed" placeholder="Data rows will appear here..."></textarea>
         </div>
     </div>
 
     <script>
         let uploadedClassArray = [];
-        let finalSpreadsheetBinaryBlob = null;
 
-        // Exact Column Maps corresponding to your sheet schema properties
+        // Exact Master Sheet Column References Mapping
         const COL_NAME = "Name of The Student";
         const COL_ROLL = "Roll Number";
         const COL_YEAR_SEC = "Year & Section";
@@ -99,8 +78,8 @@
         const COL_SDG = "Case Study on SDG (Sustainable Development Course) Topics Related to ECE";
 
         document.getElementById('uploadSource').addEventListener('change', parseInputFile, false);
-        document.getElementById('generateMatrixBtn').addEventListener('click', constructTimelineReport, false);
-        document.getElementById('downloadNativeBtn').addEventListener('click', forceNativeDownload, false);
+        document.getElementById('generateTextMatrixBtn').addEventListener('click', compileDataTextRows, false);
+        document.getElementById('copyToClipboardBtn').addEventListener('click', handleDataClipboardCopy, false);
 
         function parseInputFile(e) {
             const chosenFiles = e.target.files;
@@ -139,8 +118,8 @@
             studentSet.forEach(s => sBox.innerHTML += `<option value="${s}">${s}</option>`);
             sBox.disabled = false;
 
-            document.getElementById('generateMatrixBtn').disabled = false;
-            alert(`File Read Success! Synthesized ${data.length} master rows from your spreadsheet input.`);
+            document.getElementById('generateTextMatrixBtn').disabled = false;
+            alert(`File Read Success! Found ${data.length} student rows.`);
         }
 
         function produceHashedValue(str, count) {
@@ -159,19 +138,90 @@
 
             if(lowC.includes('vlsi') || lowC.includes('semiconductor') || lowC.includes('embedded')) {
                 const choices = [
-                    { t: "Analyzed sub-micron physical layout arrays and gate geometry configurations.", o: "Understood drain-induced barrier lowering (DIBL) scaling side effects and quantum gate tunneling constraints.\nEvaluated parameters across alternative operating voltage configurations cleanly." },
-                    { t: "Designed structural behavior hardware source files for multi-stage synchronous clock lines.", o: "Acquired critical competency in locating and mitigating setup/hold timing margin faults across logic networks.\nValidated design properties via modular simulation testbench modules successfully." },
-                    { t: "Simulated structural cell propagation path metrics inside specialized domino logic trees.", o: "Calculated detailed voltage transfer optimization limits utilizing advanced simulation sweep matrices.\nMinimized passive leakage paths through custom complementary transistor scale tuning." }
+                    { t: "Analyzed sub-micron physical layout arrays and gate geometry configurations.", o: "Understood drain-induced barrier lowering (DIBL) scaling side effects and quantum gate tunneling constraints. Evaluated parameters across alternative operating voltage configurations cleanly." },
+                    { t: "Designed structural behavior hardware source files for multi-stage synchronous clock lines.", o: "Acquired critical competency in locating and mitigating setup/hold timing margin faults across logic networks. Validated design properties via modular simulation testbench modules successfully." },
+                    { t: "Simulated structural cell propagation path metrics inside specialized domino logic trees.", o: "Calculated detailed voltage transfer optimization limits utilizing advanced simulation sweep matrices. Minimized passive leakage paths through custom complementary transistor scale tuning." }
                 ];
                 logs = choices[seed % choices.length];
             } 
             else if(lowC.includes('pcb') || lowC.includes('layout') || lowC.includes('design')) {
                 const choices = [
-                    { t: "Mapped schematic package footprints for complex high-density multi-pin microprocessor blocks.", o: "Mastered programmatic netlist properties synchronization parameters and dynamic layout component routing rules.\nEnsured dimensional scaling footprints fully matched physical layout target definitions." },
-                    { t: "Executed localized trace configurations optimizing routing distances and differential pair alignments.", o: "Acquired deep insights into minimizing high-frequency parasitic cross-talk lines and matching transmission path impedance.\nPreserved signal propagation integrity across fast signal rise times safely." },
-                    { t: "Conducted rigorous design rule optimization loops (DRC) to scan for structural pad clearance warnings.", o: "Resolved critical layer separation parameters to prepare high-quality production-ready Gerber dataset outputs.\nValidated path designs against strict chemical etching constraint standards." }
+                    { t: "Mapped schematic package footprints for complex high-density multi-pin microprocessor blocks.", o: "Mastered programmatic netlist properties synchronization parameters and dynamic layout component routing rules. Ensured dimensional scaling footprints fully matched physical layout target definitions." },
+                    { t: "Executed localized trace configurations optimizing routing distances and differential pair alignments.", o: "Acquired deep insights into minimizing high-frequency parasitic cross-talk lines and matching transmission path impedance. Preserved signal propagation integrity across fast signal rise times safely." },
+                    { t: "Conducted rigorous design rule optimization loops (DRC) to scan for structural pad clearance warnings.", o: "Resolved critical layer separation parameters to prepare high-quality production-ready Gerber dataset outputs. Validated path designs against strict chemical etching constraint standards." }
                 ];
                 logs = choices[seed % choices.length];
             } 
             else {
-                const choices =
+                const choices = [
+                    { t: "Interfaced external analog hardware instrumentation components with custom micro-controller peripheral lines.", o: "Understood embedded analog-to-digital converter signal sampling resolution steps and quantization noise reduction filtering. Developed lightweight interrupt handler scripts to stabilize sensor arrays outputs dynamically." },
+                    { t: "Configured local wireless device communication data networks mapping to remote MQTT message brokers.", o: "Mastered lightweight client processing structures, data payload serialization schemas, and secure client subscription routines. Maintained data throughput stability under variable network latency conditions." },
+                    { t: "Programmed power-saving embedded firmware microcode using localized peripheral sleep-cycle timers.", o: "Acquired clear operational engineering insights into reducing micro-controller current loop draws during idle cycles. Optimized processing routines to extend battery shelf-life properties significantly." }
+                ];
+                logs = choices[seed % choices.length];
+            }
+
+            return {
+                task: `Completed Video Lesson Module #${videoId}: ${logs.t}`,
+                outcome: logs.o
+            };
+        }
+
+        function compileDataTextRows() {
+            const dStart = document.getElementById('dateStart').value;
+            const dEnd = document.getElementById('dateEnd').value;
+            const cFilter = document.getElementById('courseDrop').value;
+            const sFilter = document.getElementById('studentDrop').value;
+
+            if(!dStart || !dEnd) { alert("Please set date parameters."); return; }
+
+            let targetCalendarDates = [];
+            let currentDay = new Date(dStart);
+            let endingDay = new Date(dEnd);
+
+            while(currentDay <= endingDay) {
+                targetCalendarDates.push(new Date(currentDay).toISOString().split('T')[0]);
+                currentDay.setDate(currentDay.getDate() + 1);
+            }
+
+            // Headers row exactly matching standard columns
+            let plainTextOutputResult = "Date Log\tName of The Student\tRoll Number\tYear & Section\tMail ID\tMobile Number\tOnline Certification Courses\tCase Study on SDG Topics Related to ECE\tDaily Video Task Completed\tConcepts & Learnings Acquired (2+ Lines)\n";
+
+            // Chronological Processing Structure (Dates Outer Loop)
+            targetCalendarDates.forEach((activeDate, loopIndex) => {
+                let consecutiveVideoID = loopIndex + 1; 
+
+                uploadedClassArray.forEach(student => {
+                    let nameStr = student[COL_NAME] ? String(student[COL_NAME]).trim() : "";
+                    let courseStr = student[COL_COURSE] ? String(student[COL_COURSE]).trim() : "";
+
+                    let matchC = (cFilter === "All" || courseStr === cFilter);
+                    let matchS = (sFilter === "All" || nameStr === sFilter);
+
+                    if(nameStr && matchC && matchS) {
+                        let dynamicLogData = buildRealisticEceLogs(nameStr, courseStr, consecutiveVideoID);
+
+                        // Tab delimited row append string parsing
+                        plainTextOutputResult += `${activeDate}\t${nameStr}\t${student[COL_ROLL] || "N/A"}\t${student[COL_YEAR_SEC] || "N/A"}\t${student[COL_MAIL] || "N/A"}\t${student[COL_PHONE] || "N/A"}\t${courseStr}\t${student[COL_SDG] || "N/A"}\t${dynamicLogData.task}\t${dynamicLogData.outcome}\n`;
+                    }
+                });
+            });
+
+            document.getElementById('rawOutputDataBox').value = plainTextOutputResult;
+            document.getElementById('outputContainer').classList.remove('hidden');
+        }
+
+        function handleDataClipboardCopy() {
+            const textDataArea = document.getElementById('rawOutputDataBox');
+            textDataArea.select();
+            textDataArea.setSelectionRange(0, 99999); // Safe range selection fallback for mobile devices
+
+            navigator.clipboard.writeText(textDataArea.value).then(() => {
+                alert("Copied successfully! You can now open Excel or Google Sheets and paste (CTRL+V) directly.");
+            }).catch(err => {
+                alert("Clipboard copy error, please select and copy all content inside the text box manually instead.");
+            });
+        }
+    </script>
+</body>
+</html>
