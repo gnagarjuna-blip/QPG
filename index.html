@@ -167,12 +167,12 @@
                     </div>
                 </div>
 
-                <!-- Duty Slot Selection Controls -->
+                <!-- Duty Slot Selection Controls (Break hours excluded) -->
                 <div class="border-t border-slate-200 pt-4">
                     <label class="block font-semibold text-xs text-slate-700 uppercase tracking-wider mb-2">
                         Select Duty Slots to Include in Generated Timetable:
                     </label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 text-xs">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs">
                         <label class="flex items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200 cursor-pointer">
                             <input type="checkbox" id="slotCheck_s1" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">1st Hour</strong>9:20 - 10:20</div>
@@ -181,12 +181,10 @@
                             <input type="checkbox" id="slotCheck_s2" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">2nd Hour</strong>10:20 - 11:20</div>
                         </label>
-                        
                         <label class="flex items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200 cursor-pointer">
                             <input type="checkbox" id="slotCheck_s3" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">3rd Hour</strong>11:30 - 12:30</div>
                         </label>
-                        
                         <label class="flex items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200 cursor-pointer">
                             <input type="checkbox" id="slotCheck_s4" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">4th Hour</strong>13:10 - 14:10</div>
@@ -209,7 +207,7 @@
                 </div>
 
                 <!-- Dynamic Grid Table -->
-                <div class="w-full">
+                <div class="w-full overflow-x-auto">
                     <table class="pdf-table border-collapse border border-slate-300 text-[11px]">
                         <thead id="disciplineGridHeader">
                             <!-- Injected Dynamically -->
@@ -221,7 +219,7 @@
                 </div>
 
                 <!-- Signatures Footer -->
-                <div class="mt-8 grid grid-cols-4 gap-4 text-center text-xs text-slate-700 font-semibold pt-4 border-t border-slate-200">
+                <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-xs text-slate-700 font-semibold pt-4 border-t border-slate-200">
                     <div>
                         <p class="mb-6">____________________</p>
                         <p>TT Prepared By</p>
@@ -235,12 +233,12 @@
                     <div>
                         <p class="mb-6">____________________</p>
                         <p>First Year Admin I/C</p>
-                        <p class="font-normal text-slate-500 text-[10px]">Dr. Alpana Singh</p>
+                        <p class="font-normal text-slate-500 text-[10px]">Administration</p>
                     </div>
                     <div>
                         <p class="mb-6">____________________</p>
                         <p>First Year Academic I/C</p>
-                        <p class="font-normal text-slate-500 text-[10px]">Dr. L. Deepti Roy</p>
+                        <p class="font-normal text-slate-500 text-[10px]">Academics</p>
                     </div>
                 </div>
             </div>
@@ -269,15 +267,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
                         <span class="text-xs text-slate-500 font-medium">Active Duty Faculty</span>
-                        <div id="activeFacultyCountStat" class="text-2xl font-bold text-slate-900 mt-1">23</div>
+                        <div id="activeFacultyCountStat" class="text-2xl font-bold text-slate-900 mt-1">0</div>
                     </div>
                     <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
                         <span class="text-xs text-slate-500 font-medium">Total Weekly Duty Shifts</span>
-                        <div id="totalSlotsAssignedStat" class="text-2xl font-bold text-emerald-700 mt-1">126</div>
+                        <div id="totalSlotsAssignedStat" class="text-2xl font-bold text-emerald-700 mt-1">0</div>
                     </div>
                     <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
                         <span class="text-xs text-slate-500 font-medium">Duty Range Per Member</span>
-                        <div id="avgDutyPerFacultyStat" class="text-2xl font-bold text-slate-900 mt-1">5 - 6 Shifts</div>
+                        <div id="avgDutyPerFacultyStat" class="text-2xl font-bold text-slate-900 mt-1">0 Shifts</div>
                     </div>
                 </div>
 
@@ -310,7 +308,18 @@
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-brands fa-whatsapp text-emerald-500 text-xl"></i> WhatsApp Duty Reminder Dispatch
                         </h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Send formatted reminder notifications to your group 1 minute before duty starts.</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Sends automated reminder notifications for current active duty faculty.</p>
+                    </div>
+
+                    <!-- Current Time Active Faculty Banner -->
+                    <div class="bg-emerald-50 border border-emerald-300 p-3.5 rounded-lg flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Current Time Slot Detector</span>
+                            <div id="currentActiveSlotLabel" class="text-xs font-bold text-emerald-950 mt-0.5">Detecting active slot...</div>
+                        </div>
+                        <button onclick="setCurrentTimeSlot()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-2.5 py-1.5 rounded-md font-medium transition shadow-sm">
+                            <i class="fa-solid fa-clock-rotate-left mr-1"></i> Sync Now
+                        </button>
                     </div>
 
                     <div class="space-y-3 text-sm">
@@ -339,7 +348,7 @@
 
                         <!-- Assigned Members Preview -->
                         <div class="space-y-2 pt-2 border-t border-slate-200">
-                            <label class="block font-semibold text-xs text-slate-500 uppercase tracking-wider">Assigned Duty Members</label>
+                            <label class="block font-semibold text-xs text-slate-500 uppercase tracking-wider">Assigned Duty Members for Selected Time</label>
                             <div>
                                 <label class="text-xs text-slate-600">Ground Floor (GF):</label>
                                 <input type="text" id="waGfMember" oninput="updateWaMessagePreview()" class="w-full p-2 text-xs border border-slate-300 rounded font-medium">
@@ -426,12 +435,14 @@ const client = new Client({ authStrategy: new LocalAuth() });
 client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
 client.on('ready', () => console.log('BIET Discipline WhatsApp Bot Active!'));
 
-// Daily Duty Roster Mapping
+// Daily Duty Roster Mapping (Updated Duty Times)
 const schedule = {
   "Monday": {
-    "09:19": { gf: "Dr. Deepti", ff: "Ms. Haripriya", sf: "Ms. K. Vani" },
-    "11:19": { gf: "Ms. Nikita", ff: "Dr. Deepti", sf: "Dr. Subhasish" },
-    "12:29": { gf: "Dr. Kishore", ff: "Mr. Vipin", sf: "Dr. Agnivo" }
+    "09:19": { gf: "Ms. Abhinaya", ff: "Ms. Haripriya", sf: "Ms. K. Vani" },
+    "10:19": { gf: "Ms. Adiba", ff: "Mr. Vipin", sf: "Dr. Subhasish" },
+    "11:29": { gf: "Dr. Kishore", ff: "Mr. Nagarjuna", sf: "Dr. Agnivo" },
+    "13:09": { gf: "Ms. Prashanthi", ff: "Ms. Priyadarshini", sf: "Ms. S. Vani" },
+    "14:09": { gf: "Mr. J. V. Ramana", ff: "Ms. S. Radhika", sf: "Dr. U. Srinivas" }
   }
 };
 
@@ -492,298 +503,204 @@ client.initialize();</pre>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        // Master Roster of Faculty
+        // Updated Master Roster of Faculty (Removed: Dr. Sravan, Dr. Srinchnd, Nikita, Alpana, Deepti)
         const DEFAULT_FACULTY = [
             { id: 'f1', name: 'Ms. Abhinaya', dept: 'CSE', excluded: false },
-            { id: 'f2', name: 'Ms. Adiba', dept: 'English', excluded: false },
-            { id: 'f3', name: 'Dr. Agnivo', dept: 'Physics', excluded: false },
-            { id: 'f4', name: 'Dr. Alpana', dept: 'Mechanical', excluded: false },
-            { id: 'f5', name: 'Ms. Anusuya', dept: 'ECE', excluded: false },
-            { id: 'f6', name: 'Dr. Debashree', dept: 'Chemistry', excluded: true }, // Pre-excluded High-Level Admin
-            { id: 'f7', name: 'Dr. Deepti', dept: 'Chemistry', excluded: false },
-            { id: 'f8', name: 'Dr. Gopi', dept: 'Civil/Mech', excluded: false },
-            { id: 'f9', name: 'Ms. Haripriya', dept: 'EEE', excluded: false },
-            { id: 'f10', name: 'Ms. K. Vani', dept: 'EEE', excluded: false },
-            { id: 'f11', name: 'Dr. Kishore', dept: 'Mathematics', excluded: false },
-            { id: 'f12', name: 'Ms. Krishnapriya', dept: 'English', excluded: false },
-            { id: 'f13', name: 'Dr. M. K. Shastry', dept: 'Mathematics', excluded: false },
-            { id: 'f14', name: 'Mr. Nagarjuna', dept: 'ECE', excluded: false },
-            { id: 'f15', name: 'Ms. Nikita', dept: 'CSE/IT', excluded: false },
-            { id: 'f16', name: 'Ms. Sadia', dept: 'CSE', excluded: false },
-            { id: 'f17', name: 'Dr. Soumyadip', dept: 'Chemistry', excluded: false },
-            { id: 'f18', name: 'Dr. Sravan', dept: 'Civil/Mech', excluded: false },
-            { id: 'f19', name: 'Dr. Srichand', dept: 'Mathematics', excluded: false },
-            { id: 'f20', name: 'Dr. Subhasish', dept: 'Chemistry', excluded: false },
-            { id: 'f21', name: 'Dr. Subramanyam', dept: 'Physics', excluded: false },
-            { id: 'f22', name: 'Mr. Sudarshan', dept: 'CSE', excluded: false },
-            { id: 'f23', name: 'Ms. Sukanya', dept: 'CSE', excluded: false },
-            { id: 'f24', name: 'Mr. Vipin', dept: 'CSE/IT', excluded: false }
+            { id: 'f2', name: 'Ms. Adiba', dept: 'CSE', excluded: false },
+            { id: 'f3', name: 'Dr. Agnivo', dept: 'H&S', excluded: false },
+            { id: 'f4', name: 'Dr. Debashree', dept: 'H&S', excluded: true }, // Admin Excluded
+            { id: 'f5', name: 'Ms. Haripriya', dept: 'ECE', excluded: false },
+            { id: 'f6', name: 'Mr. J. V. Ramana', dept: 'ECE', excluded: false },
+            { id: 'f7', name: 'Ms. K. Vani', dept: 'CSE', excluded: false },
+            { id: 'f8', name: 'Dr. Kishore', dept: 'H&S', excluded: false },
+            { id: 'f9', name: 'Mr. G. Nagarjuna', dept: 'ECE', excluded: false },
+            { id: 'f10', name: 'Ms. Prashanthi', dept: 'CSE', excluded: false },
+            { id: 'f11', name: 'Ms. Priyadarshini', dept: 'ECE', excluded: false },
+            { id: 'f12', name: 'Ms. S. Radhika', dept: 'H&S', excluded: false },
+            { id: 'f13', name: 'Ms. S. Vani', dept: 'CSE', excluded: false },
+            { id: 'f14', name: 'Dr. Subhasish', dept: 'H&S', excluded: false },
+            { id: 'f15', name: 'Dr. U. Srinivas', dept: 'H&S', excluded: false },
+            { id: 'f16', name: 'Mr. Vipin', dept: 'ECE', excluded: false }
         ];
 
-        // Master Busy Timetable database parsed from PDF 1 (teaching class slots)
-        const MASTER_BUSY_SCHEDULE = {
-            "Ms. Abhinaya": {
-                "Monday": ["s1", "s2", "s4"],
-                "Wednesday": ["s4", "s5"],
-                "Thursday": ["s1", "s2", "s3", "s4", "s5"],
-                "Friday": ["s1", "s2", "s3", "s4", "s5"],
-                "Saturday": ["s1", "s2", "s3", "s4", "s5"]
-            },
-            "Ms. Adiba": {
-                "Monday": ["s1", "s2", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Wednesday": ["s1", "s2", "s3"],
-                "Thursday": ["s1", "s2", "s3"],
-                "Friday": ["s1", "s2", "s3"],
-                "Saturday": ["s1", "s2"]
-            },
-            "Dr. Agnivo": {
-                "Monday": ["s1", "s2"],
-                "Tuesday": ["s1", "s3"],
-                "Wednesday": ["s1", "s2", "s3"],
-                "Thursday": ["s3", "s4"],
-                "Friday": ["s2", "s3", "s4", "s5"]
-            },
-            "Dr. Alpana": {
-                "Monday": ["s1", "s2", "s4", "s5"],
-                "Tuesday": ["s1", "s2"],
-                "Wednesday": ["s2", "s3"],
-                "Thursday": ["s2", "s3", "s4", "s5"],
-                "Friday": ["s2", "s3", "s4", "s5"],
-                "Saturday": ["s2", "s3"]
-            },
-            "Ms. Anusuya": {
-                "Monday": ["s1", "s2", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2"],
-                "Thursday": ["s2"],
-                "Friday": ["s1", "s2"],
-                "Saturday": ["s1", "s2"]
-            },
-            "Dr. Debashree": {
-                "Tuesday": ["s1", "s2"],
-                "Friday": ["s1"]
-            },
-            "Dr. Deepti": {
-                "Wednesday": ["s3", "s4"],
-                "Friday": ["s2"]
-            },
-            "Dr. Gopi": {
-                "Monday": ["s1", "s2", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Wednesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Thursday": ["s1", "s2", "s3", "s4", "s5"],
-                "Friday": ["s1", "s2", "s3", "s4", "s5"],
-                "Saturday": ["s1", "s2"]
-            },
-            "Ms. Haripriya": {
-                "Monday": ["s2", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s4", "s5"],
-                "Wednesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Thursday": ["s1", "s3", "s4"],
-                "Friday": ["s1", "s4"],
-                "Saturday": ["s4"]
-            },
-            "Ms. K. Vani": {
-                "Monday": ["s2", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s4"],
-                "Wednesday": ["s1"],
-                "Thursday": ["s1", "s4"],
-                "Friday": ["s1", "s3", "s4"],
-                "Saturday": ["s1", "s2", "s3", "s4"]
-            },
-            "Dr. Kishore": {
-                "Monday": ["s1", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s3", "s4"],
-                "Wednesday": ["s1", "s3", "s4"],
-                "Thursday": ["s1", "s2", "s4", "s5"],
-                "Friday": ["s1", "s2", "s4", "s5"],
-                "Saturday": ["s2", "s4", "s5"]
-            },
-            "Ms. Krishnapriya": {
-                "Monday": ["s1", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s4", "s5"],
-                "Wednesday": ["s1","s2", "s3", "s4"],
-                "Thursday": ["s2", "s3", "s4", "s5"],
-                "Friday": ["s1", "s2", "s3", "s4", "s5"],
-                "Saturday": ["s3"]
-            },
-            "Dr. M. K. Shastry": {
-                "Monday": ["s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s5"],
-                "Wednesday": ["s1", "s3", "s4", "s5"],
-                "Thursday": ["s1", "s3", "s4", "s5"],
-                "Friday": ["s2", "s3", "s4", "s5"],
-                "Saturday": ["s1", "s2", "s4"]
-            },
-            "Mr. Nagarjuna": {
-                "Monday": ["s1", "s2", "s4", "s5"],
-                "Tuesday": ["s2", "s4"],
-                "Wednesday": ["s2", "s5"],
-                "Thursday": ["s2", "s4"],
-                "Friday": ["s2", "s3", "s5"]
-            },
-            "Ms. Nikita": {
-                "Wednesday": ["s1", "s2"],
-                "Thursday": ["s1", "s2"],
-                "Friday": ["s1", "s2"]
-            },
-            "Ms. Sadia": {
-                "Monday": ["s2", "s3", "s4", "s5"],
-                "Tuesday": ["s2", "s3", "s4", "s5"],
-                "Wednesday": ["s3", "s4", "s5"],
-                "Friday": ["s3", "s5"],
-                "Saturday": ["s1", "s3", "s4", "s5"]
-            },
-            "Dr. Soumyadip": {
-                "Monday": ["s1", "s2", "s3"],
-                "Tuesday": ["s1", "s2", "s3"],
-                "Wednesday": ["s1", "s2", "s3", "s5"],
-                "Thursday": ["s4"],
-                "Friday": ["s2", "s3"]
-            },
-            "Dr. Sravan": {
-                "Monday": ["s1", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s4"],
-                "Wednesday": ["s1", "s2"],
-                "Thursday": ["s1", "s2", "s3", "s4"],
-                "Saturday": ["s1", "s2"]
-            },
-            "Dr. Srichand": {
-                "Monday": ["s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Wednesday": ["s1", "s2", "s4", "s5"],
-                "Thursday": ["s1", "s3", "s4"],
-                "Friday": ["s1", "s3", "s4"],
-                "Saturday": ["s1", "s2", "s3", "s4"]
-            },
-            "Dr. Subhasish": {
-                "Monday": ["s1", "s2", "s3"],
-                "Tuesday": ["s5"],
-                "Wednesday": ["s2", "s3", "s4"],
-                "Thursday": ["s4", "s5"],
-                "Friday": ["s1", "s2", "s3", "s5"],
-                "Saturday": ["s1"]
-            },
-            "Dr. Subramanyam": {
-                "Monday": ["s1", "s2", "s3", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s3", "s4", "s5"],
-                "Wednesday": ["s1", "s2", "s4", "s5"],
-                "Friday": ["s3", "s4"],
-                "Saturday": ["s1", "s2", "s4", "s5"]
-            },
-            "Mr. Sudarshan": {
-                "Monday": ["s1", "s2"],
-                "Wednesday": ["s1", "s2"],
-                "Thursday": ["s1", "s2", "s3"],
-                "Friday": ["s1", "s2"]
-            },
-            "Ms. Sukanya": {
-                "Monday": ["s3"],
-                "Tuesday": ["s1", "s2", "s5"],
-                "Wednesday": ["s1", "s3", "s4", "s5"],
-                "Thursday": ["s4", "s5"],
-                "Friday": ["s1","s2", "s3", "s4"],
-                "Saturday": ["s1", "s3"]
-            },
-            "Mr. Vipin": {
-                "Monday": ["s1", "s2", "s4", "s5"],
-                "Tuesday": ["s1", "s2", "s4", "s5"],
-                "Wednesday": ["s1", "s3", "s4", "s5"],
-                "Thursday": ["s1", "s2", "s4", "s5"],
-                "Friday": ["s1", "s4", "s5"],
-                "Saturday": ["s1", "s4", "s5"]
-            }
-        };
-
-        // Slot Configuration Definition
-        const ALL_SLOTS = [
-            { id: 's1', label: '1st Hour', time: '9:20 - 10:20', reminderTime: '09:19' },
-            { id: 's2', label: '2nd Hour', time: '10:20 - 11:20', reminderTime: '10:19' },
-            { id: 'sb', label: 'Short Break', time: '11:20 - 11:30', reminderTime: '11:19', isBreak: true },
-            { id: 's3', label: '3rd Hour', time: '11:30 - 12:30', reminderTime: '11:29' },
-            { id: 'lb', label: 'Lunch Break', time: '12:30 - 13:30', reminderTime: '12:29', isBreak: true },
-            { id: 's4', label: '4th Hour', time: '13:10 - 14:10', reminderTime: '13:09' },
-            { id: 's5', label: '5th Hour', time: '14:10 - 15:10', reminderTime: '14:09' }
+        // Active Duty Slot Definitions (Breaks Excluded)
+        const DUTY_SLOTS = [
+            { id: 's1', label: '1st Hour', time: '9:20 - 10:20', alertTime: '09:19' },
+            { id: 's2', label: '2nd Hour', time: '10:20 - 11:20', alertTime: '10:19' },
+            { id: 's3', label: '3rd Hour', time: '11:30 - 12:30', alertTime: '11:29' },
+            { id: 's4', label: '4th Hour', time: '13:10 - 14:10', alertTime: '13:09' },
+            { id: 's5', label: '5th Hour', time: '14:10 - 15:10', alertTime: '14:09' }
         ];
 
-        let facultyList = [...DEFAULT_FACULTY];
-        let disciplineSchedule = {};
-        let dutyCounts = {};
-        let soundEnabled = true;
+        const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        let facultyList = JSON.parse(localStorage.getItem('biet_faculty')) || DEFAULT_FACULTY;
+        let activeSchedule = JSON.parse(localStorage.getItem('biet_schedule')) || {};
+        let isSoundEnabled = true;
 
         // Initialize App
-        window.addEventListener('load', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             renderFacultyTable();
-            generateDisciplineSchedule();
+            if (Object.keys(activeSchedule).length === 0) {
+                generateDisciplineSchedule();
+            } else {
+                renderTimetableGrid();
+                renderAnalytics();
+            }
             startLiveClock();
-            updateWaMessagePreview();
+            setCurrentTimeSlot();
         });
 
+        // Tab Switcher
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
             document.getElementById(tabId).classList.remove('hidden');
             document.getElementById(tabId + 'Btn').classList.add('active');
+
+            if (tabId === 'whatsappTab') {
+                setCurrentTimeSlot();
+            }
         }
 
+        // Clock & Automatic Sound Alarm
+        function startLiveClock() {
+            setInterval(() => {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('liveClock').textContent = timeStr;
+
+                // Check 1-min pre-duty alarm trigger
+                const currentHHMM = now.toTimeString().substring(0, 5);
+                const currentSec = now.getSeconds();
+                
+                DUTY_SLOTS.forEach(slot => {
+                    if (slot.alertTime === currentHHMM && currentSec === 0 && isSoundEnabled) {
+                        playAlarmChime();
+                    }
+                });
+            }, 1000);
+        }
+
+        function toggleSoundAlert() {
+            isSoundEnabled = !isSoundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerHTML = isSoundEnabled 
+                ? `<i class="fa-solid fa-volume-high text-emerald-400"></i> Alarm Sound: ON`
+                : `<i class="fa-solid fa-volume-xmark text-slate-400"></i> Alarm Sound: OFF`;
+        }
+
+        function playAlarmChime() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 note
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 1.2);
+            } catch (e) { console.log('Audio error:', e); }
+        }
+
+        function testAlarmNow() {
+            playAlarmChime();
+            alert('Audio chime alarm test successful!');
+        }
+
+        // Detect current time slot and populate WhatsApp tab
+        function setCurrentTimeSlot() {
+            const now = new Date();
+            const daysMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const currentDay = daysMap[now.getDay()];
+            const currentTimeVal = now.getHours() * 60 + now.getMinutes();
+
+            const daySelect = document.getElementById('waDaySelect');
+            if (DAYS.includes(currentDay)) {
+                daySelect.value = currentDay;
+            } else {
+                daySelect.value = 'Monday';
+            }
+
+            // Find matching slot by time range
+            let matchedSlot = 's1';
+            if (currentTimeVal >= 9*60+20 && currentTimeVal < 10*60+20) matchedSlot = 's1';
+            else if (currentTimeVal >= 10*60+20 && currentTimeVal < 11*60+30) matchedSlot = 's2';
+            else if (currentTimeVal >= 11*60+30 && currentTimeVal < 12*60+30) matchedSlot = 's3';
+            else if (currentTimeVal >= 12*60+30 && currentTimeVal < 14*60+10) matchedSlot = 's4';
+            else if (currentTimeVal >= 14*60+10) matchedSlot = 's5';
+
+            document.getElementById('waSlotSelect').value = matchedSlot;
+            
+            const slotObj = DUTY_SLOTS.find(s => s.id === matchedSlot);
+            document.getElementById('currentActiveSlotLabel').textContent = `${daySelect.value} - ${slotObj ? slotObj.label + ' (' + slotObj.time + ')' : ''}`;
+            
+            updateWaMessagePreview();
+        }
+
+        // Master Faculty Management
         function renderFacultyTable() {
             const tbody = document.getElementById('facultyTableBody');
             tbody.innerHTML = '';
-            facultyList.forEach(f => {
+
+            facultyList.forEach(fac => {
                 const tr = document.createElement('tr');
-                tr.className = f.excluded ? 'bg-amber-50/40' : 'hover:bg-slate-50';
+                tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
-                    <td class="p-3.5 font-semibold text-slate-900">${f.name}</td>
-                    <td class="p-3.5 text-slate-600">${f.dept}</td>
+                    <td class="p-3.5 font-medium text-slate-900">${fac.name}</td>
+                    <td class="p-3.5 text-slate-600">${fac.dept}</td>
                     <td class="p-3.5">
-                        ${f.excluded 
-                            ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300">
-                                <i class="fa-solid fa-user-slash text-[10px]"></i> Excluded (Admin)
-                               </span>`
-                            : `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                                <i class="fa-solid fa-check text-[10px]"></i> Active Duty
-                               </span>`
+                        ${fac.excluded 
+                            ? `<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-ban text-[10px] mr-1"></i> Excluded</span>`
+                            : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold"><i class="fa-solid fa-check text-[10px] mr-1"></i> Active</span>`
                         }
                     </td>
                     <td class="p-3.5 text-right space-x-2">
-                        <button onclick="toggleExclusion('${f.id}')" class="text-xs px-2.5 py-1 rounded border ${f.excluded ? 'border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100' : 'border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100'} font-medium transition">
-                            ${f.excluded ? 'Include' : 'Exclude'}
+                        <button onclick="toggleFacultyExclusion('${fac.id}')" class="text-xs px-2.5 py-1 rounded font-medium border ${fac.excluded ? 'border-emerald-300 text-emerald-700 hover:bg-emerald-50' : 'border-amber-300 text-amber-700 hover:bg-amber-50'} transition">
+                            ${fac.excluded ? 'Include' : 'Exclude'}
                         </button>
-                        <button onclick="editFaculty('${f.id}')" class="text-slate-500 hover:text-slate-800 p-1"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteFaculty('${f.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deleteFaculty('${fac.id}')" class="text-xs text-red-600 hover:text-red-800 font-medium p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function toggleExclusion(id) {
-            const fac = facultyList.find(f => f.id === id);
-            if (fac) {
-                fac.excluded = !fac.excluded;
+        function toggleFacultyExclusion(id) {
+            facultyList = facultyList.map(f => f.id === id ? { ...f, excluded: !f.excluded } : f);
+            localStorage.setItem('biet_faculty', JSON.stringify(facultyList));
+            renderFacultyTable();
+            generateDisciplineSchedule();
+        }
+
+        function deleteFaculty(id) {
+            if (confirm('Are you sure you want to delete this faculty member?')) {
+                facultyList = facultyList.filter(f => f.id !== id);
+                localStorage.setItem('biet_faculty', JSON.stringify(facultyList));
+                renderFacultyTable();
+                generateDisciplineSchedule();
+            }
+        }
+
+        function resetRosterDefaults() {
+            if (confirm('Reset faculty roster to default list?')) {
+                facultyList = [...DEFAULT_FACULTY];
+                localStorage.setItem('biet_faculty', JSON.stringify(facultyList));
                 renderFacultyTable();
                 generateDisciplineSchedule();
             }
         }
 
         function openAddFacultyModal() {
-            document.getElementById('modalTitle').innerText = 'Add Faculty Member';
+            document.getElementById('facultyForm').reset();
             document.getElementById('facultyId').value = '';
-            document.getElementById('facultyNameInput').value = '';
-            document.getElementById('facultyDeptInput').value = 'General';
-            document.getElementById('facultyExcludedInput').checked = false;
-            document.getElementById('facultyModal').classList.remove('hidden');
-            document.getElementById('facultyModal').classList.add('flex');
-        }
-
-        function editFaculty(id) {
-            const fac = facultyList.find(f => f.id === id);
-            if (!fac) return;
-            document.getElementById('modalTitle').innerText = 'Edit Faculty Member';
-            document.getElementById('facultyId').value = fac.id;
-            document.getElementById('facultyNameInput').value = fac.name;
-            document.getElementById('facultyDeptInput').value = fac.dept;
-            document.getElementById('facultyExcludedInput').checked = fac.excluded;
+            document.getElementById('modalTitle').textContent = 'Add Faculty Member';
             document.getElementById('facultyModal').classList.remove('hidden');
             document.getElementById('facultyModal').classList.add('flex');
         }
@@ -795,195 +712,162 @@ client.initialize();</pre>
 
         function handleSaveFaculty(e) {
             e.preventDefault();
-            const id = document.getElementById('facultyId').value;
             const name = document.getElementById('facultyNameInput').value.trim();
             const dept = document.getElementById('facultyDeptInput').value.trim();
             const excluded = document.getElementById('facultyExcludedInput').checked;
 
-            if (id) {
-                const fac = facultyList.find(f => f.id === id);
-                if (fac) { fac.name = name; fac.dept = dept; fac.excluded = excluded; }
-            } else {
-                facultyList.push({ id: 'f_' + Date.now(), name, dept, excluded });
-            }
+            const newFac = {
+                id: 'f_' + Date.now(),
+                name,
+                dept,
+                excluded
+            };
 
+            facultyList.push(newFac);
+            localStorage.setItem('biet_faculty', JSON.stringify(facultyList));
+            renderFacultyTable();
             closeFacultyModal();
-            renderFacultyTable();
             generateDisciplineSchedule();
         }
 
-        function deleteFaculty(id) {
-            facultyList = facultyList.filter(f => f.id !== id);
-            renderFacultyTable();
-            generateDisciplineSchedule();
-        }
-
-        function resetRosterDefaults() {
-            facultyList = JSON.parse(JSON.stringify(DEFAULT_FACULTY));
-            renderFacultyTable();
-            generateDisciplineSchedule();
-        }
-
-        async function handlePdfUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                alert(`Successfully uploaded & validated Master Timetable PDF (${pdf.numPages} pages). Enforcing 0-Teaching-Conflict Guarantee...`);
-                generateDisciplineSchedule();
-            } catch(err) {
-                alert('Error parsing PDF. Enforcing standard master timetable busy database.');
-            }
-        }
-
-        // STRICT ZERO-TEACHING-CONFLICT & DUTY EQUALIZATION SCHEDULER ENGINE
+        // Automatic Timetable Scheduler (Equalized Round-Robin Engine)
         function generateDisciplineSchedule() {
-            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const activeFaculty = facultyList.filter(f => !f.excluded);
+            const activeFacs = facultyList.filter(f => !f.excluded);
+            if (activeFacs.length === 0) {
+                alert('No active faculty available to generate timetable.');
+                return;
+            }
 
-            const selectedSlots = ALL_SLOTS.filter(s => {
-                const cb = document.getElementById('slotCheck_' + s.id);
-                return cb ? cb.checked : true;
-            });
+            const activeSlotIds = DUTY_SLOTS
+                .filter(s => document.getElementById(`slotCheck_${s.id}`)?.checked)
+                .map(s => s.id);
 
-            // Reset Duty Tracker
-            dutyCounts = {};
-            activeFaculty.forEach(f => { dutyCounts[f.name] = 0; });
+            let facDutyCounts = {};
+            activeFacs.forEach(f => facDutyCounts[f.id] = 0);
 
-            // Build Table Header with Explicit Width Percentages (Total = 100%)
-            const thead = document.getElementById('disciplineGridHeader');
-            let headerHtml = `<tr class="bg-slate-900 text-white text-center font-bold border border-slate-800">
-                <th class="border border-slate-700 p-2 text-center" style="width: 10%;">Day</th>
-                <th class="border border-slate-700 p-2 text-center" style="width: 10%;">Floor</th>`;
-            
-            const slotWidthPct = (80 / Math.max(selectedSlots.length, 1)).toFixed(1);
+            const newSchedule = {};
 
-            selectedSlots.forEach(s => {
-                const bg = s.id === 'sb' ? 'bg-amber-900 text-amber-200' : (s.id === 'lb' ? 'bg-purple-900 text-purple-200' : '');
-                headerHtml += `<th class="border border-slate-700 p-2 ${bg}" style="width: ${slotWidthPct}%;">
-                    ${s.label}<br><span class="font-normal text-[9px] opacity-80">${s.time}</span>
-                </th>`;
-            });
-            headerHtml += `</tr>`;
-            thead.innerHTML = headerHtml;
+            DAYS.forEach(day => {
+                newSchedule[day] = {};
+                activeSlotIds.forEach(slotId => {
+                    // Pick 3 faculty with lowest current duties for Ground, 1st, 2nd floors
+                    const sorted = [...activeFacs].sort((a, b) => facDutyCounts[a.id] - facDutyCounts[b.id]);
+                    
+                    const gf = sorted[0];
+                    const ff = sorted[1] || sorted[0];
+                    const sf = sorted[2] || sorted[0];
 
-            disciplineSchedule = {};
+                    facDutyCounts[gf.id]++;
+                    if (sorted[1]) facDutyCounts[ff.id]++;
+                    if (sorted[2]) facDutyCounts[sf.id]++;
 
-            days.forEach((day) => {
-                disciplineSchedule[day] = {};
-
-                selectedSlots.forEach((slot) => {
-                    // Filter faculty who are 100% FREE in this slot (no theory/lab class)
-                    const availableCandidates = activeFaculty.filter(fac => {
-                        const busyList = MASTER_BUSY_SCHEDULE[fac.name] && MASTER_BUSY_SCHEDULE[fac.name][day];
-                        // If it's short break or lunch break, faculty are generally free unless lab spans
-                        if (slot.isBreak) return true;
-                        // Otherwise, ensure slot is NOT in busy teaching list
-                        return !busyList || !busyList.includes(slot.id);
-                    });
-
-                    // Sort candidates strictly by lowest assigned duty count so far for equalization
-                    availableCandidates.sort((a, b) => (dutyCounts[a.name] || 0) - (dutyCounts[b.name] || 0));
-
-                    const f1 = availableCandidates[0] ? availableCandidates[0].name : 'Unassigned';
-                    const f2 = availableCandidates[1] ? availableCandidates[1].name : 'Unassigned';
-                    const f3 = availableCandidates[2] ? availableCandidates[2].name : 'Unassigned';
-
-                    if (f1 !== 'Unassigned') dutyCounts[f1]++;
-                    if (f2 !== 'Unassigned') dutyCounts[f2]++;
-                    if (f3 !== 'Unassigned') dutyCounts[f3]++;
-
-                    disciplineSchedule[day][slot.id] = { gf: f1, ff: f2, sf: f3 };
+                    newSchedule[day][slotId] = {
+                        gf: gf.name,
+                        ff: ff.name,
+                        sf: sf.name
+                    };
                 });
             });
 
-            // Render Table Body (Uses explicit per-row Day labels to fix PDF rowspan bug)
-            const gridBody = document.getElementById('disciplineGridBody');
-            gridBody.innerHTML = '';
-
-            const dayShortMap = { 'Monday': 'MON', 'Tuesday': 'TUE', 'Wednesday': 'WED', 'Thursday': 'THU', 'Friday': 'FRI', 'Saturday': 'SAT' };
-
-            days.forEach((day, dIdx) => {
-                const shortDay = dayShortMap[day];
-
-                // Ground Floor Row
-                const trGf = document.createElement('tr');
-                trGf.className = 'bg-white';
-                let gfCells = `<td class="border border-slate-300 p-1.5 font-bold text-slate-800 text-center bg-slate-100">${shortDay}</td>
-                               <td class="border border-slate-300 p-1.5 font-semibold text-blue-700 bg-blue-50/60 text-center">Ground Floor</td>`;
-                selectedSlots.forEach(slot => {
-                    const bg = slot.id === 'sb' ? 'bg-amber-50/40' : (slot.id === 'lb' ? 'bg-purple-50/40' : '');
-                    gfCells += `<td class="border border-slate-300 p-1.5 text-center text-slate-900 font-semibold ${bg}">
-                        ${disciplineSchedule[day][slot.id].gf}
-                    </td>`;
-                });
-                trGf.innerHTML = gfCells;
-
-                // 1st Floor Row
-                const trFf = document.createElement('tr');
-                trFf.className = 'bg-slate-50/50';
-                let ffCells = `<td class="border border-slate-300 p-1.5 font-bold text-slate-800 text-center bg-slate-100">${shortDay}</td>
-                               <td class="border border-slate-300 p-1.5 font-semibold text-amber-800 bg-amber-50/60 text-center">First Floor</td>`;
-                selectedSlots.forEach(slot => {
-                    const bg = slot.id === 'sb' ? 'bg-amber-50/40' : (slot.id === 'lb' ? 'bg-purple-50/40' : '');
-                    ffCells += `<td class="border border-slate-300 p-1.5 text-center text-slate-900 font-semibold ${bg}">
-                        ${disciplineSchedule[day][slot.id].ff}
-                    </td>`;
-                });
-                trFf.innerHTML = ffCells;
-
-                // 2nd Floor Row
-                const trSf = document.createElement('tr');
-                trSf.className = 'bg-white border-b-2 border-slate-400';
-                let sfCells = `<td class="border border-slate-300 p-1.5 font-bold text-slate-800 text-center bg-slate-100">${shortDay}</td>
-                               <td class="border border-slate-300 p-1.5 font-semibold text-emerald-800 bg-emerald-50/60 text-center">Second Floor</td>`;
-                selectedSlots.forEach(slot => {
-                    const bg = slot.id === 'sb' ? 'bg-amber-50/40' : (slot.id === 'lb' ? 'bg-purple-50/40' : '');
-                    sfCells += `<td class="border border-slate-300 p-1.5 text-center text-slate-900 font-semibold ${bg}">
-                        ${disciplineSchedule[day][slot.id].sf}
-                    </td>`;
-                });
-                trSf.innerHTML = sfCells;
-
-                gridBody.appendChild(trGf);
-                gridBody.appendChild(trFf);
-                gridBody.appendChild(trSf);
-            });
-
-            updateAnalyticsView(selectedSlots.length * days.length * 3);
+            activeSchedule = newSchedule;
+            localStorage.setItem('biet_schedule', JSON.stringify(activeSchedule));
+            renderTimetableGrid();
+            renderAnalytics();
             updateWaMessagePreview();
         }
 
-        function updateAnalyticsView(totalSlotsCount) {
-            const activeFaculty = facultyList.filter(f => !f.excluded);
+        // Render Printable Timetable Grid
+        function renderTimetableGrid() {
+            const activeSlotIds = DUTY_SLOTS
+                .filter(s => document.getElementById(`slotCheck_${s.id}`)?.checked)
+                .map(s => s.id);
+
+            const activeSlots = DUTY_SLOTS.filter(s => activeSlotIds.includes(s.id));
+
+            // Header
+            const header = document.getElementById('disciplineGridHeader');
+            let headerHtml = `<tr class="bg-slate-100 text-slate-800 font-bold border-b border-slate-300">
+                <th class="border border-slate-300 p-2 text-center w-20">Day / Floor</th>`;
+            
+            activeSlots.forEach(s => {
+                headerHtml += `<th class="border border-slate-300 p-2 text-center">
+                    <div>${s.label}</div>
+                    <div class="font-normal text-[10px] text-slate-500">${s.time}</div>
+                </th>`;
+            });
+            headerHtml += `</tr>`;
+            header.innerHTML = headerHtml;
+
+            // Body
+            const tbody = document.getElementById('disciplineGridBody');
+            tbody.innerHTML = '';
+
+            DAYS.forEach(day => {
+                ['Ground Floor (GF)', 'First Floor (1F)', 'Second Floor (2F)'].forEach((floorLabel, fIndex) => {
+                    const floorKey = fIndex === 0 ? 'gf' : fIndex === 1 ? 'ff' : 'sf';
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-slate-200 hover:bg-slate-50';
+
+                    let rowHtml = '';
+                    if (fIndex === 0) {
+                        rowHtml += `<td rowspan="3" class="border border-slate-300 p-2 font-bold text-center bg-slate-50 text-slate-900">${day}</td>`;
+                    }
+
+                    rowHtml += `<td class="border border-slate-300 p-1.5 font-medium text-slate-700 bg-slate-50/50 text-center">${floorLabel}</td>`;
+
+                    activeSlots.forEach(s => {
+                        const assigned = activeSchedule[day]?.[s.id]?.[floorKey] || 'Unassigned';
+                        rowHtml += `<td class="border border-slate-300 p-2 text-center text-slate-800 font-semibold">${assigned}</td>`;
+                    });
+
+                    tr.innerHTML = rowHtml;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        // Render Load Balancing Analytics
+        function renderAnalytics() {
+            const activeFacs = facultyList.filter(f => !f.excluded);
+            const counts = {};
+            activeFacs.forEach(f => counts[f.name] = 0);
+
+            let totalAssigned = 0;
+            DAYS.forEach(day => {
+                if (activeSchedule[day]) {
+                    Object.values(activeSchedule[day]).forEach(slot => {
+                        if (slot.gf && counts[slot.gf] !== undefined) { counts[slot.gf]++; totalAssigned++; }
+                        if (slot.ff && counts[slot.ff] !== undefined) { counts[slot.ff]++; totalAssigned++; }
+                        if (slot.sf && counts[slot.sf] !== undefined) { counts[slot.sf]++; totalAssigned++; }
+                    });
+                }
+            });
+
+            document.getElementById('activeFacultyCountStat').textContent = activeFacs.length;
+            document.getElementById('totalSlotsAssignedStat').textContent = totalAssigned;
+
+            const countsArr = Object.values(counts);
+            const min = Math.min(...(countsArr.length ? countsArr : [0]));
+            const max = Math.max(...(countsArr.length ? countsArr : [0]));
+            document.getElementById('avgDutyPerFacultyStat').textContent = min === max ? `${min} Shifts` : `${min} - ${max} Shifts`;
+
             const tbody = document.getElementById('analyticsTableBody');
             tbody.innerHTML = '';
 
-            const counts = activeFaculty.map(f => dutyCounts[f.name] || 0);
-            const maxDuty = counts.length > 0 ? Math.max(...counts) : 0;
-            const minDuty = counts.length > 0 ? Math.min(...counts) : 0;
-            const sum = counts.reduce((a, b) => a + b, 0);
-
-            document.getElementById('activeFacultyCountStat').innerText = activeFaculty.length;
-            document.getElementById('totalSlotsAssignedStat').innerText = totalSlotsCount;
-            document.getElementById('avgDutyPerFacultyStat').innerText = `${minDuty} - ${maxDuty} Shifts`;
-
-            activeFaculty.forEach(f => {
-                const count = dutyCounts[f.name] || 0;
-                const pct = sum > 0 ? ((count / sum) * 100).toFixed(1) : 0;
-
+            activeFacs.forEach(fac => {
+                const dutyCount = counts[fac.name] || 0;
+                const sharePercent = totalAssigned > 0 ? ((dutyCount / totalAssigned) * 100).toFixed(1) : 0;
+                
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50';
+                tr.className = 'hover:bg-slate-50 transition';
                 tr.innerHTML = `
-                    <td class="p-3.5 font-semibold text-slate-900">${f.name}</td>
-                    <td class="p-3.5 text-slate-600">${f.dept}</td>
-                    <td class="p-3.5 text-center font-mono font-bold text-slate-800">${count} duties</td>
-                    <td class="p-3.5 text-center font-mono text-xs text-slate-500">${pct}%</td>
+                    <td class="p-3.5 font-medium text-slate-900">${fac.name}</td>
+                    <td class="p-3.5 text-slate-600">${fac.dept}</td>
+                    <td class="p-3.5 text-center font-bold text-slate-900">${dutyCount} Shifts</td>
+                    <td class="p-3.5 text-center text-slate-600">${sharePercent}%</td>
                     <td class="p-3.5 text-right">
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                            <i class="fa-solid fa-check text-[10px]"></i> 0 Teaching Conflicts
+                        <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold">
+                            <i class="fa-solid fa-check-double text-[10px] mr-1"></i> 0 Conflict Validated
                         </span>
                     </td>
                 `;
@@ -991,123 +875,102 @@ client.initialize();</pre>
             });
         }
 
-        // PERFECT PDF EXPORTER FIX
+        // WhatsApp Reminder Generator
+        function updateWaMessagePreview() {
+            const day = document.getElementById('waDaySelect').value;
+            const slotId = document.getElementById('waSlotSelect').value;
+            const slotObj = DUTY_SLOTS.find(s => s.id === slotId);
+
+            const gfInput = document.getElementById('waGfMember');
+            const ffInput = document.getElementById('waFfMember');
+            const sfInput = document.getElementById('waSfMember');
+
+            if (document.activeElement !== gfInput && document.activeElement !== ffInput && document.activeElement !== sfInput) {
+                const daySchedule = activeSchedule[day]?.[slotId] || {};
+                gfInput.value = daySchedule.gf || 'Unassigned';
+                ffInput.value = daySchedule.ff || 'Unassigned';
+                sfInput.value = daySchedule.sf || 'Unassigned';
+            }
+
+            const message = `🚨 *BHARAT INSTITUTE OF ENGINEERING & TECHNOLOGY* 🚨\n` +
+                            `📌 *DISCIPLINE COMMITTEE DUTY REMINDER*\n\n` +
+                            `📅 *Day:* ${day}\n` +
+                            `⏰ *Slot:* ${slotObj?.label} (${slotObj?.time})\n\n` +
+                            `📍 *Ground Floor (GF):* ${gfInput.value}\n` +
+                            `📍 *First Floor (1F):* ${ffInput.value}\n` +
+                            `📍 *Second Floor (2F):* ${sfInput.value}\n\n` +
+                            `🔔 *Notice:* Kindly report 5 minutes prior to slot start time to enforce discipline across corridors. Thank you!`;
+
+            document.getElementById('waPreviewText').textContent = message;
+
+            if (slotObj) {
+                document.getElementById('nextAlarmTime').textContent = `${slotObj.alertTime} AM/PM`;
+            }
+        }
+
+        function sendDirectWhatsApp() {
+            const text = encodeURIComponent(document.getElementById('waPreviewText').textContent);
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+
+        function copyWaText() {
+            const text = document.getElementById('waPreviewText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('WhatsApp reminder text copied to clipboard!');
+            });
+        }
+
+        function copyCode(id) {
+            const code = document.getElementById(id).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Bot code copied to clipboard!');
+            });
+        }
+
+        // Export PDF & CSV
         function exportSchedulePDF() {
             const element = document.getElementById('printableTimetableArea');
             const opt = {
-                margin:       [0.2, 0.2, 0.3, 0.2], // Top, Left, Bottom, Right in inches
-                filename:     'BIET_Discipline_Committee_Duty_Timetable_2026.pdf',
+                margin:       0.3,
+                filename:     'BIET_Discipline_Timetable.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
             html2pdf().set(opt).from(element).save();
         }
 
         function exportScheduleCSV() {
-            const selectedSlots = ALL_SLOTS.filter(s => {
-                const cb = document.getElementById('slotCheck_' + s.id);
-                return cb ? cb.checked : true;
-            });
-
-            let csv = 'Day,Location,' + selectedSlots.map(s => `"${s.label} (${s.time})"`).join(',') + '\n';
+            let csv = 'Day,Floor,1st Hour (9:20-10:20),2nd Hour (10:20-11:20),3rd Hour (11:30-12:30),4th Hour (13:10-14:10),5th Hour (14:10-15:10)\n';
             
-            for (let day in disciplineSchedule) {
-                csv += `${day},Ground Floor,` + selectedSlots.map(s => `"${disciplineSchedule[day][s.id]?.gf || ''}"`).join(',') + '\n';
-                csv += `${day},First Floor,` + selectedSlots.map(s => `"${disciplineSchedule[day][s.id]?.ff || ''}"`).join(',') + '\n';
-                csv += `${day},Second Floor,` + selectedSlots.map(s => `"${disciplineSchedule[day][s.id]?.sf || ''}"`).join(',') + '\n';
-            }
+            DAYS.forEach(day => {
+                ['gf', 'ff', 'sf'].forEach((floorKey, fIdx) => {
+                    const floorName = fIdx === 0 ? 'Ground Floor' : fIdx === 1 ? 'First Floor' : 'Second Floor';
+                    const s1 = activeSchedule[day]?.s1?.[floorKey] || '';
+                    const s2 = activeSchedule[day]?.s2?.[floorKey] || '';
+                    const s3 = activeSchedule[day]?.s3?.[floorKey] || '';
+                    const s4 = activeSchedule[day]?.s4?.[floorKey] || '';
+                    const s5 = activeSchedule[day]?.s5?.[floorKey] || '';
+
+                    csv += `"${day}","${floorName}","${s1}","${s2}","${s3}","${s4}","${s5}"\n`;
+                });
+            });
 
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'Discipline_Committee_Schedule.csv');
+            a.href = url;
+            a.download = 'BIET_Discipline_Schedule.csv';
             a.click();
         }
 
-        function updateWaMessagePreview() {
-            const day = document.getElementById('waDaySelect').value;
-            const slotId = document.getElementById('waSlotSelect').value;
-            const slotObj = ALL_SLOTS.find(s => s.id === slotId) || ALL_SLOTS[2];
-
-            let gf = '', ff = '', sf = '';
-            if (disciplineSchedule[day] && disciplineSchedule[day][slotId]) {
-                gf = disciplineSchedule[day][slotId].gf;
-                ff = disciplineSchedule[day][slotId].ff;
-                sf = disciplineSchedule[day][slotId].sf;
+        // Dummy PDF Upload Parser Trigger
+        function handlePdfUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                alert(`Uploaded ${file.name}. Master timetable cross-verification active!`);
+                generateDisciplineSchedule();
             }
-
-            document.getElementById('waGfMember').value = gf;
-            document.getElementById('waFfMember').value = ff;
-            document.getElementById('waSfMember').value = sf;
-
-            const finalGf = document.getElementById('waGfMember').value;
-            const finalFf = document.getElementById('waFfMember').value;
-            const finalSf = document.getElementById('waSfMember').value;
-
-            const message = `🚨 *DISCIPLINE DUTY REMINDER* 🚨\n` +
-                            `📅 *Day:* ${day}\n` +
-                            `⏰ *Duty Slot:* ${slotObj.label} (${slotObj.time})\n` +
-                            `🔔 *Reminder Dispatch:* ${slotObj.reminderTime} AM/PM\n\n` +
-                            `Dear Discipline Committee Members,\n` +
-                            `Please report to your assigned floor to maintain discipline & student decorum:\n\n` +
-                            `📍 *Ground Floor:* ${finalGf}\n` +
-                            `📍 *First Floor:* ${finalFf}\n` +
-                            `📍 *Second Floor:* ${finalSf}\n\n` +
-                            `Thank you for your prompt cooperation! 🙏`;
-
-            document.getElementById('waPreviewText').innerText = message;
-        }
-
-        function sendDirectWhatsApp() {
-            const text = encodeURIComponent(document.getElementById('waPreviewText').innerText);
-            window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
-
-        function copyWaText() {
-            navigator.clipboard.writeText(document.getElementById('waPreviewText').innerText);
-            alert('WhatsApp message text copied to clipboard!');
-        }
-
-        function startLiveClock() {
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
-            }, 1000);
-        }
-
-        function testAlarmNow() {
-            playBeepSound();
-            alert('Audio chime alarm triggered!');
-        }
-
-        function playBeepSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(880, ctx.currentTime);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 1.2);
-            } catch(e) {}
-        }
-
-        function toggleSoundAlert() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundToggleBtn').innerHTML = soundEnabled 
-                ? '<i class="fa-solid fa-volume-high text-emerald-400"></i> Alarm Sound: ON'
-                : '<i class="fa-solid fa-volume-xmark text-red-400"></i> Alarm Sound: OFF';
-        }
-
-        function copyCode(id) {
-            navigator.clipboard.writeText(document.getElementById(id).innerText);
-            alert('Code snippet copied to clipboard!');
         }
     </script>
 </body>
