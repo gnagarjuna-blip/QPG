@@ -181,18 +181,12 @@
                             <input type="checkbox" id="slotCheck_s2" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">2nd Hour</strong>10:20 - 11:20</div>
                         </label>
-                        <label class="flex items-center gap-2 bg-amber-50/60 p-2.5 rounded border border-amber-200 cursor-pointer">
-                            <input type="checkbox" id="slotCheck_sb" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
-                            <div><strong class="block text-amber-900">Short Break</strong>11:20 - 11:30</div>
-                        </label>
+                        
                         <label class="flex items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200 cursor-pointer">
                             <input type="checkbox" id="slotCheck_s3" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">3rd Hour</strong>11:30 - 12:30</div>
                         </label>
-                        <label class="flex items-center gap-2 bg-purple-50/60 p-2.5 rounded border border-purple-200 cursor-pointer">
-                            <input type="checkbox" id="slotCheck_lb" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
-                            <div><strong class="block text-purple-900">Lunch Break</strong>12:30 - 13:30</div>
-                        </label>
+                        
                         <label class="flex items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200 cursor-pointer">
                             <input type="checkbox" id="slotCheck_s4" checked onchange="generateDisciplineSchedule()" class="rounded text-emerald-600">
                             <div><strong class="block">4th Hour</strong>13:10 - 14:10</div>
@@ -337,9 +331,7 @@
                             <select id="waSlotSelect" onchange="updateWaMessagePreview()" class="w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none">
                                 <option value="s1">1st Hour: 9:20 - 10:20 AM (Reminder @ 9:19 AM)</option>
                                 <option value="s2">2nd Hour: 10:20 - 11:20 AM (Reminder @ 10:19 AM)</option>
-                                <option value="sb" selected>Short Break: 11:20 - 11:30 AM (Reminder @ 11:19 AM)</option>
                                 <option value="s3">3rd Hour: 11:30 - 12:30 PM (Reminder @ 11:29 AM)</option>
-                                <option value="lb">Lunch Break: 12:30 - 1:10 PM (Reminder @ 12:29 PM)</option>
                                 <option value="s4">4th Hour: 13:10 - 14:10 PM (Reminder @ 13:09 PM)</option>
                                 <option value="s5">5th Hour: 14:10 - 15:10 PM (Reminder @ 14:09 PM)</option>
                             </select>
@@ -610,7 +602,7 @@ client.initialize();</pre>
             "Ms. Krishnapriya": {
                 "Monday": ["s1", "s4", "s5"],
                 "Tuesday": ["s1", "s2", "s4", "s5"],
-                "Wednesday": ["s2", "s3", "s4", "s5"],
+                "Wednesday": ["s1","s2", "s3", "s4"],
                 "Thursday": ["s2", "s3", "s4", "s5"],
                 "Friday": ["s1", "s2", "s3", "s4", "s5"],
                 "Saturday": ["s3"]
@@ -645,7 +637,8 @@ client.initialize();</pre>
             "Dr. Soumyadip": {
                 "Monday": ["s1", "s2", "s3"],
                 "Tuesday": ["s1", "s2", "s3"],
-                "Wednesday": ["s1", "s2", "s3"],
+                "Wednesday": ["s1", "s2", "s3", "s5"],
+                "Thursday": ["s4"],
                 "Friday": ["s2", "s3"]
             },
             "Dr. Sravan": {
@@ -665,8 +658,10 @@ client.initialize();</pre>
             },
             "Dr. Subhasish": {
                 "Monday": ["s1", "s2", "s3"],
-                "Thursday": ["s2", "s3"],
-                "Friday": ["s1", "s2", "s3"],
+                "Tuesday": ["s5"],
+                "Wednesday": ["s2", "s3", "s4"],
+                "Thursday": ["s4", "s5"],
+                "Friday": ["s1", "s2", "s3", "s5"],
                 "Saturday": ["s1"]
             },
             "Dr. Subramanyam": {
@@ -687,7 +682,7 @@ client.initialize();</pre>
                 "Tuesday": ["s1", "s2", "s5"],
                 "Wednesday": ["s1", "s3", "s4", "s5"],
                 "Thursday": ["s4", "s5"],
-                "Friday": ["s1", "s3", "s4"],
+                "Friday": ["s1","s2", "s3", "s4"],
                 "Saturday": ["s1", "s3"]
             },
             "Mr. Vipin": {
